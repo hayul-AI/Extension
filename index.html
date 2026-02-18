@@ -905,6 +905,7 @@
         const { jsPDF } = window.jspdf;
         const fileStore = new Map();
         let currentTargetSize = 0;
+        let ocrWorker = null; // Cached OCR worker
 
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -1124,76 +1125,57 @@
             });
         }
 
-        async function performOCR(file, tab) {
-            const container = document.getElementById('ocr-progress-container');
-            const bar = document.getElementById('ocr-progress-bar');
-            const output = document.getElementById('ocrResult');
-            container.style.display = 'block';
-            bar.style.width = '0%';
-            output.value = 'Self-check: Verifying local OCR assets...';
-            
-            const paths = {
-                worker: "/ocr/worker.min.js",
-                core: "/ocr/tesseract-core.wasm.js",
-                lang: "/ocr/tessdata"
-            };
+        async function getWorker(logger, retry = true) {
+            if (ocrWorker) return ocrWorker;
 
             try {
-                const checks = [
-                    fetch(paths.worker, { method: 'HEAD' }),
-                    fetch(paths.core, { method: 'HEAD' }),
-                    fetch(`${paths.lang}/eng.traineddata.gz`, { method: 'HEAD' }),
-                    fetch(`${paths.lang}/kor.traineddata.gz`, { method: 'HEAD' })
-                ];
-                const results = await Promise.all(checks);
-                const failed = results.findIndex(r => !r.ok);
-                if (failed !== -1) {
-                    const failedFile = failed === 0 ? 'worker.min.js' : failed === 1 ? 'tesseract-core.wasm.js' : failed === 2 ? 'eng.traineddata.gz' : 'kor.traineddata.gz';
-                    throw new Error(`Missing local asset: ${failedFile}`);
+                const worker = await Tesseract.createWorker({
+                    logger: logger,
+                    workerPath: "/ocr/worker.min.js",
+                    corePath: "/ocr/tesseract-core.wasm.js",
+                    langPath: "/ocr/tessdata"
+                });
+                await worker.loadLanguage('eng');
+                await worker.initialize('eng');
+                ocrWorker = worker;
+                return ocrWorker;
+            } catch (error) {
+                console.error("OCR Init Error:", error);
+                if (retry) {
+                    console.log("Retrying OCR initialization...");
+                    return getWorker(logger, false);
                 }
-            } catch (e) {
-                output.value = `Asset Error: ${e.message}\nMake sure you've uploaded the /ocr/ folder.`;
-                return;
+                throw error;
             }
+        }
 
-            output.value = 'Initializing local OCR engine...';
-            let worker;
-            const timeout = setTimeout(() => {
-                if (output.value.includes('Initializing') || output.value.includes('loading')) {
-                    output.value = "OCR engine failed to load (Timeout).";
-                    if (worker) worker.terminate();
-                }
-            }, 30000);
+        async function performOCR(file, tab) {
+            const bar = document.getElementById('ocr-progress-bar');
+            const output = document.getElementById('ocrResult');
+            const container = document.getElementById('ocr-progress-container');
+            
+            container.style.display = 'block';
+            bar.style.width = '0%';
+            output.value = 'Loading OCR engine (first run may take 5-10 seconds)...';
 
             try {
                 const canvas = await preprocessForOCR(file);
-                output.value = 'Engine loading...';
-                worker = await Tesseract.createWorker({
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            const p = Math.round(m.progress * 100);
-                            bar.style.width = p + '%';
-                            output.value = `Recognizing text... ${p}%`;
-                        } else {
-                            output.value = `${m.status}...`;
-                        }
-                    },
-                    workerPath: paths.worker,
-                    corePath: paths.core,
-                    langPath: paths.lang
+                const worker = await getWorker(m => {
+                    if (m.status === 'recognizing text') {
+                        const p = Math.round(m.progress * 100);
+                        bar.style.width = p + '%';
+                        output.value = `Recognizing text... ${p}%`;
+                    } else {
+                        output.value = `${m.status}...`;
+                    }
                 });
 
-                await worker.loadLanguage('eng+kor');
-                await worker.initialize('eng+kor');
-                clearTimeout(timeout);
                 const { data: { text } } = await worker.recognize(canvas);
                 output.value = text || 'No text found.';
-                await worker.terminate();
             } catch (error) {
-                clearTimeout(timeout);
                 console.error('OCR Error:', error);
-                output.value = `Critical Error: ${error.message}`;
-                if (worker) await worker.terminate();
+                output.value = `OCR Error: ${error.message}. Please check if the /ocr/ folder contains all necessary files.`;
+                ocrWorker = null; // Clear cached worker on fatal error
             }
         }
 
