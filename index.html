@@ -3,516 +3,543 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Converter Tool - Free & Secure Online Tool</title>
+    <title>Image Tools - Pro Browser Utility</title>
     <meta name="description" content="Free online image converter. Convert HEIC to JPG, WEBP to JPG, PNG to JPG, compress images, extract text with OCR, merge JPG to PDF, and generate favicons securely in your browser.">
-    <meta name="keywords" content="image converter, HEIC to JPG, WEBP to JPG, image compression, free OCR, extract text from image, JPG to PDF, favicon maker, browser-based converter">
-    <meta property="og:title" content="Image Converter Tool - Free & Secure Browser-based Utility">
-    <meta property="og:description" content="Convert and edit images directly on your device without uploading to a server. Supports HEIC, WEBP, Compression, OCR, PDF, and more.">
-    <meta property="og:type" content="website">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "Image Converter Tool",
-      "applicationCategory": "MultimediaApplication",
-      "operatingSystem": "Web Browser",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "description": "Browser-based free image conversion, compression, and OCR tool. Use securely without server uploads.",
-      "featureList": "HEIC to JPG, WEBP to JPG, Image Compression, OCR, Image to PDF, Favicon Generator"
-    }
-    </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6460078490158642"
-     crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6460078490158642" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
         :root {
-            --primary-color: #007bff;
-            --secondary-color: #6c757d;
-            --background-color: #f8f9fa;
-            --text-color: #212529;
-            --border-color: #dee2e6;
-            --success-color: #28a745;
-            --error-color: #dc3545;
-            --card-bg: #ffffff;
-            --font-size: 18px;
-            --container-width: 95%;
-            --max-width: 1200px;
-            --shadow-color: rgba(0,0,0,0.08);
+            --brand-primary: #6366f1;
+            --brand-secondary: #8b5cf6;
+            --brand-success: #10b981;
+            --brand-danger: #f43f5e;
+            --bg-light: #f8fafc;
+            --bg-dark: #0f172a;
+            --text-light: #1e293b;
+            --text-dark: #f1f5f9;
+            --glass-light: rgba(255, 255, 255, 0.85);
+            --glass-dark: rgba(30, 41, 59, 0.85);
+            --border-light: rgba(255, 255, 255, 0.3);
+            --border-dark: rgba(255, 255, 255, 0.08);
+            --radius-xl: 28px;
+            --radius-lg: 20px;
+            --shadow-float: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
         }
 
         [data-theme="dark"] {
-            --background-color: #121212;
-            --text-color: #e0e0e0;
-            --border-color: #333333;
-            --card-bg: #1e1e1e;
-            --secondary-color: #a0a0a0;
-            --shadow-color: rgba(0,0,0,0.4);
+            --bg-base: var(--bg-dark);
+            --text-base: var(--text-dark);
+            --glass-base: var(--glass-dark);
+            --border-base: var(--border-dark);
+            --secondary-color: #94a3b8;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        [data-theme="light"] {
+            --bg-base: var(--bg-light);
+            --text-base: var(--text-light);
+            --glass-base: var(--glass-light);
+            --border-base: var(--border-light);
+            --secondary-color: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            font-size: var(--font-size);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { 
+            background: var(--border-base); 
+            border-radius: 10px; 
+            border: 3px solid var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-color); }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-base);
             line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
+
+        .bg-blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            filter: blur(100px);
+            opacity: 0.5;
+        }
+
+        .blob {
+            position: absolute;
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            animation: move 25s infinite alternate ease-in-out;
+        }
+
+        .blob-1 { top: -10%; left: -10%; background: var(--brand-primary); }
+        .blob-2 { bottom: -10%; right: -10%; background: var(--brand-secondary); animation-delay: -7s; }
+        .blob-3 { top: 30%; left: 20%; background: #ec4899; animation-duration: 30s; opacity: 0.3; }
+
+        @keyframes move {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { transform: translate(15vw, 20vh) scale(1.3) rotate(90deg); }
+        }
+
         .container {
-            width: var(--container-width);
-            max-width: var(--max-width);
+            width: 95%;
+            max-width: 1050px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
         }
+
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
+            margin-bottom: 5rem;
         }
-        .header-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
+
+        .hero {
+            text-align: center;
+            margin-bottom: 5rem;
         }
-        .site-logo {
-            width: 48px;
-            height: 48px;
-            fill: var(--primary-color);
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            margin-bottom: 1.25rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary), #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        h1 {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin: 0;
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--secondary-color);
+            max-width: 650px;
+            margin: 0 auto;
+            font-weight: 500;
         }
-        .theme-toggle {
-            background: none;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-        }
-        .theme-toggle:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
+
         .tabs {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-bottom: 2rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 0.4rem;
+            padding: 0.5rem;
+            background: var(--glass-base);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-base);
+            border-radius: 24px;
+            margin-bottom: 3.5rem;
+            scrollbar-width: none;
+            box-shadow: var(--shadow-float);
         }
+
+        .tabs::-webkit-scrollbar { display: none; }
+
         .tab-button {
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
+            padding: 0.8rem 1.75rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            white-space: nowrap;
+            border: none;
+            background: transparent;
+            color: var(--secondary-color);
+            border-radius: 18px;
             cursor: pointer;
-            border: 2px solid var(--primary-color);
-            background-color: var(--card-bg);
-            color: var(--primary-color);
-            border-radius: 50px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .tab-button:hover, .tab-button.active {
-            background-color: var(--primary-color);
+
+        .tab-button:hover {
+            color: var(--brand-primary);
+            background: rgba(99, 102, 241, 0.08);
+        }
+
+        .tab-button.active {
+            background: var(--brand-primary);
             color: white;
+            box-shadow: 0 12px 20px -5px rgba(99, 102, 241, 0.4);
         }
+
         .tab-content {
             display: none;
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            background-color: var(--card-bg);
-            box-shadow: 0 8px 24px var(--shadow-color);
+            padding: 3.5rem;
+            background: var(--glass-base);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-base);
+            box-shadow: var(--shadow-float);
+            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        .tab-content.active {
-            display: block;
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
+
+        .tab-content.active { display: block; }
+
         .file-drop-area {
-            border: 3px dashed var(--border-color);
-            border-radius: 12px;
-            padding: 4rem 2rem;
+            border: 2px dashed var(--brand-primary);
+            border-radius: var(--radius-lg);
+            padding: 6rem 2rem;
             text-align: center;
-            transition: all 0.3s ease;
-            background-color: rgba(0,0,0,0.02);
-        }
-        .file-drop-area.dragover {
-            border-color: var(--primary-color);
-            background-color: rgba(0, 123, 255, 0.1);
-        }
-        .file-input {
-            display: none;
-        }
-        .file-label {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background-color: var(--primary-color);
-            color: white;
-            border-radius: 8px;
+            background: rgba(99, 102, 241, 0.015);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            transition: background-color 0.3s;
-            font-weight: 600;
-            margin-top: 1rem;
+            position: relative;
         }
+
+        .file-drop-area:hover {
+            border-color: var(--brand-secondary);
+            background: rgba(99, 102, 241, 0.04);
+            transform: translateY(-2px);
+        }
+
+        .file-label {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+            padding: 0.9rem 2.5rem;
+            border-radius: 14px;
+            color: white;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
         .file-label:hover {
-            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
         }
+
         .convert-button {
             display: block;
             width: 100%;
-            padding: 1.2rem;
-            font-size: 1.3rem;
-            font-weight: bold;
-            background-color: var(--success-color);
+            padding: 1.125rem;
+            font-size: 1.125rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--brand-success), #059669);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 16px;
             cursor: pointer;
-            margin-top: 1.5rem;
-            transition: all 0.3s ease;
+            margin-top: 2.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
         }
+
         .convert-button:hover:not(:disabled) {
-            background-color: #218838;
             transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.4);
+            filter: brightness(1.1);
         }
+
         .convert-button:disabled {
-            background-color: #ccc;
+            background: var(--secondary-color);
+            opacity: 0.4;
             cursor: not-allowed;
+            box-shadow: none;
         }
+
         .progress-bar {
             width: 100%;
-            height: 24px;
-            background-color: var(--border-color);
-            border-radius: 12px;
-            margin-top: 1.5rem;
+            height: 14px;
+            background-color: var(--border-base);
+            border-radius: 9999px;
+            margin-top: 2.5rem;
             overflow: hidden;
             display: none;
-            position: relative;
         }
+
         .progress-bar-inner {
             width: 0;
             height: 100%;
-            background-color: var(--primary-color);
-            transition: width 0.3s ease;
+            background: linear-gradient(90deg, var(--brand-primary), #ec4899, var(--brand-secondary));
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+            transition: width 0.4s ease;
         }
-        .progress-text {
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: #000;
-            line-height: 24px;
-            mix-blend-mode: difference;
-        }
-        .results {
-            margin-top: 2rem;
-        }
-        .result-item {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            background-color: var(--background-color);
-            flex-wrap: wrap;
-        }
-        .result-item img {
-            max-width: 120px;
-            max-height: 120px;
-            object-fit: contain;
-            border-radius: 5px;
-            background: #eee;
-        }
-        .result-info {
-            flex-grow: 1;
-            min-width: 200px;
-        }
-        .download-button {
-            padding: 0.8rem 1.5rem;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
-        .download-button:hover {
-            background-color: #0056b3;
-        }
-        .error-message {
-            color: var(--error-color);
-            margin-top: 1rem;
-            font-weight: 600;
-            padding: 1rem;
-            background-color: rgba(220, 53, 69, 0.1);
-            border-radius: 8px;
-            display: none;
-        }
-        .options {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background-color: var(--background-color);
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        .option-group {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .option-group label {
-            font-weight: 600;
-            min-width: 120px;
-        }
-        .option-group input[type="range"] {
-            flex-grow: 1;
-            max-width: 300px;
-        }
-        .option-group select {
-            padding: 0.5rem;
-            border-radius: 5px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-color);
-            font-size: 1rem;
-        }
-        .preset-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        .preset-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--primary-color);
-            background: transparent;
-            color: var(--primary-color);
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        .preset-btn:hover, .preset-btn.active {
-            background: var(--primary-color);
-            color: white;
-        }
-        
-        /* OCR Specific */
-        #ocr-result-area {
-            width: 100%;
-            height: 300px;
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: var(--card-bg);
-            color: var(--text-color);
-            font-family: monospace;
-            font-size: 1rem;
-            resize: vertical;
-        }
-        .ocr-controls {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-        .ocr-btn {
-            flex: 1;
-            min-width: 120px;
-            padding: 0.8rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: opacity 0.3s;
-        }
-        .ocr-btn.copy { background-color: var(--primary-color); color: white; }
-        .ocr-btn.download { background-color: var(--success-color); color: white; }
-        .ocr-btn.reset { background-color: var(--secondary-color); color: white; }
-        .ocr-btn:hover { opacity: 0.9; }
 
-        .preprocessing-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
+        @keyframes shimmer {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
         }
-        .checkbox-group {
+
+        .result-item {
+            background: var(--glass-base);
+            border: 1px solid var(--border-base);
+            padding: 1.5rem;
+            border-radius: 22px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.95rem;
+            gap: 1.5rem;
+            margin-bottom: 1.25rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .result-item:hover {
+            transform: scale(1.02);
+            border-color: var(--brand-primary);
+            background: white;
+        }
+
+        [data-theme="dark"] .result-item:hover { background: #1e293b; }
+
+        .result-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 14px;
+            object-fit: cover;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle {
+            padding: 0.7rem 1.4rem;
+            background: var(--glass-base);
+            border: 1px solid var(--border-base);
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover { background: var(--bg-base); transform: scale(1.05); }
+
+        .faq-section {
+            margin-top: 8rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .faq-card {
+            background: var(--glass-base);
+            padding: 2.5rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-base);
+            transition: all 0.3s;
+        }
+
+        .faq-card:hover { transform: translateY(-5px); border-color: var(--brand-primary); }
+
+        .faq-card h4 {
+            color: var(--brand-primary);
+            margin-bottom: 1.25rem;
+            font-size: 1.25rem;
+            font-weight: 800;
         }
 
         footer {
+            margin-top: 10rem;
+            padding: 5rem 0;
             text-align: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
-            color: var(--secondary-color);
+            border-top: 1px solid var(--border-base);
         }
-        footer p { margin-bottom: 1rem; }
-        footer a { color: var(--primary-color); text-decoration: none; margin: 0 0.8rem; font-weight: 600; }
+
+        .nav-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 700;
+            margin: 0 1.5rem;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover { color: var(--brand-primary); }
+
+        #ocr-result-area {
+            width: 100%;
+            height: 300px;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 18px;
+            border: 1px solid var(--border-base);
+            background: rgba(0,0,0,0.02);
+            color: var(--text-base);
+            font-size: 1rem;
+            line-height: 1.7;
+            resize: vertical;
+        }
+
+        .preset-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid var(--border-base);
+            background: transparent;
+            color: var(--secondary-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .preset-btn.active {
+            background: var(--brand-primary);
+            color: white;
+            border-color: var(--brand-primary);
+        }
 
         @media (max-width: 768px) {
-            h1 { font-size: 1.8rem; }
-            .tab-button { font-size: 0.9rem; padding: 0.6rem 1rem; }
-            .tab-content { padding: 1.2rem; }
-            .file-drop-area { padding: 2.5rem 1rem; }
-            .option-group { flex-direction: column; align-items: flex-start; }
-            .option-group input[type="range"] { max-width: 100%; width: 100%; }
+            .hero h1 { font-size: 2.75rem; }
+            .tab-content { padding: 2rem 1.5rem; }
+            .container { padding: 1.5rem 1rem; }
+            .tabs { border-radius: 18px; }
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
+    <div class="bg-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
     <div class="container">
         <header>
-            <h1>Image Tools</h1>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
+            <div class="header-title" style="display: flex; align-items: center; gap: 0.75rem;">
+                <svg width="36" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-primary);">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                <span style="font-weight: 800; font-size: 1.4rem; letter-spacing: -0.03em;">ImageTools <span style="font-weight: 400; color: var(--secondary-color);">Pro</span></span>
+            </div>
+            <button class="theme-toggle" id="theme-toggle">
                 <span class="theme-icon">🌙</span>
                 <span class="theme-text">Dark Mode</span>
             </button>
         </header>
 
+        <section class="hero">
+            <h1>Smarter Images,<br>Better Privacy.</h1>
+            <p>Convert, compress, and extract text from your photos with pro-grade speed. All processing happens 100% on your device.</p>
+        </section>
+
         <nav class="tabs">
-            <button class="tab-button active" data-tab="heic-to-jpg">HEIC → JPG</button>
-            <button class="tab-button" data-tab="webp-to-jpg">WEBP → JPG</button>
-            <button class="tab-button" data-tab="png-to-jpg">PNG → JPG</button>
-            <button class="tab-button" data-tab="jpg-to-png">JPG → PNG</button>
+            <button class="tab-button active" data-tab="heic-to-jpg">HEIC to JPG</button>
+            <button class="tab-button" data-tab="webp-to-jpg">WEBP to JPG</button>
+            <button class="tab-button" data-tab="png-to-jpg">PNG to JPG</button>
+            <button class="tab-button" data-tab="jpg-to-png">JPG to PNG</button>
             <button class="tab-button" data-tab="compress">Compress</button>
-            <button class="tab-button" data-tab="ocr">OCR (Text)</button>
-            <button class="tab-button" data-tab="jpg-to-pdf">JPG → PDF</button>
+            <button class="tab-button" data-tab="ocr">OCR</button>
+            <button class="tab-button" data-tab="jpg-to-pdf">PDF</button>
             <button class="tab-button" data-tab="favicon">Favicon</button>
         </nav>
 
-        <!-- Google AdSense - Top Responsive Ad -->
-        <div style="margin: 20px 0; text-align: center;">
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-6460078490158642"
-                 data-ad-slot="auto"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-
         <main>
-            <!-- Tab Content: HEIC to JPG -->
+            <!-- Conversion Tabs -->
             <div id="heic-to-jpg" class="tab-content active">
                 <h2>Convert HEIC to JPG</h2>
                 <div class="file-drop-area">
-                    <input type="file" class="file-input" multiple accept=".heic, .heif">
-                    <p>Drag and drop HEIC files here or</p>
+                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop HEIC files here</p>
+                    <p style="color: var(--secondary-color); font-size: 0.9rem;">or click to browse your folders</p>
                     <label class="file-label">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".heic, .heif" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Convert Now</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
-                <div class="error-message"></div>
+                <button class="convert-button" disabled>Generate JPGs</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
                 <div class="results"></div>
             </div>
 
-            <!-- Tab Content: WEBP to JPG -->
+            <!-- WEBP Tab -->
             <div id="webp-to-jpg" class="tab-content">
                 <h2>Convert WEBP to JPG</h2>
                 <div class="file-drop-area">
-                    <input type="file" class="file-input" multiple accept=".webp">
-                    <p>Drag and drop WEBP files here or</p>
+                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop WEBP files here</p>
                     <label class="file-label">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".webp" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Convert Now</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
-                <div class="error-message"></div>
+                <button class="convert-button" disabled>Process to JPG</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
                 <div class="results"></div>
             </div>
-            
-            <!-- Tab Content: PNG to JPG -->
+
+            <!-- PNG Tab -->
             <div id="png-to-jpg" class="tab-content">
                 <h2>Convert PNG to JPG</h2>
                 <div class="file-drop-area">
-                    <input type="file" class="file-input" multiple accept=".png">
-                    <p>Drag and drop PNG files here or</p>
+                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop PNG images here</p>
                     <label class="file-label">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".png" style="display: none;">
                 </div>
                 <div class="options">
                     <div class="option-group">
-                        <label for="png-to-jpg-quality">Quality (0.1-1.0):</label>
+                        <label>Output Quality:</label>
                         <input type="range" id="png-to-jpg-quality" min="0.1" max="1.0" value="0.92" step="0.01">
-                        <span class="quality-value">0.92</span>
+                        <span class="quality-value" style="font-weight: 800; min-width: 40px;">0.92</span>
                     </div>
                 </div>
                 <button class="convert-button" disabled>Convert Now</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
-                <div class="error-message"></div>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
                 <div class="results"></div>
             </div>
 
-            <!-- Tab Content: JPG to PNG -->
+            <!-- JPG to PNG Tab -->
             <div id="jpg-to-png" class="tab-content">
                  <h2>Convert JPG to PNG</h2>
                 <div class="file-drop-area">
-                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg">
-                    <p>Drag and drop JPG files here or</p>
+                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop JPG photos here</p>
                     <label class="file-label">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Convert Now</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
-                <div class="error-message"></div>
+                <button class="convert-button" disabled>Convert to PNG</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
                 <div class="results"></div>
             </div>
 
-            <!-- Tab Content: Image Compression -->
+            <!-- Compress Tab -->
             <div id="compress" class="tab-content">
-                <h2>Compress Images (Reduce Size)</h2>
+                <h2>Optimize & Compress</h2>
                 <div class="file-drop-area">
-                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg, .png, .webp">
-                    <p>Drag and drop images here or</p>
+                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop images to reduce size</p>
                     <label class="file-label">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
                 </div>
                  <div class="options">
                     <div class="option-group">
-                        <label for="compress-quality">Quality Setting:</label>
+                        <label>Quality:</label>
                         <input type="range" id="compress-quality" min="0.4" max="0.95" value="0.8" step="0.01">
-                        <span class="quality-value">0.8</span>
+                        <span class="quality-value" style="font-weight: 800; min-width: 40px;">0.8</span>
                     </div>
                     <div class="option-group">
-                        <label for="compress-resize">Resize (Width):</label>
-                        <select id="compress-resize">
-                            <option value="original">Original Size</option>
+                        <label>Max Width:</label>
+                        <select id="compress-resize" style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-base); background: var(--bg-base); color: inherit; font-weight: 600;">
+                            <option value="original">Keep Original</option>
                             <option value="1920">1920px (Full HD)</option>
                             <option value="1280">1280px (HD)</option>
                             <option value="1080">1080px</option>
                         </select>
                     </div>
                     <div class="option-group">
-                        <label>Target Size (Auto):</label>
+                        <label>Target File Size:</label>
                         <div class="preset-buttons">
                             <button class="preset-btn" data-target="204800">200KB</button>
                             <button class="preset-btn" data-target="512000">500KB</button>
@@ -521,204 +548,153 @@
                         </div>
                     </div>
                 </div>
-                <button class="convert-button" disabled>Start Compression</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
-                <div class="error-message"></div>
+                <button class="convert-button" disabled>Compress Images</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
                 <div class="results"></div>
             </div>
 
-            <!-- Tab Content: OCR -->
+            <!-- OCR Tab -->
             <div id="ocr" class="tab-content">
-                <h2>Extract Text from Image (OCR)</h2>
-                <p style="font-size: 0.9rem; color: var(--secondary-color); margin-bottom: 1rem;">
-                    🔒 Images are processed entirely on your device and are never uploaded to a server.
-                </p>
+                <h2>Text Recognition (OCR)</h2>
                 <div class="file-drop-area">
-                    <input type="file" class="file-input" accept="image/*">
-                    <p>Drag and drop an image here or</p>
+                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop image with text</p>
                     <label class="file-label">Select Image</label>
+                    <input type="file" class="file-input" accept="image/*" style="display: none;">
                 </div>
-                
                 <div class="options">
-                    <div class="preprocessing-options">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="ocr-grayscale" checked>
-                            <label for="ocr-grayscale">Grayscale</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="ocr-contrast" checked>
-                            <label for="ocr-contrast">Boost Contrast</label>
-                        </div>
+                    <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; gap: 0.6rem; font-weight: 600; cursor: pointer;"><input type="checkbox" id="ocr-grayscale" checked style="width: 18px; height: 18px;"> Grayscale</label>
+                        <label style="display: flex; align-items: center; gap: 0.6rem; font-weight: 600; cursor: pointer;"><input type="checkbox" id="ocr-contrast" checked style="width: 18px; height: 18px;"> Sharp Contrast</label>
                     </div>
                     <div class="option-group">
-                        <label for="ocr-threshold">Binarization Threshold:</label>
+                        <label>Threshold:</label>
                         <input type="range" id="ocr-threshold" min="0" max="255" value="128">
-                        <span id="threshold-value">128</span>
+                        <span id="threshold-value" style="font-weight: 800; min-width: 40px;">128</span>
                     </div>
                 </div>
-
-                <button class="convert-button" id="ocr-start-btn" disabled>Start Extraction</button>
-                
-                <div class="progress-bar" id="ocr-progress-container">
-                    <div class="progress-bar-inner" id="ocr-progress-bar"></div>
-                    <div class="progress-text" id="ocr-progress-text">Ready</div>
-                </div>
-
+                <button class="convert-button" id="ocr-start-btn" disabled>Scan for Text</button>
+                <div class="progress-bar" id="ocr-progress-container"><div class="progress-bar-inner" id="ocr-progress-bar"></div></div>
                 <textarea id="ocr-result-area" placeholder="Extracted text will appear here..." readonly></textarea>
-                
                 <div class="ocr-controls">
-                    <button class="ocr-btn copy" id="ocr-copy-btn">Copy to Clipboard</button>
-                    <button class="ocr-btn download" id="ocr-download-btn">Download .txt</button>
+                    <button class="ocr-btn copy" id="ocr-copy-btn">Copy Text</button>
+                    <button class="ocr-btn download" id="ocr-download-btn">Save as TXT</button>
                     <button class="ocr-btn reset" id="ocr-reset-btn">Reset</button>
                 </div>
-                <div class="error-message" id="ocr-error"></div>
             </div>
 
-            <!-- Tab Content: JPG to PDF -->
+            <!-- PDF Tab -->
             <div id="jpg-to-pdf" class="tab-content">
-                <h2>Convert JPG to PDF</h2>
+                <h2>Merge to PDF</h2>
                 <div class="file-drop-area">
-                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg">
-                    <p>Drag and drop JPG files here or</p>
-                    <label class="file-label">Select Files (Multiple Allowed)</label>
+                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop images to merge</p>
+                    <label class="file-label">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Convert to PDF</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
-                <div class="error-message"></div>
+                <button class="convert-button" disabled>Generate PDF</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
                 <div class="results"></div>
             </div>
 
-            <!-- Tab Content: Favicon Maker -->
+            <!-- Favicon Tab -->
             <div id="favicon" class="tab-content">
-                 <h2>Create Favicon (PNG, JPG)</h2>
+                 <h2>Generate Favicon</h2>
                 <div class="file-drop-area">
-                    <input type="file" class="file-input" accept=".png, .jpg, .jpeg">
-                    <p>Drag and drop an image here or</p>
-                    <label class="file-label">Select File (Only 1)</label>
+                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop brand logo (1:1 ratio)</p>
+                    <label class="file-label">Select File</label>
+                    <input type="file" class="file-input" accept=".png, .jpg, .jpeg" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Generate Favicon</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
-                <div class="error-message"></div>
+                <button class="convert-button" disabled>Create Favicon Pack</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
                 <div class="results"></div>
             </div>
         </main>
 
-        <section style="margin-top: 4rem; padding: 2rem; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 12px var(--shadow-color);">
-            <h3>Frequently Asked Questions (FAQ)</h3>
-            <div style="display: grid; gap: 1.5rem;">
-                <div>
-                    <h4 style="color: var(--primary-color);">Is it safe to use this tool?</h4>
-                    <p>Yes. All image processing happens locally in your browser. We never upload your files to any server, ensuring 100% privacy.</p>
-                </div>
-                <div>
-                    <h4 style="color: var(--primary-color);">What formats are supported?</h4>
-                    <p>We support HEIC, WEBP, PNG, and JPG. You can convert between these formats and also generate PDFs or Favicons.</p>
-                </div>
-                <div>
-                    <h4 style="color: var(--primary-color);">How does the "OCR" feature work?</h4>
-                    <p>It uses Tesseract.js to analyze images and extract text. This is useful for copying text from scanned documents or screenshots without typing them out manually.</p>
-                </div>
+        <section class="faq-section">
+            <div class="faq-card">
+                <h4>Privacy First</h4>
+                <p>We believe in absolute data ownership. That's why we built this tool to run entirely in your local RAM. No uploads, no logs, no risks.</p>
+            </div>
+            <div class="faq-card">
+                <h4>Pro Formats</h4>
+                <p>Handle modern web formats like WEBP and Apple's HEIC effortlessly. Perfect for developers and photography enthusiasts alike.</p>
+            </div>
+            <div class="faq-card">
+                <h4>Fast & Simple</h4>
+                <p>Optimized algorithms ensure that even batch processing of 50+ images is fast and fluid. Free to use with zero registration.</p>
             </div>
         </section>
 
-        <!-- 광고 영역 (Ad Area) -->
-        <div style="margin: 30px 0; text-align: center;">
-            <p style="font-size: 0.8rem; color: var(--secondary-color); margin-bottom: 10px;">Advertisement</p>
-            <ins class="adsbygoogle"
-              style="display:block"
-              data-ad-client="ca-pub-6460078490158642"
-              data-ad-slot="1234567890"
-              data-ad-format="auto"
-              data-full-width-responsive="true"></ins>
-            <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-
         <footer>
-            <p>🔒 All conversions are processed on your device. Files are never uploaded to our servers.</p>
-            <nav>
+            <div class="nav-links">
                 <a href="about.html">About</a>
-                <a href="privacy.html">Privacy Policy</a>
-                <a href="terms.html">Terms of Service</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
                 <a href="contact.html">Contact</a>
-            </nav>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--secondary-color); font-weight: 500;">© 2024 ImageTools Pro. Built for Privacy.</p>
         </footer>
     </div>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- Theme Logic ---
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = themeToggle.querySelector('.theme-icon');
         const themeText = themeToggle.querySelector('.theme-text');
-        const html = document.documentElement;
+        const body = document.body;
 
         const savedTheme = localStorage.getItem('theme') || 'light';
         setTheme(savedTheme);
 
         themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme') || 'light';
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            setTheme(newTheme);
+            const currentTheme = body.getAttribute('data-theme');
+            setTheme(currentTheme === 'light' ? 'dark' : 'light');
         });
 
         function setTheme(theme) {
-            html.setAttribute('data-theme', theme);
+            body.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
-            if (theme === 'dark') {
-                themeIcon.textContent = '☀️';
-                themeText.textContent = 'Light Mode';
-            } else {
-                themeIcon.textContent = '🌙';
-                themeText.textContent = 'Dark Mode';
-            }
+            themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+            themeText.textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
         }
 
-        // --- Library instances ---
-        const { jsPDF } = window.jspdf;
         const JSZip = window.JSZip;
+        const { jsPDF } = window.jspdf;
+        const fileStore = new Map();
+        let currentTargetSize = 0;
 
-        // --- Global state ---
-        const fileStore = new Map(); // tabId -> FileList
-        let currentTargetSize = 0; // for compress tab
-
-        // --- DOM Elements ---
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
 
-        // --- Tab Switching Logic ---
         tabButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const tabId = button.dataset.tab;
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-                tabContents.forEach(content => {
-                    content.classList.toggle('active', content.id === tabId);
-                });
+                tabContents.forEach(content => content.classList.toggle('active', content.id === tabId));
                 const currentFiles = fileStore.get(tabId);
                 updateSelectedFilesDisplay(document.getElementById(tabId), currentFiles);
             });
         });
 
-        // --- File Input and Drag & Drop Logic ---
         tabContents.forEach(tab => {
             const dropArea = tab.querySelector('.file-drop-area');
             const fileInput = tab.querySelector('.file-input');
-            const fileLabel = tab.querySelector('.file-label');
             const convertButton = tab.querySelector('.convert-button');
             const tabId = tab.id;
 
             if (!dropArea || !fileInput) return;
 
-            fileLabel.addEventListener('click', () => fileInput.click());
+            dropArea.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', () => handleFiles(fileInput.files));
-            dropArea.addEventListener('dragover', (e) => { e.preventDefault(); dropArea.classList.add('dragover'); });
-            dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
-            dropArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropArea.classList.remove('dragover');
-                handleFiles(e.dataTransfer.files);
+            
+            ['dragover', 'dragleave', 'drop'].forEach(evt => {
+                dropArea.addEventListener(evt, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (evt === 'dragover') dropArea.classList.add('dragover');
+                    if (evt === 'dragleave' || evt === 'drop') dropArea.classList.remove('dragover');
+                    if (evt === 'drop') handleFiles(e.dataTransfer.files);
+                });
             });
             
             function handleFiles(files) {
@@ -730,333 +706,208 @@
             }
 
             if (convertButton) {
-                convertButton.addEventListener('click', () => {
+                convertButton.addEventListener('click', e => {
+                    e.stopPropagation();
                     const files = fileStore.get(tabId);
-                    if (files && files.length > 0) executeConversion(tabId, files);
+                    if (files) executeConversion(tabId, files);
                 });
             }
             
             const qualitySlider = tab.querySelector('input[type="range"]');
             if (qualitySlider) {
-                const qualityValueSpan = tab.querySelector('.quality-value');
-                qualitySlider.addEventListener('input', (e) => {
-                    if (qualityValueSpan) qualityValueSpan.textContent = e.target.value;
-                });
+                const qValue = tab.querySelector('.quality-value');
+                qualitySlider.addEventListener('input', e => { if (qValue) qValue.textContent = e.target.value; });
             }
         });
 
-        // --- Compress Tab Specific Logic ---
         const compressTab = document.getElementById('compress');
-        const presetBtns = compressTab.querySelectorAll('.preset-btn');
-        presetBtns.forEach(btn => {
+        compressTab.querySelectorAll('.preset-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                presetBtns.forEach(b => b.classList.remove('active'));
+                compressTab.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentTargetSize = parseInt(btn.dataset.target);
-                const qualityInput = compressTab.querySelector('#compress-quality');
-                if (currentTargetSize > 0) {
-                    qualityInput.disabled = true;
-                    compressTab.querySelector('.quality-value').textContent = 'Auto';
-                } else {
-                    qualityInput.disabled = false;
-                    compressTab.querySelector('.quality-value').textContent = qualityInput.value;
-                }
+                const qInput = compressTab.querySelector('#compress-quality');
+                qInput.disabled = currentTargetSize > 0;
+                compressTab.querySelector('.quality-value').textContent = currentTargetSize > 0 ? 'Auto' : qInput.value;
             });
         });
 
-        // --- OCR Tab Specific Logic ---
-        const ocrTab = document.getElementById('ocr');
-        const ocrStartBtn = document.getElementById('ocr-start-btn');
-        const ocrResultArea = document.getElementById('ocr-result-area');
-        const ocrProgressContainer = document.getElementById('ocr-progress-container');
-        const ocrProgressBar = document.getElementById('ocr-progress-bar');
-        const ocrProgressText = document.getElementById('ocr-progress-text');
-        const ocrThresholdInput = document.getElementById('ocr-threshold');
-        const thresholdValueSpan = document.getElementById('threshold-value');
-
-        ocrThresholdInput.addEventListener('input', (e) => {
-            thresholdValueSpan.textContent = e.target.value;
-        });
-
+        const ocrResult = document.getElementById('ocr-result-area');
         document.getElementById('ocr-copy-btn').addEventListener('click', () => {
-            ocrResultArea.select();
+            ocrResult.select();
             document.execCommand('copy');
-            alert('Text copied to clipboard.');
+            alert('Text copied!');
         });
 
         document.getElementById('ocr-download-btn').addEventListener('click', () => {
-            const text = ocrResultArea.value;
-            if (!text) return;
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
+            if (!ocrResult.value) return;
             const a = document.createElement('a');
-            a.href = url;
+            a.href = URL.createObjectURL(new Blob([ocrResult.value], { type: 'text/plain' }));
             a.download = 'extracted_text.txt';
             a.click();
         });
 
         document.getElementById('ocr-reset-btn').addEventListener('click', () => {
-            ocrResultArea.value = '';
+            ocrResult.value = '';
             fileStore.delete('ocr');
-            updateSelectedFilesDisplay(ocrTab, null);
-            ocrStartBtn.disabled = true;
-            ocrProgressContainer.style.display = 'none';
-            ocrProgressBar.style.width = '0%';
-            ocrProgressText.textContent = 'Ready';
+            updateSelectedFilesDisplay(document.getElementById('ocr'), null);
+            document.getElementById('ocr-start-btn').disabled = true;
+            document.getElementById('ocr-progress-container').style.display = 'none';
         });
 
-        /**
-         * Main execution router
-         */
         async function executeConversion(tabId, files) {
             const tab = document.getElementById(tabId);
             setInProgress(tab, true);
-            clearResultsAndErrors(tab);
+            const resultsContainer = tab.querySelector('.results');
+            resultsContainer.innerHTML = '';
 
             try {
                 let results = [];
                 switch (tabId) {
-                    case 'heic-to-jpg':
-                        results = await convertHeicToJpg(files, tab);
-                        break;
-                    case 'webp-to-jpg':
-                        results = await convertImageToFormat(files, tab, 'image/jpeg', '.jpg');
-                        break;
-                    case 'png-to-jpg':
-                        const q1 = tab.querySelector('#png-to-jpg-quality').value;
-                        results = await convertImageToFormat(files, tab, 'image/jpeg', '.jpg', q1);
-                        break;
-                    case 'jpg-to-png':
-                        results = await convertImageToFormat(files, tab, 'image/png', '.png');
-                        break;
-                    case 'compress':
-                        results = await compressImagesLogic(files, tab);
-                        break;
-                    case 'ocr':
-                        await performOCR(files[0], tab);
-                        break;
-                    case 'jpg-to-pdf':
-                        results = await convertJpgToPdf(files, tab);
-                        break;
-                    case 'favicon':
-                        results = await createFavicon(files[0], tab);
-                        break;
+                    case 'heic-to-jpg': results = await convertHeic(files, tab); break;
+                    case 'webp-to-jpg': results = await convertCanvas(files, tab, 'image/jpeg', '.jpg'); break;
+                    case 'png-to-jpg': results = await convertCanvas(files, tab, 'image/jpeg', '.jpg', tab.querySelector('#png-to-jpg-quality').value); break;
+                    case 'jpg-to-png': results = await convertCanvas(files, tab, 'image/png', '.png'); break;
+                    case 'compress': results = await compressLogic(files, tab); break;
+                    case 'ocr': await performOCR(files[0], tab); break;
+                    case 'jpg-to-pdf': results = await convertPdf(files, tab); break;
+                    case 'favicon': results = await convertFavicon(files[0], tab); break;
                 }
-                
                 if (results.length > 0) displayResults(tab, results);
-
-            } catch (error) {
-                console.error('Error:', error);
-                displayError(tab, `Error: ${error.message}`);
+            } catch (e) {
+                alert('Error: ' + e.message);
             } finally {
                 setInProgress(tab, false);
             }
         }
 
-        // --- Logic Functions ---
-
-        async function compressImagesLogic(files, tab) {
-            const results = [];
-            const progressBar = tab.querySelector('.progress-bar-inner');
-            const progressText = tab.querySelector('.progress-text');
-            const targetWidth = tab.querySelector('#compress-resize').value;
-            const manualQuality = parseFloat(tab.querySelector('#compress-quality').value);
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const percentage = Math.round((i / files.length) * 100);
-                updateProgress(progressBar, progressText, percentage);
-
-                const blob = await new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.onload = async () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (targetWidth !== 'original') {
-                            const tw = parseInt(targetWidth);
-                            if (width > tw) {
-                                height = (tw / width) * height;
-                                width = tw;
-                            }
-                        }
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        if (currentTargetSize > 0) { // Auto adjust quality
-                            let low = 0.1, high = 0.95, bestBlob = null;
-                            for (let j = 0; j < 6; j++) {
-                                const mid = (low + high) / 2;
-                                const b = await new Promise(r => canvas.toBlob(r, 'image/jpeg', mid));
-                                if (b.size <= currentTargetSize) {
-                                    bestBlob = b;
-                                    low = mid;
-                                } else {
-                                    high = mid;
-                                }
-                            }
-                            resolve(bestBlob || (await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.1))));
-                        } else {
-                            canvas.toBlob(resolve, 'image/jpeg', manualQuality);
-                        }
-                    };
-                    img.onerror = () => reject(new Error(`Failed to load ${file.name}`));
-                    img.src = URL.createObjectURL(file);
-                });
-                results.push({ name: file.name.replace(/\.[^/.]+$/, "") + "_compressed.jpg", blob, originalSize: file.size });
-            }
-            updateProgress(progressBar, progressText, 100);
-            return results;
-        }
-
-        async function performOCR(file, tab) {
-            ocrProgressContainer.style.display = 'block';
-            ocrResultArea.value = 'Processing image...';
-            
-            try {
-                // Preprocessing
-                const processedImg = await preprocessImage(file);
-                
-                const worker = await Tesseract.createWorker('eng+kor', 1, {
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            const p = Math.round(m.progress * 100);
-                            updateProgress(ocrProgressBar, ocrProgressText, p);
-                        } else {
-                            ocrProgressText.textContent = m.status;
-                        }
-                    }
-                });
-
-                const { data: { text } } = await worker.recognize(processedImg);
-                ocrResultArea.value = text || 'No text extracted.';
-                await worker.terminate();
-            } catch (e) {
-                throw new Error('Error during OCR: ' + e.message);
-            }
-        }
-
-        async function preprocessImage(file) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                    
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    const data = imageData.data;
-                    const isGrayscale = document.getElementById('ocr-grayscale').checked;
-                    const isContrast = document.getElementById('ocr-contrast').checked;
-                    const threshold = parseInt(document.getElementById('ocr-threshold').value);
-
-                    for (let i = 0; i < data.length; i += 4) {
-                        let r = data[i], g = data[i+1], b = data[i+2];
-                        
-                        if (isGrayscale || isContrast) {
-                            let gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                            if (isContrast) {
-                                gray = (gray - 128) * 1.5 + 128; // Simple contrast boost
-                            }
-                            if (threshold > 0) {
-                                gray = gray >= threshold ? 255 : 0;
-                            }
-                            data[i] = data[i+1] = data[i+2] = gray;
-                        }
-                    }
-                    ctx.putImageData(imageData, 0, 0);
-                    resolve(canvas.toDataURL('image/png'));
-                };
-                img.src = URL.createObjectURL(file);
-            });
-        }
-
-        // --- Helper Functions ---
-        async function convertHeicToJpg(files, tab) {
-            const results = [];
+        async function convertHeic(files, tab) {
+            const res = [];
             const bar = tab.querySelector('.progress-bar-inner');
-            const txt = tab.querySelector('.progress-text');
             for (let i = 0; i < files.length; i++) {
-                updateProgress(bar, txt, Math.round((i/files.length)*100));
-                try {
-                    const blob = await heic2any({ blob: files[i], toType: "image/jpeg", quality: 0.9 });
-                    results.push({ name: files[i].name.replace(/\.(heic|heif)$/i, '') + '.jpg', blob, originalSize: files[i].size });
-                } catch (e) { displayError(tab, `Failed to convert ${files[i].name}`); }
+                bar.style.width = (i/files.length)*100 + '%';
+                const blob = await heic2any({ blob: files[i], toType: 'image/jpeg', quality: 0.9 });
+                res.push({ name: files[i].name.replace(/\.[^/.]+$/, "") + '.jpg', blob, originalSize: files[i].size });
             }
-            updateProgress(bar, txt, 100);
-            return results;
+            return res;
         }
 
-        async function convertImageToFormat(files, tab, format, ext, quality) {
-            const results = [];
+        async function convertCanvas(files, tab, format, ext, quality) {
+            const res = [];
             const bar = tab.querySelector('.progress-bar-inner');
-            const txt = tab.querySelector('.progress-text');
             for (let i = 0; i < files.length; i++) {
-                updateProgress(bar, txt, Math.round((i/files.length)*100));
-                const blob = await new Promise(resolve => {
+                bar.style.width = (i/files.length)*100 + '%';
+                const blob = await new Promise(r => {
                     const img = new Image();
                     img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = img.width; canvas.height = img.height;
-                        canvas.getContext('2d').drawImage(img, 0, 0);
-                        canvas.toBlob(resolve, format, parseFloat(quality) || 0.92);
+                        const c = document.createElement('canvas');
+                        c.width = img.width; c.height = img.height;
+                        c.getContext('2d').drawImage(img, 0, 0);
+                        c.toBlob(r, format, parseFloat(quality) || 0.92);
                     };
                     img.src = URL.createObjectURL(files[i]);
                 });
-                results.push({ name: files[i].name.split('.').slice(0, -1).join('.') + ext, blob, originalSize: files[i].size });
+                res.push({ name: files[i].name.replace(/\.[^/.]+$/, "") + ext, blob, originalSize: files[i].size });
             }
-            updateProgress(bar, txt, 100);
-            return results;
+            return res;
         }
 
-        async function convertJpgToPdf(files, tab) {
+        async function compressLogic(files, tab) {
+            const res = [];
+            const bar = tab.querySelector('.progress-bar-inner');
+            const tw = tab.querySelector('#compress-resize').value;
+            const mq = parseFloat(tab.querySelector('#compress-quality').value);
+
+            for (let i = 0; i < files.length; i++) {
+                bar.style.width = (i/files.length)*100 + '%';
+                const blob = await new Promise(r => {
+                    const img = new Image();
+                    img.onload = async () => {
+                        const c = document.createElement('canvas');
+                        let w = img.width, h = img.height;
+                        if (tw !== 'original') {
+                            const target = parseInt(tw);
+                            if (w > target) { h = (target/w)*h; w = target; }
+                        }
+                        c.width = w; c.height = h;
+                        c.getContext('2d').drawImage(img, 0, 0, w, h);
+                        if (currentTargetSize > 0) {
+                            let low = 0.1, high = 0.95, best = null;
+                            for (let j=0; j<6; j++) {
+                                const mid = (low+high)/2;
+                                const b = await new Promise(ok => c.toBlob(ok, 'image/jpeg', mid));
+                                if (b.size <= currentTargetSize) { best = b; low = mid; } else { high = mid; }
+                            }
+                            r(best || (await new Promise(ok => c.toBlob(ok, 'image/jpeg', 0.1))));
+                        } else {
+                            c.toBlob(r, 'image/jpeg', mq);
+                        }
+                    };
+                    img.src = URL.createObjectURL(files[i]);
+                });
+                res.push({ name: files[i].name.replace(/\.[^/.]+$/, "") + "_comp.jpg", blob, originalSize: files[i].size });
+            }
+            return res;
+        }
+
+        async function performOCR(file, tab) {
+            const container = document.getElementById('ocr-progress-container');
+            const bar = document.getElementById('ocr-progress-bar');
+            container.style.display = 'block';
+            ocrResult.value = 'Analyzing image...';
+            
+            const worker = await Tesseract.createWorker('eng+kor', 1, {
+                logger: m => { if (m.status === 'recognizing text') bar.style.width = (m.progress*100) + '%'; }
+            });
+            const { data: { text } } = await worker.recognize(file);
+            ocrResult.value = text || 'No text found.';
+            await worker.terminate();
+        }
+
+        async function convertPdf(files, tab) {
             const pdf = new jsPDF();
             for (let i = 0; i < files.length; i++) {
+                if (i > 0) pdf.addPage();
                 const dataUrl = await new Promise(r => {
                     const reader = new FileReader();
                     reader.onload = e => r(e.target.result);
                     reader.readAsDataURL(files[i]);
                 });
-                if (i > 0) pdf.addPage();
-                pdf.addImage(dataUrl, 'JPEG', 0, 0, 210, 297); // Simplified A4 fit
+                const img = new Image();
+                await new Promise(r => { img.onload = r; img.src = dataUrl; });
+                const ratio = img.width / img.height;
+                pdf.addImage(dataUrl, 'JPEG', 0, 0, 210, 210/ratio);
             }
-            return [{ name: 'converted.pdf', blob: pdf.output('blob'), originalSize: 0 }];
+            return [{ name: 'merged.pdf', blob: pdf.output('blob'), originalSize: 0 }];
         }
 
-        async function createFavicon(file, tab) {
+        async function convertFavicon(file, tab) {
             const zip = new JSZip();
             const source = await new Promise(r => {
                 const img = new Image(); img.onload = () => r(img);
                 img.src = URL.createObjectURL(file);
             });
-            const sizes = [16, 32, 48, 64];
-            for (const s of sizes) {
-                const canvas = document.createElement('canvas');
-                canvas.width = canvas.height = s;
-                canvas.getContext('2d').drawImage(source, 0, 0, s, s);
-                const b = await new Promise(r => canvas.toBlob(r, 'image/png'));
+            for (const s of [16, 32, 48, 64]) {
+                const c = document.createElement('canvas');
+                c.width = c.height = s;
+                c.getContext('2d').drawImage(source, 0, 0, s, s);
+                const b = await new Promise(ok => c.toBlob(ok, 'image/png'));
                 zip.file(`favicon-${s}x${s}.png`, b);
             }
-            const zipBlob = await zip.generateAsync({ type: 'blob' });
-            return [{ name: 'favicon-package.zip', blob: zipBlob, originalSize: file.size, noPreview: true }];
+            const blob = await zip.generateAsync({ type: 'blob' });
+            return [{ name: 'favicon_pack.zip', blob, originalSize: file.size, noPreview: true }];
         }
 
-        function displayResults(tab, resultsData) {
+        function displayResults(tab, data) {
             const container = tab.querySelector('.results');
-            container.innerHTML = '';
-            if (resultsData.length > 1) {
+            if (data.length > 1) {
                 const zip = new JSZip();
-                resultsData.forEach(r => zip.file(r.name, r.blob));
+                data.forEach(r => zip.file(r.name, r.blob));
                 zip.generateAsync({ type: 'blob' }).then(b => {
-                    container.appendChild(createResultItem({ name: 'all_files.zip', blob: b, originalSize: 0, noPreview: true }));
+                    container.prepend(createResultItem({ name: 'download_all.zip', blob: b, originalSize: 0, noPreview: true }));
                 });
             }
-            resultsData.forEach(r => container.appendChild(createResultItem(r)));
+            data.forEach(r => container.appendChild(createResultItem(r)));
         }
 
         function createResultItem(res) {
@@ -1067,8 +918,8 @@
             div.innerHTML = `
                 ${res.noPreview ? '' : `<img src="${url}">`}
                 <div class="result-info">
-                    <strong>${res.name}</strong>
-                    <p>${formatBytes(res.blob.size)} ${reduction > 0 ? `(${reduction}% reduced)` : ''}</p>
+                    <strong style="display:block; margin-bottom: 0.25rem;">${res.name}</strong>
+                    <p>${formatBytes(res.blob.size)} ${reduction > 0 ? `<span style="color: var(--brand-success); font-weight: 700;">(${reduction}% smaller)</span>` : ''}</p>
                 </div>
                 <a href="${url}" download="${res.name}" class="download-button">Download</a>
             `;
@@ -1076,9 +927,9 @@
         }
 
         function updateSelectedFilesDisplay(tab, files) {
-            const p = tab.querySelector('.file-drop-area p');
-            if (!files || files.length === 0) p.textContent = 'Select or drag files here.';
-            else p.textContent = files.length === 1 ? `Selected: ${files[0].name}` : `${files.length} files selected`;
+            const p = tab.querySelector('.file-drop-area p:first-child');
+            if (!p) return;
+            p.textContent = (!files || files.length === 0) ? 'Drop files here' : (files.length === 1 ? `Selected: ${files[0].name}` : `${files.length} files selected`);
         }
 
         function setInProgress(tab, busy) {
@@ -1088,23 +939,6 @@
             if (bar) bar.style.display = busy ? 'block' : 'none';
         }
 
-        function updateProgress(bar, text, p) {
-            if (bar) bar.style.width = p + '%';
-            if (text) text.textContent = p + '%';
-        }
-
-        function clearResultsAndErrors(tab) {
-            const r = tab.querySelector('.results');
-            const e = tab.querySelector('.error-message');
-            if (r) r.innerHTML = '';
-            if (e) { e.textContent = ''; e.style.display = 'none'; }
-        }
-
-        function displayError(tab, msg) {
-            const e = tab.querySelector('.error-message');
-            if (e) { e.textContent = msg; e.style.display = 'block'; }
-        }
-
         function formatBytes(b) {
             if (b === 0) return '0 B';
             const i = Math.floor(Math.log(b) / Math.log(1024));
@@ -1112,6 +946,5 @@
         }
     });
     </script>
-
 </body>
 </html>
