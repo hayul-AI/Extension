@@ -1250,20 +1250,20 @@
         async function initOcrEngineOnce() {
             if (ocrWorker) return ocrWorker;
             const output = document.getElementById('ocrResult');
-            output.value = "Initializing OCR engine...";
+            const bar = document.getElementById('ocr-progress-bar');
+            if (output) output.value = "Initializing OCR engine...";
             
             try {
                 if (typeof Tesseract === 'undefined') throw new Error("Tesseract.js not loaded. Check script import order.");
                 
-                const timeoutSeconds = 60; // Increased to 60s
+                const timeoutSeconds = 60;
                 const workerOptions = {
                     workerPath: "/ocr/worker.min.js",
                     corePath: "/ocr/tesseract-core.wasm.js",
                     langPath: "/ocr/tessdata",
                     logger: m => {
                         console.log(m);
-                        const bar = document.getElementById('ocr-progress-bar');
-                        const output = document.getElementById('ocrResult');
+                        const progress = Math.round((m.progress || 0) * 100);
                         
                         // Update diagnostics panel progress
                         const diagList = document.getElementById('diag-list');
@@ -1274,34 +1274,34 @@
                                 progressItem.className = 'diag-item diag-progress';
                                 diagList.appendChild(progressItem);
                             }
-                            progressItem.innerHTML = `<span>Last Action</span><span class="diag-status">${m.status}: ${Math.round((m.progress || 0) * 100)}%</span>`;
+                            progressItem.innerHTML = `<span>Last Action: ${m.status}</span><span class="diag-status">${progress}%</span>`;
                         }
 
                         if (m.status === 'recognizing text') {
-                            const p = Math.round(m.progress * 100);
-                            if (bar) bar.style.width = p + '%';
-                            if (output) output.value = `Recognizing text... ${p}%`;
+                            if (bar) bar.style.width = progress + '%';
+                            if (output) output.value = `Recognizing text... ${progress}%`;
                         } else {
                             if (output && !output.value.includes('OCR engine ready')) {
-                                output.value = `${m.status}... ${m.progress ? Math.round(m.progress * 100) + '%' : ''}`;
+                                output.value = `${m.status}... ${progress}%`;
                             }
                         }
                     }
                 };
 
-                const initPromise = Tesseract.createWorker(['eng', 'kor'], 1, workerOptions);
-
-                // Timeout for initialization
+                // Create worker with explicit languages
+                const worker = await Tesseract.createWorker(['eng', 'kor'], 1, workerOptions);
+                
+                // 60s Timeout for initialization (Tesseract.createWorker is async)
                 const timeoutPromise = new Promise((_, reject) => 
                     setTimeout(() => reject(new Error(`OCR engine initialization timed out (${timeoutSeconds}s)`)), timeoutSeconds * 1000)
                 );
 
-                ocrWorker = await Promise.race([initPromise, timeoutPromise]);
-                output.value = "OCR engine ready.";
+                ocrWorker = await Promise.race([Promise.resolve(worker), timeoutPromise]);
+                if (output) output.value = "OCR engine ready.";
                 return ocrWorker;
             } catch (error) {
                 console.error('OCR Init Error:', error);
-                output.value = `OCR Init Error: ${error.message}`;
+                if (output) output.value = `OCR Init Error: ${error.message}`;
                 ocrWorker = null;
                 throw error;
             }

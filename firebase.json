@@ -17,11 +17,7 @@
         ]
       }
     ],
-    "rewrites": [
-      {
-        "source": "!/ocr/**",
-        "destination": "/index.html"
-      }
-    ]
+    "cleanUrls": true,
+    "trailingSlash": false
   }
 }
