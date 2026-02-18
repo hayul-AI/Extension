@@ -349,6 +349,53 @@
 
         .result-card:hover { transform: scale(1.02); border-color: var(--brand-primary); }
 
+        /* OCR Comparison Styles */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        @media (min-width: 992px) {
+            .comparison-grid { grid-template-columns: 1fr 1fr; }
+        }
+        .corrected-panel {
+            border: 2px solid var(--brand-primary);
+            background: rgba(99, 102, 241, 0.04);
+            border-radius: 18px;
+            padding: 1.5rem;
+            min-height: 300px;
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.7;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+        .diff-highlight {
+            color: #2563eb;
+            font-weight: 700;
+            background: rgba(37, 99, 235, 0.1);
+            padding: 0 2px;
+            border-radius: 4px;
+            text-decoration: underline;
+        }
+        .ocr-controls-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+        .lang-select {
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-base);
+            background: var(--bg-base);
+            color: var(--text-main);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
         #ocr-result-area, #ocrResult {
             width: 100%; height: 300px;
             margin-top: 2rem; padding: 1.5rem;
@@ -853,17 +900,37 @@
                 </div>
                 <button class="btn-success convert-button" id="ocr-start-btn" disabled>Scan & Extract</button>
                 <div class="progress-wrapper" id="ocr-progress-container"><div class="progress-fill" id="ocr-progress-bar"></div></div>
-                <textarea id="ocrResult" placeholder="Recognized text will appear here..." readonly></textarea>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 2rem;">
-                    <button class="btn-primary" id="ocr-check-grammar" style="padding: 0.75rem; background: var(--brand-secondary); box-shadow: none;">Check Grammar</button>
-                    <button class="btn-primary" id="ocr-copy-btn" style="padding: 0.75rem;">Copy</button>
-                    <button class="btn-primary" id="ocr-download-btn" style="padding: 0.75rem; background: var(--brand-success); box-shadow: none;">Save</button>
-                    <button class="btn-primary" id="ocr-reset-btn" style="padding: 0.75rem; background: var(--text-sub); box-shadow: none;">Reset</button>
+                
+                <div class="comparison-grid" id="ocr-main-view">
+                    <div class="original-side">
+                        <label style="font-weight: 700; display: block; margin: 1.5rem 0 0.5rem 0;">Original OCR Result</label>
+                        <textarea id="ocrResult" placeholder="Recognized text will appear here..." readonly style="margin-top:0; height: 400px;"></textarea>
+                    </div>
+                    <div class="corrected-side" id="ocr-preview-area" style="display: none;">
+                        <label style="font-weight: 700; display: block; margin: 1.5rem 0 0.5rem 0;">Corrected Preview (Blue = Changed)</label>
+                        <div id="correctedResult" class="corrected-panel"></div>
+                    </div>
                 </div>
+
+                <div class="ocr-controls-group">
+                    <select id="ocr-lang-select" class="lang-select">
+                        <option value="auto">Auto Detect</option>
+                        <option value="en-US">English (US)</option>
+                        <option value="ko">Korean (한국어)</option>
+                    </select>
+                    <button class="btn-primary" id="ocr-check-grammar" style="padding: 0.75rem 1.5rem; background: var(--brand-secondary); box-shadow: none;">Check Grammar</button>
+                    <button class="btn-primary" id="ocr-auto-fix" style="padding: 0.75rem 1.5rem; background: var(--brand-primary); display: none;">Auto Fix All</button>
+                    <button class="btn-primary" id="ocr-apply-fixes" style="padding: 0.75rem 1.5rem; background: var(--brand-success); display: none;">Apply to Original</button>
+                    <button class="btn-primary" id="ocr-copy-corrected" style="padding: 0.75rem 1.5rem; background: var(--text-main); display: none;">Copy Corrected</button>
+                    <button class="btn-primary" id="ocr-copy-btn" style="padding: 0.75rem 1.5rem;">Copy Original</button>
+                    <button class="btn-primary" id="ocr-download-btn" style="padding: 0.75rem 1.5rem; background: var(--brand-success); box-shadow: none;">Save</button>
+                    <button class="btn-primary" id="ocr-reset-btn" style="padding: 0.75rem 1.5rem; background: var(--text-sub); box-shadow: none;">Reset</button>
+                </div>
+
                 <div id="grammar-issues" class="issues-panel">
                     <h3 style="margin-bottom: 1rem;">Detected Issues</h3>
                     <div id="issues-list"></div>
-                    <button class="btn-primary" id="apply-all-fixes" style="margin-top: 1rem; width: 100%;">Apply Cleanup & Normalization</button>
+                    <button class="btn-primary" id="apply-all-fixes" style="margin-top: 1rem; width: 100%;">Rules-based Cleanup (Spaces/Punctuation)</button>
                 </div>
 
                 <div id="ocr-diagnostics" class="diagnostics-panel">
@@ -1549,62 +1616,151 @@
             img.src = URL.createObjectURL(file);
         }
 
-        // Grammar Check Logic
-        document.getElementById('ocr-check-grammar').addEventListener('click', async () => {
+        // Grammar Check & Enhancement Logic
+        const ocrLangSelect = document.getElementById('ocr-lang-select');
+        const correctedArea = document.getElementById('correctedResult');
+        const previewArea = document.getElementById('ocr-preview-area');
+        const autoFixBtn = document.getElementById('ocr-auto-fix');
+        const applyFixesBtn = document.getElementById('ocr-apply-fixes');
+        const copyCorrectedBtn = document.getElementById('ocr-copy-corrected');
+        let lastMatches = [];
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function makeDiffHtml(original, matches) {
+            let html = "";
+            let lastIdx = 0;
+            // Sort matches by offset ascending
+            const sortedMatches = [...matches].sort((a, b) => a.offset - b.offset);
+            
+            sortedMatches.forEach(match => {
+                html += escapeHtml(original.substring(lastIdx, match.offset));
+                const replacement = (match.replacements && match.replacements.length > 0) 
+                    ? match.replacements[0].value 
+                    : original.substring(match.offset, match.offset + match.length);
+                
+                html += `<span class="diff-highlight" title="${escapeHtml(match.message)}">${escapeHtml(replacement)}</span>`;
+                lastIdx = match.offset + match.length;
+            });
+            html += escapeHtml(original.substring(lastIdx));
+            return html;
+        }
+
+        async function checkGrammar() {
             const text = ocrOutput.value;
-            if (!text || text.length < 5) return;
+            if (!text || text.length < 2) return;
             
             const panel = document.getElementById('grammar-issues');
             const list = document.getElementById('issues-list');
             panel.style.display = 'block';
-            list.innerHTML = 'Analyzing text...';
+            list.innerHTML = 'Analyzing text with AI...';
+            
+            let lang = ocrLangSelect.value;
+            if (lang === 'auto') {
+                const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text);
+                lang = isKorean ? 'ko' : 'en-US';
+            }
 
             try {
                 const response = await fetch('https://api.languagetool.org/v2/check', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `language=en-US&text=${encodeURIComponent(text)}`
+                    body: `language=${lang}&text=${encodeURIComponent(text)}`
                 });
                 const data = await response.json();
+                lastMatches = data.matches;
                 
                 list.innerHTML = '';
                 if (data.matches.length === 0) {
-                    list.innerHTML = '<p style="color: var(--brand-success);">No issues found!</p>';
+                    list.innerHTML = '<p style="color: var(--brand-success); font-weight: 800;">✨ No major issues detected!</p>';
+                    previewArea.style.display = 'none';
+                    autoFixBtn.style.display = 'none';
+                    applyFixesBtn.style.display = 'none';
+                    copyCorrectedBtn.style.display = 'none';
                 } else {
-                    data.matches.forEach(match => {
+                    // Show Comparison View
+                    previewArea.style.display = 'block';
+                    autoFixBtn.style.display = 'inline-block';
+                    applyFixesBtn.style.display = 'inline-block';
+                    copyCorrectedBtn.style.display = 'inline-block';
+                    
+                    correctedArea.innerHTML = makeDiffHtml(text, data.matches);
+
+                    data.matches.forEach((match, idx) => {
                         const div = document.createElement('div');
                         div.className = 'issue-item';
                         div.innerHTML = `
-                            <p class="issue-message">${match.message}</p>
-                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">"${text.substring(match.offset, match.offset + match.length)}"</p>
-                            <div>
-                                ${match.replacements.slice(0, 3).map(rep => `<button class="suggestion-btn" onclick="window.applyGrammarFix(${match.offset}, ${match.length}, '${rep.value.replace(/'/g, "\\'")}')">${rep.value}</button>`).join('')}
+                            <p class="issue-message"><strong>[${match.rule.category.name}]</strong> ${match.message}</p>
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem; opacity: 0.8;">Context: "...${escapeHtml(text.substring(Math.max(0, match.offset-20), match.offset))}<b style="color:var(--brand-accent)">${escapeHtml(text.substring(match.offset, match.offset + match.length))}</b>${escapeHtml(text.substring(match.offset + match.length, match.offset + match.length + 20))}..."</p>
+                            <div class="suggestions">
+                                ${match.replacements.slice(0, 3).map(rep => `<button class="suggestion-btn" onclick="window.applySingleFix(${idx}, '${rep.value.replace(/'/g, "\\'")}')">${rep.value}</button>`).join('')}
                             </div>
                         `;
                         list.appendChild(div);
                     });
                 }
             } catch (e) {
-                list.innerHTML = 'Error connecting to grammar engine.';
+                list.innerHTML = 'Error connecting to grammar engine. Check your internet connection.';
             }
+        }
+
+        document.getElementById('ocr-check-grammar').addEventListener('click', checkGrammar);
+
+        window.applySingleFix = (matchIdx, replacement) => {
+            const match = lastMatches[matchIdx];
+            const text = ocrOutput.value;
+            ocrOutput.value = text.substring(0, match.offset) + replacement + text.substring(match.offset + match.length);
+            checkGrammar(); // Refresh
+        };
+
+        autoFixBtn.addEventListener('click', () => {
+            let text = ocrOutput.value;
+            // Apply from back to front to preserve offsets
+            const sorted = [...lastMatches].sort((a, b) => b.offset - a.offset);
+            sorted.forEach(match => {
+                if (match.replacements && match.replacements.length > 0) {
+                    const rep = match.replacements[0].value;
+                    text = text.substring(0, match.offset) + rep + text.substring(match.offset + match.length);
+                }
+            });
+            ocrOutput.value = text;
+            checkGrammar();
         });
 
-        window.applyGrammarFix = (offset, length, replacement) => {
-            const text = ocrOutput.value;
-            ocrOutput.value = text.substring(0, offset) + replacement + text.substring(offset + length);
-            document.getElementById('ocr-check-grammar').click(); // Re-check
-        };
+        applyFixesBtn.addEventListener('click', () => {
+            // The text is already in the preview, we just update the original if they haven't auto-fixed yet
+            // But usually "Apply" means take the corrected version (div content) and put it in textarea
+            ocrOutput.value = correctedArea.innerText;
+            previewArea.style.display = 'none';
+            autoFixBtn.style.display = 'none';
+            applyFixesBtn.style.display = 'none';
+            copyCorrectedBtn.style.display = 'none';
+            alert('Corrected text applied to original OCR result.');
+        });
+
+        copyCorrectedBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(correctedArea.innerText);
+            alert('Corrected text copied to clipboard!');
+        });
 
         document.getElementById('apply-all-fixes').addEventListener('click', () => {
             let text = ocrOutput.value;
-            // 1. Remove double spaces
+            // 1. Double spaces
             text = text.replace(/\s\s+/g, ' ');
-            // 2. Normalize punctuation spacing
-            text = text.replace(/\s([,.!?;:])/g, '$1');
-            // 3. Sentence capitalization
-            text = text.replace(/(^\s*|[.!?]\s+)([a-z])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+            // 2. Korean specific cleanup (if applicable)
+            if (/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text)) {
+                text = text.replace(/([가-힣])\s+([,.!?])/g, '$1$2'); // Remove space before punctuation
+            } else {
+                // English punctuation cleanup
+                text = text.replace(/\s([,.!?;:])/g, '$1');
+                text = text.replace(/(^\s*|[.!?]\s+)([a-z])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+            }
             ocrOutput.value = text.trim();
-            alert('Cleanup and normalization applied!');
+            checkGrammar();
         });
 
         async function convertPdf(files, tab) {
