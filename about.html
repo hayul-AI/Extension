@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Image Converter Tool</title>
+    <title>About - PixelConvert</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; padding: 20px; max-width: 800px; margin: 0 auto; color: #333; }
-        h1 { border-bottom: 2px solid #007bff; padding-bottom: 10px; color: #007bff; }
-        p { margin-bottom: 15px; }
-        .back-link { display: inline-block; margin-top: 20px; text-decoration: none; color: white; background: #007bff; padding: 10px 20px; border-radius: 5px; }
-        .back-link:hover { background: #0056b3; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; padding: 40px 20px; max-width: 800px; margin: 0 auto; color: #1e293b; background-color: #f8fafc; }
+        h1 { font-weight: 800; color: #6366f1; margin-bottom: 20px; }
+        p { margin-bottom: 20px; font-size: 1.1rem; color: #64748b; }
+        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .back-link { display: inline-block; margin-top: 30px; text-decoration: none; color: white; background: #6366f1; padding: 12px 24px; border-radius: 12px; font-weight: 700; transition: transform 0.2s; }
+        .back-link:hover { transform: translateY(-2px); }
     </style>
 </head>
 <body>
-    <h1>About Our Service</h1>
-    <p>'Image Converter Tool' is a web-based utility designed to help anyone edit images easily, quickly, and securely.</p>
-    
-    <p>Many online conversion sites upload user files to a server for processing. This can lead to slow speeds and significant privacy risks.</p>
+    <div class="card">
+        <h1>About PixelConvert</h1>
+        <p>PixelConvert is a state-of-the-art web utility designed for fast, secure, and professional image processing.</p>
+        
+        <p>Unlike traditional online converters that upload your private photos to a remote server, <strong>PixelConvert performs all operations 100% locally within your browser.</strong> This means your data never leaves your device, ensuring total privacy and near-instant processing speeds.</p>
 
-    <p>This service utilizes modern web technologies (WebAssembly, Canvas API, etc.) to <strong>perform all operations directly within your browser</strong>. Your valuable photos are never sent anywhere; they are processed exclusively on your own device.</p>
+        <p>Our mission is to provide high-quality creative tools that are accessible to everyone, for free, without the need for registration or software installation.</p>
 
-    <p>Key Features:</p>
-    <ul>
-        <li>Various format conversions including HEIC, WEBP, PNG, and JPG</li>
-        <li>Image size optimization (Compression)</li>
-        <li>Text extraction from images (OCR)</li>
-        <li>Merging multiple images into a single PDF</li>
-    </ul>
+        <p>Key Technologies:</p>
+        <ul>
+            <li>WebAssembly (WASM) for high-performance OCR</li>
+            <li>HTML5 Canvas for lossless image conversion</li>
+            <li>Tesseract.js for localized text extraction</li>
+        </ul>
 
-    <a href="index.html" class="back-link">Go to Tool</a>
+        <a href="index.html" class="back-link">Back to PixelConvert</a>
+    </div>
 </body>
 </html>

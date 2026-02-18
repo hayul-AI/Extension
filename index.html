@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImageTools Pro - Advanced Browser Utility</title>
-    <meta name="description" content="Free online image converter. Convert HEIC, WEBP, PNG to JPG, compress images, and extract text securely in your browser.">
+    <title>PixelConvert — Free Online Image Converter & OCR</title>
+    <meta name="description" content="Convert, compress, and extract text from images instantly. HEIC, JPG, PNG, WEBP, PDF, and OCR tools. No uploads, 100% browser-based.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -137,11 +137,11 @@
         .hero { text-align: center; margin-bottom: 6rem; }
         .hero h1 {
             font-size: 4.5rem; font-weight: 800; letter-spacing: -0.06em;
-            line-height: 1; margin-bottom: 1.5rem;
+            line-height: 1.1; margin-bottom: 1.5rem;
             background: linear-gradient(to right, var(--text-main), var(--brand-primary));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .hero p { font-size: 1.25rem; color: var(--text-sub); max-width: 600px; margin: 0 auto; font-weight: 500; }
+        .hero p { font-size: 1.25rem; color: var(--text-sub); max-width: 700px; margin: 0 auto; font-weight: 500; }
 
         .tabs-container {
             position: sticky; top: 2rem; z-index: 100;
@@ -191,6 +191,29 @@
         }
 
         .tab-content.active { display: block; }
+
+        .tool-info {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-base);
+            padding-bottom: 2rem;
+        }
+
+        .tool-info h3 { font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; color: var(--brand-primary); }
+        .tool-info p { margin-bottom: 1rem; color: var(--text-sub); }
+        .tool-steps { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .tool-steps li { margin-bottom: 0.5rem; font-weight: 600; color: var(--text-main); }
+        
+        .faq-block { margin-top: 2rem; }
+        .faq-item-small { margin-bottom: 1.5rem; }
+        .faq-item-small strong { display: block; margin-bottom: 0.25rem; color: var(--text-main); }
+        .faq-item-small span { color: var(--text-sub); font-size: 0.95rem; }
+
+        .privacy-note {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.75rem 1.25rem; background: rgba(16, 185, 129, 0.1);
+            color: var(--brand-success); border-radius: 12px; font-weight: 700;
+            font-size: 0.9rem; margin-top: 1rem;
+        }
 
         .drop-zone {
             border: 2px dashed var(--border-base);
@@ -366,7 +389,7 @@
                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                     </svg>
                 </div>
-                <span class="logo-text">ImageTools</span>
+                <span class="logo-text">PixelConvert</span>
             </a>
             <button class="theme-toggle" id="theme-toggle">
                 <span class="theme-icon">🌙</span>
@@ -375,20 +398,20 @@
         </header>
 
         <section class="hero">
-            <h1>Smarter Workflow.<br>Total Privacy.</h1>
-            <p>The web's most secure pro image toolkit. Zero uploads, zero logs, instant local processing.</p>
+            <h1>Free Online Image Converter & OCR</h1>
+            <p>Convert, compress, and extract text from images instantly. No uploads, no registration — everything runs in your browser.</p>
         </section>
 
         <div class="tabs-container">
             <nav class="tabs">
-                <button class="tab-button active" data-tab="heic-to-jpg">HEIC to JPG</button>
-                <button class="tab-button" data-tab="webp-to-jpg">WEBP to JPG</button>
-                <button class="tab-button" data-tab="png-to-jpg">PNG to JPG</button>
-                <button class="tab-button" data-tab="jpg-to-png">JPG to PNG</button>
-                <button class="tab-button" data-tab="compress">Compress</button>
-                <button class="tab-button" data-tab="ocr">OCR</button>
-                <button class="tab-button" data-tab="jpg-to-pdf">PDF</button>
-                <button class="tab-button" data-tab="favicon">Favicon</button>
+                <button class="tab-button active" data-tab="heic-to-jpg">HEIC to JPG Converter</button>
+                <button class="tab-button" data-tab="webp-to-jpg">WEBP to JPG Converter</button>
+                <button class="tab-button" data-tab="png-to-jpg">PNG to JPG Converter</button>
+                <button class="tab-button" data-tab="jpg-to-png">JPG to PNG Converter</button>
+                <button class="tab-button" data-tab="compress">Image Compressor</button>
+                <button class="tab-button" data-tab="ocr">Image to Text (OCR)</button>
+                <button class="tab-button" data-tab="jpg-to-pdf">Images to PDF</button>
+                <button class="tab-button" data-tab="favicon">Favicon Generator</button>
             </nav>
         </div>
 
@@ -397,7 +420,35 @@
 
             <!-- HEIC Tab -->
             <div id="heic-to-jpg" class="tab-content active">
-                <h2>Convert HEIC to JPG</h2>
+                <div class="tool-info">
+                    <h3>Professional HEIC to JPG Converter</h3>
+                    <p>Easily convert Apple's high-efficiency image format (HEIC) to universally compatible JPG files. Our converter preserves image metadata and quality while ensuring your photos can be opened on any device.</p>
+                    <p>This tool is ideal for iPhone users who need to share photos with Windows, Android, or web platforms that don't yet support the HEIF standard.</p>
+                    <ul class="tool-steps">
+                        <li>Select or drag and drop your .heic or .heif files.</li>
+                        <li>Click "Process Images" to start the local conversion.</li>
+                        <li>Download your high-quality JPG files instantly.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>Is this converter safe to use?</strong>
+                            <span>Yes. PixelConvert processes images entirely in your browser's memory. No data is sent to our servers.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Can I convert multiple HEIC files at once?</strong>
+                            <span>Absolutely! Our batch converter can handle dozens of files simultaneously with pro-grade speed.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Do I lose image quality?</strong>
+                            <span>We use optimized algorithms to ensure minimal quality loss during the HEIC to JPG conversion process.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Does it support .HEIF files?</strong>
+                            <span>Yes, both .heic and .heif extensions are supported.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop HEIC files here</p>
                     <label class="btn-primary">Select Files</label>
@@ -410,7 +461,35 @@
 
             <!-- WEBP Tab -->
             <div id="webp-to-jpg" class="tab-content">
-                <h2>Convert WEBP to JPG</h2>
+                <div class="tool-info">
+                    <h3>Fast WEBP to JPG Converter</h3>
+                    <p>Convert modern WEBP images back to standard JPG format in seconds. While WEBP is great for the web, JPG remains the standard for editing, printing, and sharing across all software.</p>
+                    <p>Our tool uses your browser's hardware acceleration to provide near-instant results even for high-resolution graphics.</p>
+                    <ul class="tool-steps">
+                        <li>Upload your .webp files from your computer.</li>
+                        <li>The tool automatically prepares the standard JPG output.</li>
+                        <li>Save the converted images to your local drive.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>Why convert WEBP to JPG?</strong>
+                            <span>Many older applications and some social media platforms do not fully support the WEBP format.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Is there a file size limit?</strong>
+                            <span>Since processing happens locally, the limit depends on your device's RAM, but it easily handles most high-res photos.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Can I use this on mobile?</strong>
+                            <span>Yes, PixelConvert is fully responsive and works perfectly on iOS and Android browsers.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Does it cost anything?</strong>
+                            <span>No, our converter is 100% free with no hidden subscriptions.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop WEBP files here</p>
                     <label class="btn-primary">Select Files</label>
@@ -423,7 +502,35 @@
 
             <!-- PNG Tab -->
             <div id="png-to-jpg" class="tab-content">
-                <h2>Convert PNG to JPG</h2>
+                <div class="tool-info">
+                    <h3>High-Quality PNG to JPG Converter</h3>
+                    <p>Convert transparent PNG images to optimized JPG files. This is perfect for reducing file sizes for web use while maintaining high visual fidelity.</p>
+                    <p>You can manually adjust the output quality to find the perfect balance between file size and image clarity.</p>
+                    <ul class="tool-steps">
+                        <li>Add your PNG images to the converter.</li>
+                        <li>Adjust the quality slider if you need a specific file size.</li>
+                        <li>Download the resulting JPG images instantly.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>What happens to transparency?</strong>
+                            <span>Since JPG doesn't support transparency, any transparent areas will be filled with a solid white background.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Does this reduce file size?</strong>
+                            <span>Yes, JPG is a lossy format and is typically much smaller than PNG for photographic content.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Can I batch convert?</strong>
+                            <span>Yes, you can upload and convert multiple PNGs at once.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Is the quality good?</strong>
+                            <span>By setting the slider to 0.9 or higher, you can maintain excellent quality that is indistinguishable from the original.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop PNG images here</p>
                     <label class="btn-primary">Select Files</label>
@@ -443,7 +550,35 @@
 
             <!-- JPG to PNG Tab -->
             <div id="jpg-to-png" class="tab-content">
-                 <h2>Convert JPG to PNG</h2>
+                <div class="tool-info">
+                    <h3>Lossless JPG to PNG Converter</h3>
+                    <p>Convert JPG photos to PNG format when you need a lossless container for further editing or web development. PNG is the preferred format for graphics that require high precision.</p>
+                    <p>This process is entirely client-side, ensuring your private photos never leave your device.</p>
+                    <ul class="tool-steps">
+                        <li>Select the JPG files you wish to convert.</li>
+                        <li>Wait for the local processing to finish.</li>
+                        <li>Download your new PNG files one by one or as a pack.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>Will the file size increase?</strong>
+                            <span>Yes, PNG is usually larger than JPG because it uses lossless compression.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Does this improve the image quality?</strong>
+                            <span>No, converting to PNG cannot "restore" detail lost in the original JPG, but it prevents further loss during saving.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Is it free for commercial use?</strong>
+                            <span>Yes, PixelConvert is free for all types of usage.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Do I need to register?</strong>
+                            <span>No registration or email is required. Just upload and convert.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop JPG photos here</p>
                     <label class="btn-primary">Select Files</label>
@@ -456,7 +591,35 @@
 
             <!-- Compress Tab -->
             <div id="compress" class="tab-content">
-                <h2>Optimize & Compress</h2>
+                <div class="tool-info">
+                    <h3>Smart Image Compressor</h3>
+                    <p>Reduce the file size of your images without losing visible quality. Our compressor uses advanced Canvas algorithms to shrink JPG, PNG, and WEBP files for faster website loading and easier email sharing.</p>
+                    <p>Use our "Auto-Target" presets to quickly hit specific file size limits (like 200KB or 1MB) required by many government and corporate portals.</p>
+                    <ul class="tool-steps">
+                        <li>Select multiple images to compress in batch.</li>
+                        <li>Choose a target size preset or adjust quality manually.</li>
+                        <li>Download the optimized images instantly.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>What is "Manual" mode?</strong>
+                            <span>Manual mode lets you pick a specific quality percentage (0.1 to 0.95) for the compression.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>How does "Auto-Target" work?</strong>
+                            <span>The tool performs a binary search to find the highest quality setting that stays under your chosen file size limit.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Are my original images deleted?</strong>
+                            <span>We never have your images. They stay on your computer. Your originals remain untouched in your folders.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Which formats can I compress?</strong>
+                            <span>We support JPG, JPEG, PNG, and WEBP compression.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop images to shrink</p>
                     <label class="btn-primary">Select Files</label>
@@ -496,7 +659,35 @@
 
             <!-- OCR Tab -->
             <div id="ocr" class="tab-content">
-                <h2>Text Extraction (OCR)</h2>
+                <div class="tool-info">
+                    <h3>Free Image to Text (OCR) Converter</h3>
+                    <p>Extract text from any image using our powerful Optical Character Recognition (OCR) engine. Perfect for digitizing scanned documents, receipts, or notes from your camera. All processing is done locally via WebAssembly.</p>
+                    <p>Our engine supports both English and Korean text recognition, with built-in grammar checking and text cleanup tools to ensure your digitized data is accurate and ready for use.</p>
+                    <ul class="tool-steps">
+                        <li>Upload an image containing text (JPG, PNG, or WEBP).</li>
+                        <li>Wait for the OCR engine to analyze and extract the content.</li>
+                        <li>Review, copy, or save the extracted text as a .txt file.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>Which languages are supported?</strong>
+                            <span>Currently, our local engine is optimized for English and Korean (Hangul).</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Can I extract text from handwriting?</strong>
+                            <span>Our tool works best with printed text. Recognition accuracy for handwriting varies based on legibility.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Is there a character limit?</strong>
+                            <span>No, you can process entire pages of text at once.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>What is "Check Grammar"?</strong>
+                            <span>It uses the LanguageTool API to find and fix spelling or grammar errors in the extracted text.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop image with text</p>
                     <label class="btn-primary">Select Image</label>
@@ -531,7 +722,35 @@
 
             <!-- PDF Tab -->
             <div id="jpg-to-pdf" class="tab-content">
-                <h2>Merge to PDF</h2>
+                <div class="tool-info">
+                    <h3>Professional Images to PDF Converter</h3>
+                    <p>Combine multiple JPG images into a single, high-quality PDF document. This is ideal for creating digital portfolios, submitting assignments, or organizing scanned receipts into a single file.</p>
+                    <p>Our PDF generator ensures that image quality is maintained while keeping the document size manageable for sharing and archiving.</p>
+                    <ul class="tool-steps">
+                        <li>Upload all the images you want to merge into a single PDF.</li>
+                        <li>The tool automatically scales them to a standard A4 page layout.</li>
+                        <li>Download the merged PDF document instantly.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>Can I reorder images?</strong>
+                            <span>Currently, images are added in the order you select them. For specific ordering, upload them in groups.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Is there a page limit?</strong>
+                            <span>The tool can handle dozens of pages, limited only by your browser's available memory.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Are the PDFs searchable?</strong>
+                            <span>The resulting PDF contains images. To make it searchable, you would need to run it through an OCR process.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Can I merge PNG files too?</strong>
+                            <span>Currently, this tool is optimized for JPG and JPEG files.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop images to merge</p>
                     <label class="btn-primary">Select Files</label>
@@ -544,7 +763,35 @@
 
             <!-- Favicon Tab -->
             <div id="favicon" class="tab-content">
-                 <h2>Favicon Generator</h2>
+                <div class="tool-info">
+                    <h3>Free Favicon Generator</h3>
+                    <p>Convert your brand logo into a complete set of favicons for your website. A favicon is the small icon that appears in browser tabs and bookmarks, essential for a professional web presence.</p>
+                    <p>Our generator creates standard sizes (16x16, 32x32, etc.) and bundles them into a convenient ZIP pack for easy deployment.</p>
+                    <ul class="tool-steps">
+                        <li>Upload a square logo image (PNG or JPG).</li>
+                        <li>Wait for the tool to generate the multiple required sizes.</li>
+                        <li>Download the ZIP pack containing all your new favicons.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>What is the best starting resolution?</strong>
+                            <span>We recommend using a 512x512 PNG image for the best results across all sizes.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Which formats are in the ZIP pack?</strong>
+                            <span>The pack contains standard .png files in 16x16, 32x32, 48x48, and 64x64 resolutions.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Do I need to pay for the ZIP pack?</strong>
+                            <span>No, like all PixelConvert tools, the favicon generator is completely free.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Is a square image required?</strong>
+                            <span>Yes, favicons are always square. Non-square images will be scaled to fit.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop your logo</p>
                     <label class="btn-primary">Select Image</label>
@@ -580,7 +827,7 @@
                 <a href="terms.html">Terms</a>
                 <a href="contact.html">Contact</a>
             </nav>
-            <p style="font-size: 0.95rem; color: var(--text-sub); font-weight: 600;">© 2024 ImageTools Pro. Safe. Private. Fast.</p>
+            <p style="font-size: 0.95rem; color: var(--text-sub); font-weight: 600;">© 2026 PixelConvert. Built for privacy.</p>
         </footer>
     </div>
 
