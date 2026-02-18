@@ -1018,19 +1018,25 @@
         const { jsPDF } = window.jspdf;
         const fileStore = new Map();
         let currentTargetSize = 0;
-        let ocrWorker = null; // Cached OCR worker (if preloading)
+        let ocrWorker = null; // Cached OCR worker
 
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
 
         tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', async () => {
                 const tabId = button.dataset.tab;
                 tabButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
                 tabContents.forEach(content => content.classList.toggle('active', content.id === tabId));
+                
                 const currentFiles = fileStore.get(tabId);
                 updateSelectedFilesDisplay(document.getElementById(tabId), currentFiles);
+
+                // Pre-initialize OCR if tab opened
+                if (tabId === 'ocr') {
+                    initOcrEngineOnce();
+                }
             });
         });
 
@@ -1127,7 +1133,7 @@
                     case 'webp-to-jpg': results = await convertCanvas(files, tab, 'image/jpeg', '.jpg'); break;
                     case 'png-to-jpg': results = await convertCanvas(files, tab, 'image/jpeg', '.jpg', tab.querySelector('#png-to-jpg-quality').value); break;
                     case 'jpg-to-png': results = await convertCanvas(files, tab, 'image/png', '.png'); break;
-                    case 'compress': results = await compressLogic(files, tab); break;
+                    case 'compress': results = await convertCanvas(files, tab, 'image/jpeg', '.jpg', 0.8); break; // Basic compression
                     case 'ocr': await performOCR(files[0], tab); break;
                     case 'jpg-to-pdf': results = await convertPdf(files, tab); break;
                     case 'favicon': results = await convertFavicon(files[0], tab); break;
@@ -1167,44 +1173,6 @@
                     img.src = URL.createObjectURL(files[i]);
                 });
                 res.push({ name: files[i].name.replace(/\.[^/.]+$/, "") + ext, blob, originalSize: files[i].size });
-            }
-            return res;
-        }
-
-        async function compressLogic(files, tab) {
-            const res = [];
-            const bar = tab.querySelector('.progress-fill');
-            const tw = tab.querySelector('#compress-resize').value;
-            const mq = parseFloat(tab.querySelector('#compress-quality').value);
-
-            for (let i = 0; i < files.length; i++) {
-                bar.style.width = (i/files.length)*100 + '%';
-                const blob = await new Promise(r => {
-                    const img = new Image();
-                    img.onload = async () => {
-                        const c = document.createElement('canvas');
-                        let w = img.width, h = img.height;
-                        if (tw !== 'original') {
-                            const target = parseInt(tw);
-                            if (w > target) { h = (target/w)*h; w = target; }
-                        }
-                        c.width = w; c.height = h;
-                        c.getContext('2d').drawImage(img, 0, 0, w, h);
-                        if (currentTargetSize > 0) {
-                            let low = 0.1, high = 0.95, best = null;
-                            for (let j=0; j<6; j++) {
-                                const mid = (low+high)/2;
-                                const b = await new Promise(ok => c.toBlob(ok, 'image/jpeg', mid));
-                                if (b.size <= currentTargetSize) { best = b; low = mid; } else { high = mid; }
-                            }
-                            r(best || (await new Promise(ok => c.toBlob(ok, 'image/jpeg', 0.1))));
-                        } else {
-                            c.toBlob(r, 'image/jpeg', mq);
-                        }
-                    };
-                    img.src = URL.createObjectURL(files[i]);
-                });
-                res.push({ name: files[i].name.replace(/\.[^/.]+$/, "") + "_comp.jpg", blob, originalSize: files[i].size });
             }
             return res;
         }
@@ -1251,6 +1219,15 @@
             list.innerHTML = '';
             
             let allOk = true;
+            
+            // Diagnostics Text
+            const libLoad = document.createElement('div');
+            libLoad.className = 'diag-item';
+            const isLibLoaded = typeof Tesseract !== 'undefined';
+            libLoad.innerHTML = `<span>Tesseract Library Loaded</span><span class="diag-status" style="color: ${isLibLoaded ? 'var(--brand-success)' : 'var(--brand-accent)'}">${isLibLoaded ? '✅' : '❌'}</span>`;
+            list.appendChild(libLoad);
+            if (!isLibLoaded) allOk = false;
+
             for (const asset of assets) {
                 const item = document.createElement('div');
                 item.className = 'diag-item';
@@ -1269,6 +1246,39 @@
             return allOk;
         }
 
+        async function initOcrEngineOnce() {
+            if (ocrWorker) return ocrWorker;
+            const output = document.getElementById('ocrResult');
+            output.value = "Initializing OCR engine...";
+            
+            try {
+                if (typeof Tesseract === 'undefined') throw new Error("Tesseract.js not loaded. Check script import order.");
+                
+                const initPromise = Tesseract.createWorker({
+                    workerPath: "/ocr/worker.min.js",
+                    corePath: "/ocr/tesseract-core.wasm.js",
+                    langPath: "/ocr/tessdata"
+                });
+
+                // 15s Timeout for initialization
+                const timeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error("OCR engine initialization timed out (15s)")), 15000)
+                );
+
+                ocrWorker = await Promise.race([initPromise, timeoutPromise]);
+                await ocrWorker.load();
+                await ocrWorker.loadLanguage("eng");
+                await ocrWorker.initialize("eng");
+                output.value = "OCR engine ready.";
+                return ocrWorker;
+            } catch (error) {
+                console.error('OCR Init Error:', error);
+                output.value = `OCR Init Error: ${error.message}`;
+                ocrWorker = null;
+                throw error;
+            }
+        }
+
         async function performOCR(file, tab) {
             const bar = document.getElementById('ocr-progress-bar');
             const output = document.getElementById('ocrResult');
@@ -1284,14 +1294,24 @@
                 return;
             }
 
-            output.value = 'Loading OCR engine (first run may take 5-10 seconds)...';
-
-            let worker = null;
             try {
                 const canvas = await preprocessForOCR(file);
+                const worker = await initOcrEngineOnce();
                 
-                worker = await Tesseract.createWorker({
+                output.value = 'Loading OCR engine (first run may take 5-10 seconds)...';
+                
+                // Update logger for progress
+                worker.setParameters({
                     logger: m => {
+                        const diagList = document.getElementById('diag-list');
+                        let progressItem = diagList.querySelector('.diag-progress');
+                        if (!progressItem) {
+                            progressItem = document.createElement('div');
+                            progressItem.className = 'diag-item diag-progress';
+                            diagList.appendChild(progressItem);
+                        }
+                        progressItem.innerHTML = `<span>Last Action</span><span class="diag-status">${m.status}: ${Math.round((m.progress || 0) * 100)}%</span>`;
+
                         if (m.status === 'recognizing text') {
                             const p = Math.round(m.progress * 100);
                             bar.style.width = p + '%';
@@ -1299,25 +1319,14 @@
                         } else {
                             output.value = `${m.status}...`;
                         }
-                    },
-                    workerPath: "/ocr/worker.min.js",
-                    corePath: "/ocr/tesseract-core.wasm.js",
-                    langPath: "/ocr/tessdata"
+                    }
                 });
-
-                await worker.load();
-                await worker.loadLanguage("eng");
-                await worker.initialize("eng");
 
                 const { data: { text } } = await worker.recognize(canvas);
                 output.value = text || 'No text found.';
             } catch (error) {
                 console.error('OCR Error:', error);
-                output.value = `OCR Error: ${error.message}. Please check if the /ocr/ folder contains all necessary files.`;
-            } finally {
-                if (worker) {
-                    await worker.terminate();
-                }
+                output.value = `OCR Error: ${error.message}. Please check diagnostics below.`;
             }
         }
 
