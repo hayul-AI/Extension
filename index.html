@@ -271,6 +271,49 @@
             font-size: 1rem; line-height: 1.7; resize: vertical;
         }
 
+        .ad-container {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(0,0,0,0.03);
+            border: 1px dashed var(--border-base);
+            border-radius: 16px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-sub);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .issues-panel {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: var(--card-base);
+            border: 1px solid var(--brand-accent);
+            border-radius: 16px;
+            display: none;
+        }
+
+        .issue-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-base);
+        }
+
+        .issue-message { font-weight: 700; color: var(--brand-accent); margin-bottom: 0.5rem; }
+        .suggestion-btn {
+            background: var(--brand-primary);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
         .faq-grid {
             margin-top: 10rem; display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -350,6 +393,8 @@
         </div>
 
         <main>
+            <div class="ad-container top-ad">Advertisement Space</div>
+
             <!-- HEIC Tab -->
             <div id="heic-to-jpg" class="tab-content active">
                 <h2>Convert HEIC to JPG</h2>
@@ -471,10 +516,16 @@
                 <button class="btn-success convert-button" id="ocr-start-btn" disabled>Scan & Extract</button>
                 <div class="progress-wrapper" id="ocr-progress-container"><div class="progress-fill" id="ocr-progress-bar"></div></div>
                 <textarea id="ocrResult" placeholder="Recognized text will appear here..." readonly></textarea>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 2rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                    <button class="btn-primary" id="ocr-check-grammar" style="padding: 0.75rem; background: var(--brand-secondary); box-shadow: none;">Check Grammar</button>
                     <button class="btn-primary" id="ocr-copy-btn" style="padding: 0.75rem;">Copy</button>
                     <button class="btn-primary" id="ocr-download-btn" style="padding: 0.75rem; background: var(--brand-success); box-shadow: none;">Save</button>
                     <button class="btn-primary" id="ocr-reset-btn" style="padding: 0.75rem; background: var(--text-sub); box-shadow: none;">Reset</button>
+                </div>
+                <div id="grammar-issues" class="issues-panel">
+                    <h3 style="margin-bottom: 1rem;">Detected Issues</h3>
+                    <div id="issues-list"></div>
+                    <button class="btn-primary" id="apply-all-fixes" style="margin-top: 1rem; width: 100%;">Apply Cleanup & Normalization</button>
                 </div>
             </div>
 
@@ -503,6 +554,8 @@
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
             </div>
+
+            <div class="ad-container bottom-ad">Advertisement Space</div>
         </main>
 
         <section class="faq-grid">
@@ -648,6 +701,7 @@
             updateSelectedFilesDisplay(document.getElementById('ocr'), null);
             document.getElementById('ocr-start-btn').disabled = true;
             document.getElementById('ocr-progress-container').style.display = 'none';
+            document.getElementById('grammar-issues').style.display = 'none';
         });
 
         async function executeConversion(tabId, files) {
@@ -789,7 +843,6 @@
                 lang: "/ocr/tessdata"
             };
 
-            // Self-check step: Verify local assets
             try {
                 const checks = [
                     fetch(paths.worker, { method: 'HEAD' }),
@@ -801,19 +854,18 @@
                 const failed = results.findIndex(r => !r.ok);
                 if (failed !== -1) {
                     const failedFile = failed === 0 ? 'worker.min.js' : failed === 1 ? 'tesseract-core.wasm.js' : failed === 2 ? 'eng.traineddata.gz' : 'kor.traineddata.gz';
-                    throw new Error(`Missing local asset: ${failedFile}. Please ensure the /ocr/ folder is correctly deployed.`);
+                    throw new Error(`Missing local asset: ${failedFile}`);
                 }
             } catch (e) {
-                output.value = `Asset Error: ${e.message}\nMake sure you've uploaded the /ocr/ folder to your server.`;
+                output.value = `Asset Error: ${e.message}\nMake sure you've uploaded the /ocr/ folder.`;
                 return;
             }
 
             output.value = 'Initializing local OCR engine...';
-            
             let worker;
             const timeout = setTimeout(() => {
                 if (output.value.includes('Initializing') || output.value.includes('loading')) {
-                    output.value = "OCR engine failed to load (Timeout). Local assets might be blocked or incorrectly served.";
+                    output.value = "OCR engine failed to load (Timeout).";
                     if (worker) worker.terminate();
                 }
             }, 30000);
@@ -821,7 +873,6 @@
             try {
                 const canvas = await preprocessForOCR(file);
                 output.value = 'Engine loading...';
-                
                 worker = await Tesseract.createWorker({
                     logger: m => {
                         if (m.status === 'recognizing text') {
@@ -834,24 +885,80 @@
                     },
                     workerPath: paths.worker,
                     corePath: paths.core,
-                    langPath: paths.lang,
-                    cacheMethod: 'none' // Ensure it loads from local server path
+                    langPath: paths.lang
                 });
 
                 await worker.loadLanguage('eng+kor');
                 await worker.initialize('eng+kor');
-                
                 clearTimeout(timeout);
                 const { data: { text } } = await worker.recognize(canvas);
-                output.value = text || 'No text found in the image.';
+                output.value = text || 'No text found.';
                 await worker.terminate();
             } catch (error) {
                 clearTimeout(timeout);
                 console.error('OCR Error:', error);
-                output.value = `Critical Error: ${error.message}\nCheck if /ocr/ assets are served with correct MIME types.`;
+                output.value = `Critical Error: ${error.message}`;
                 if (worker) await worker.terminate();
             }
         }
+
+        // Grammar Check Logic
+        document.getElementById('ocr-check-grammar').addEventListener('click', async () => {
+            const text = ocrOutput.value;
+            if (!text || text.length < 5) return;
+            
+            const panel = document.getElementById('grammar-issues');
+            const list = document.getElementById('issues-list');
+            panel.style.display = 'block';
+            list.innerHTML = 'Analyzing text...';
+
+            try {
+                const response = await fetch('https://api.languagetool.org/v2/check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `language=en-US&text=${encodeURIComponent(text)}`
+                });
+                const data = await response.json();
+                
+                list.innerHTML = '';
+                if (data.matches.length === 0) {
+                    list.innerHTML = '<p style="color: var(--brand-success);">No issues found!</p>';
+                } else {
+                    data.matches.forEach(match => {
+                        const div = document.createElement('div');
+                        div.className = 'issue-item';
+                        div.innerHTML = `
+                            <p class="issue-message">${match.message}</p>
+                            <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">"${text.substring(match.offset, match.offset + match.length)}"</p>
+                            <div>
+                                ${match.replacements.slice(0, 3).map(rep => `<button class="suggestion-btn" onclick="window.applyGrammarFix(${match.offset}, ${match.length}, '${rep.value.replace(/'/g, "\\'")}')">${rep.value}</button>`).join('')}
+                            </div>
+                        `;
+                        list.appendChild(div);
+                    });
+                }
+            } catch (e) {
+                list.innerHTML = 'Error connecting to grammar engine.';
+            }
+        });
+
+        window.applyGrammarFix = (offset, length, replacement) => {
+            const text = ocrOutput.value;
+            ocrOutput.value = text.substring(0, offset) + replacement + text.substring(offset + length);
+            document.getElementById('ocr-check-grammar').click(); // Re-check
+        };
+
+        document.getElementById('apply-all-fixes').addEventListener('click', () => {
+            let text = ocrOutput.value;
+            // 1. Remove double spaces
+            text = text.replace(/\s\s+/g, ' ');
+            // 2. Normalize punctuation spacing
+            text = text.replace(/\s([,.!?;:])/g, '$1');
+            // 3. Sentence capitalization
+            text = text.replace(/(^\s*|[.!?]\s+)([a-z])/g, (m, p1, p2) => p1 + p2.toUpperCase());
+            ocrOutput.value = text.trim();
+            alert('Cleanup and normalization applied!');
+        });
 
         async function convertPdf(files, tab) {
             const pdf = new jsPDF();
@@ -919,7 +1026,7 @@
         function updateSelectedFilesDisplay(tab, files) {
             const p = tab.querySelector('.drop-zone p:first-child');
             if (!p) return;
-            p.textContent = (!files || files.length === 0) ? `Drop ${tab.dataset.tab === 'ocr' ? 'image' : 'files'} here` : (files.length === 1 ? `Selected: ${files[0].name}` : `${files.length} files selected`);
+            p.textContent = (!files || files.length === 0) ? `Drop ${tab.id === 'ocr' ? 'image' : 'files'} here` : (files.length === 1 ? `Selected: ${files[0].name}` : `${files.length} files selected`);
         }
 
         function setInProgress(tab, busy) {
