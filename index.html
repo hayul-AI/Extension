@@ -1,14 +1,856 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 변환 도구</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --text-color: #212529;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --font-size: 18px;
+            --container-width: 90%;
+            --max-width: 1200px;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-size: var(--font-size);
+            line-height: 1.6;
+        }
+        .container {
+            width: var(--container-width);
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .tab-button {
+            padding: 0.8rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid var(--primary-color);
+            background-color: white;
+            color: var(--primary-color);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        .tab-button:hover, .tab-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .file-drop-area {
+            border: 3px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .file-drop-area.dragover {
+            border-color: var(--primary-color);
+            background-color: #e9f5ff;
+        }
+        .file-input {
+            display: none;
+        }
+        .file-label {
+            display: inline-block;
+            padding: 0.7rem 1.2rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .file-label:hover {
+            background-color: #5a6268;
+        }
+        .convert-button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s;
+        }
+        .convert-button:hover {
+            background-color: #218838;
+        }
+        .convert-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-bar-inner {
+            width: 0;
+            height: 100%;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+        .results {
+            margin-top: 2rem;
+        }
+        .result-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            background-color: #f8f9fa;
+        }
+        .result-item img {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .result-info {
+            flex-grow: 1;
+        }
+        .download-button {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        .error-message {
+            color: var(--error-color);
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+        .options {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .options label {
+            margin-right: 1rem;
+            font-weight: 500;
+        }
+        .options input[type="range"] {
+            width: 200px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--secondary-color);
+        }
+        footer p {
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .tab-button { font-size: 0.9rem; padding: 0.6rem 1rem; }
+            .tab-content { padding: 1.5rem; }
+            .file-drop-area { padding: 2rem; }
+        }
+    </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
-  <script defer type="text/javascript" src="/main.js"></script>
+
+    <div class="container">
+        <header>
+            <h1>이미지 변환 도구</h1>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-button active" data-tab="heic-to-jpg">HEIC → JPG</button>
+            <button class="tab-button" data-tab="webp-to-jpg">WEBP → JPG</button>
+            <button class="tab-button" data-tab="png-to-jpg">PNG → JPG</button>
+            <button class="tab-button" data-tab="jpg-to-png">JPG → PNG</button>
+            <button class="tab-button" data-tab="compress">이미지 압축</button>
+            <button class="tab-button" data-tab="jpg-to-pdf">JPG → PDF</button>
+            <button class="tab-button" data-tab="favicon">파비콘 만들기</button>
+        </nav>
+
+        <main>
+            <!-- Tab Content: HEIC to JPG -->
+            <div id="heic-to-jpg" class="tab-content active">
+                <h2>HEIC를 JPG로 변환</h2>
+                <div class="file-drop-area">
+                    <input type="file" class="file-input" multiple accept=".heic, .heif">
+                    <p>여기에 HEIC 파일을 드래그 앤 드롭하거나</p>
+                    <label class="file-label">파일 선택</label>
+                </div>
+                <button class="convert-button" disabled>변환하기</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+                <div class="error-message"></div>
+                <div class="results"></div>
+            </div>
+
+            <!-- Tab Content: WEBP to JPG -->
+            <div id="webp-to-jpg" class="tab-content">
+                <h2>WEBP를 JPG로 변환</h2>
+                <div class="file-drop-area">
+                    <input type="file" class="file-input" multiple accept=".webp">
+                    <p>여기에 WEBP 파일을 드래그 앤 드롭하거나</p>
+                    <label class="file-label">파일 선택</label>
+                </div>
+                <button class="convert-button" disabled>변환하기</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+                <div class="error-message"></div>
+                <div class="results"></div>
+            </div>
+            
+            <!-- Tab Content: PNG to JPG -->
+            <div id="png-to-jpg" class="tab-content">
+                <h2>PNG를 JPG로 변환</h2>
+                <div class="file-drop-area">
+                    <input type="file" class="file-input" multiple accept=".png">
+                    <p>여기에 PNG 파일을 드래그 앤 드롭하거나</p>
+                    <label class="file-label">파일 선택</label>
+                </div>
+                <div class="options">
+                    <label for="png-to-jpg-quality">품질 (0.1-1.0):</label>
+                    <input type="range" id="png-to-jpg-quality" min="0.1" max="1.0" value="0.92" step="0.01">
+                    <span class="quality-value">0.92</span>
+                </div>
+                <button class="convert-button" disabled>변환하기</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+                <div class="error-message"></div>
+                <div class="results"></div>
+            </div>
+
+            <!-- Tab Content: JPG to PNG -->
+            <div id="jpg-to-png" class="tab-content">
+                 <h2>JPG를 PNG로 변환</h2>
+                <div class="file-drop-area">
+                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg">
+                    <p>여기에 JPG 파일을 드래그 앤 드롭하거나</p>
+                    <label class="file-label">파일 선택</label>
+                </div>
+                <button class="convert-button" disabled>변환하기</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+                <div class="error-message"></div>
+                <div class="results"></div>
+            </div>
+
+            <!-- Tab Content: Image Compression -->
+            <div id="compress" class="tab-content">
+                <h2>이미지 압축 (JPG, PNG, WEBP)</h2>
+                <div class="file-drop-area">
+                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg, .png, .webp">
+                    <p>여기에 압축할 이미지 파일을 드래그 앤 드롭하거나</p>
+                    <label class="file-label">파일 선택</label>
+                </div>
+                 <div class="options">
+                    <label for="compress-quality">품질 (0.1-1.0):</label>
+                    <input type="range" id="compress-quality" min="0.1" max="1.0" value="0.8" step="0.01">
+                    <span class="quality-value">0.8</span>
+                </div>
+                <button class="convert-button" disabled>압축하기</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+                <div class="error-message"></div>
+                <div class="results"></div>
+            </div>
+
+            <!-- Tab Content: JPG to PDF -->
+            <div id="jpg-to-pdf" class="tab-content">
+                <h2>JPG를 PDF로 변환</h2>
+                <div class="file-drop-area">
+                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg">
+                    <p>여기에 PDF로 만들 JPG 파일을 드래그 앤 드롭하거나</p>
+                    <label class="file-label">파일 선택 (여러 파일 선택 가능)</label>
+                </div>
+                <button class="convert-button" disabled>PDF로 변환하기</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+                <div class="error-message"></div>
+                <div class="results"></div>
+            </div>
+
+            <!-- Tab Content: Favicon Maker -->
+            <div id="favicon" class="tab-content">
+                 <h2>파비콘 만들기 (PNG, JPG)</h2>
+                <div class="file-drop-area">
+                    <input type="file" class="file-input" accept=".png, .jpg, .jpeg">
+                    <p>여기에 파비콘으로 만들 파일을 드래그 앤 드롭하거나</p>
+                    <label class="file-label">파일 선택 (1개만)</label>
+                </div>
+                <button class="convert-button" disabled>파비콘 생성하기</button>
+                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
+                <div class="error-message"></div>
+                <div class="results"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p>🔒 모든 변환은 내 기기에서만 처리됩니다. 파일은 서버로 절대 업로드되지 않습니다.</p>
+            <nav>
+                <a href="/about">소개</a>
+                <a href="/privacy">개인정보처리방침</a>
+                <a href="/terms">이용약관</a>
+                <a href="/contact">문의하기</a>
+            </nav>
+        </footer>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Library instances ---
+        const { jsPDF } = window.jspdf;
+        const JSZip = window.JSZip;
+
+        // --- Global state ---
+        const fileStore = new Map(); // tabId -> FileList
+
+        // --- DOM Elements ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // --- Tab Switching Logic ---
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                tabContents.forEach(content => {
+                    if (content.id === tabId) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+                
+                // Restore files for the activated tab
+                const currentFiles = fileStore.get(tabId);
+                updateSelectedFilesDisplay(document.getElementById(tabId), currentFiles);
+            });
+        });
+
+        // --- File Input and Drag & Drop Logic ---
+        tabContents.forEach(tab => {
+            const dropArea = tab.querySelector('.file-drop-area');
+            const fileInput = tab.querySelector('.file-input');
+            const fileLabel = tab.querySelector('.file-label');
+            const convertButton = tab.querySelector('.convert-button');
+            const tabId = tab.id;
+
+            // Open file dialog when label is clicked
+            fileLabel.addEventListener('click', () => fileInput.click());
+
+            // Handle file selection
+            fileInput.addEventListener('change', () => {
+                handleFiles(fileInput.files);
+            });
+
+            // Drag and drop events
+            dropArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropArea.classList.add('dragover');
+            });
+            dropArea.addEventListener('dragleave', () => {
+                dropArea.classList.remove('dragover');
+            });
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    fileStore.set(tabId, files);
+                    updateSelectedFilesDisplay(tab, files);
+                    convertButton.disabled = false;
+                }
+            }
+
+            // Conversion button click
+            convertButton.addEventListener('click', () => {
+                const files = fileStore.get(tabId);
+                if (files && files.length > 0) {
+                    executeConversion(tabId, files);
+                }
+            });
+            
+             // Quality slider display update
+            const qualitySlider = tab.querySelector('input[type="range"]');
+            if (qualitySlider) {
+                const qualityValueSpan = tab.querySelector('.quality-value');
+                qualitySlider.addEventListener('input', (e) => {
+                    qualityValueSpan.textContent = e.target.value;
+                });
+            }
+        });
+
+        /**
+         * Updates the file selection display within a tab.
+         * @param {HTMLElement} tab The tab content element.
+         * @param {FileList} files The selected files.
+         */
+        function updateSelectedFilesDisplay(tab, files) {
+             const dropArea = tab.querySelector('.file-drop-area p');
+             if (!files || files.length === 0) {
+                 dropArea.innerHTML = '여기에 파일을 드래그 앤 드롭하거나<br>아래 버튼을 눌러 파일을 선택하세요.';
+             } else if (files.length === 1) {
+                 dropArea.textContent = `선택된 파일: ${files[0].name} (${formatBytes(files[0].size)})`;
+             } else {
+                 dropArea.textContent = `${files.length}개의 파일이 선택되었습니다.`;
+             }
+        }
+        
+        /**
+         * Main function to route to the correct conversion logic based on tab.
+         * @param {string} tabId The ID of the active tab.
+         * @param {FileList} files The files to convert.
+         */
+        async function executeConversion(tabId, files) {
+            const tab = document.getElementById(tabId);
+            setInProgress(tab, true);
+            clearResultsAndErrors(tab);
+
+            try {
+                let results = [];
+                switch (tabId) {
+                    case 'heic-to-jpg':
+                        results = await convertHeicToJpg(files, tab);
+                        break;
+                    case 'webp-to-jpg':
+                        results = await convertImageToFormat(files, tab, 'image/jpeg', '.jpg');
+                        break;
+                    case 'png-to-jpg':
+                         const quality = tab.querySelector('#png-to-jpg-quality').value;
+                        results = await convertImageToFormat(files, tab, 'image/jpeg', '.jpg', quality);
+                        break;
+                    case 'jpg-to-png':
+                        results = await convertImageToFormat(files, tab, 'image/png', '.png');
+                        break;
+                    case 'compress':
+                        const compressQuality = tab.querySelector('#compress-quality').value;
+                        results = await compressImages(files, tab, compressQuality);
+                        break;
+                    case 'jpg-to-pdf':
+                        results = await convertJpgToPdf(files, tab);
+                        break;
+                    case 'favicon':
+                        results = await createFavicon(files[0], tab);
+                        break;
+                    default:
+                        throw new Error('알 수 없는 변환 유형입니다.');
+                }
+                
+                if (results.length > 0) {
+                    displayResults(tab, results);
+                }
+
+            } catch (error) {
+                console.error('Conversion Error:', error);
+                displayError(tab, `오류 발생: ${error.message}. 다시 시도해주세요.`);
+            } finally {
+                setInProgress(tab, false);
+            }
+        }
+
+        // --- Conversion Functions ---
+
+        /**
+         * Converts HEIC/HEIF files to JPG.
+         * @param {FileList} files The HEIC files.
+         * @param {HTMLElement} tab The current tab element.
+         * @returns {Promise<Array<{name: string, blob: Blob, originalSize: number}>>}
+         */
+        async function convertHeicToJpg(files, tab) {
+            const results = [];
+            const progressBar = tab.querySelector('.progress-bar-inner');
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                updateProgress(progressBar, (i + 1) / files.length * 100);
+                try {
+                    const convertedBlob = await heic2any({
+                        blob: file,
+                        toType: "image/jpeg",
+                        quality: 0.92,
+                    });
+                    const newName = file.name.replace(/\.(heic|heif)$/i, '') + '.jpg';
+                    results.push({ name: newName, blob: convertedBlob, originalSize: file.size });
+                } catch (e) {
+                     displayError(tab, `${file.name} 변환 실패: 지원되지 않는 형식이거나 파일이 손상되었습니다.`);
+                }
+            }
+            return results;
+        }
+        
+        /**
+         * Converts images using the Canvas API (e.g., WEBP->JPG, PNG->JPG, JPG->PNG).
+         * @param {FileList} files The image files.
+         * @param {HTMLElement} tab The current tab element.
+         * @param {string} format The target format (e.g., 'image/jpeg').
+         * @param {string} extension The target file extension (e.g., '.jpg').
+         * @param {number} [quality] The quality for JPG/WEBP (0.0 to 1.0).
+         * @returns {Promise<Array<{name: string, blob: Blob, originalSize: number}>>}
+         */
+        async function convertImageToFormat(files, tab, format, extension, quality) {
+            const results = [];
+            const progressBar = tab.querySelector('.progress-bar-inner');
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                updateProgress(progressBar, (i + 1) / files.length * 100);
+                
+                const blob = await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        canvas.toBlob(resolve, format, quality);
+                    };
+                    img.onerror = () => reject(new Error(`${file.name} 파일을 읽을 수 없습니다.`));
+                    img.src = URL.createObjectURL(file);
+                });
+
+                const newName = file.name.split('.').slice(0, -1).join('.') + extension;
+                results.push({ name: newName, blob, originalSize: file.size });
+            }
+            return results;
+        }
+
+        /**
+         * Compresses JPG, PNG, or WEBP images.
+         * @param {FileList} files The image files.
+         * @param {HTMLElement} tab The current tab element.
+         * @param {number} quality The target quality (0.0 to 1.0).
+         * @returns {Promise<Array<{name: string, blob: Blob, originalSize: number}>>}
+         */
+        async function compressImages(files, tab, quality) {
+            const results = [];
+            const progressBar = tab.querySelector('.progress-bar-inner');
+            for (let i = 0; i < files.length; i++) {
+                 const file = files[i];
+                 updateProgress(progressBar, (i + 1) / files.length * 100);
+                 const format = file.type;
+                 const extension = '.' + format.split('/')[1];
+
+                 const blob = await new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        // For PNG, compression is lossless, so we just re-draw it.
+                        // Quality setting mainly affects JPG and WEBP.
+                        canvas.toBlob(resolve, format, format === 'image/png' ? 1.0 : quality);
+                    };
+                    img.onerror = () => reject(new Error(`${file.name} 파일을 읽을 수 없습니다.`));
+                    img.src = URL.createObjectURL(file);
+                });
+                
+                results.push({ name: file.name, blob, originalSize: file.size });
+            }
+            return results;
+        }
+        
+        /**
+         * Converts multiple JPG images into a single PDF.
+         * @param {FileList} files The JPG files.
+         * @param {HTMLElement} tab The current tab element.
+         * @returns {Promise<Array<{name: string, blob: Blob, originalSize: number}>>}
+         */
+        async function convertJpgToPdf(files, tab) {
+            const pdf = new jsPDF();
+            const progressBar = tab.querySelector('.progress-bar-inner');
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                updateProgress(progressBar, (i + 1) / files.length * 100);
+                
+                const dataUrl = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = e => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+
+                const img = await new Promise(resolve => {
+                   const image = new Image();
+                   image.onload = () => resolve(image);
+                   image.src = dataUrl;
+                });
+
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                const imgRatio = img.width / img.height;
+                const pageRatio = pageWidth / pageHeight;
+
+                let imgWidth, imgHeight;
+                if (imgRatio > pageRatio) {
+                    imgWidth = pageWidth;
+                    imgHeight = pageWidth / imgRatio;
+                } else {
+                    imgHeight = pageHeight;
+                    imgWidth = pageHeight * imgRatio;
+                }
+
+                if (i > 0) {
+                    pdf.addPage();
+                }
+                pdf.addImage(dataUrl, 'JPEG', 0, 0, imgWidth, imgHeight);
+            }
+            
+            const pdfBlob = pdf.output('blob');
+            const totalOriginalSize = Array.from(files).reduce((sum, f) => sum + f.size, 0);
+
+            return [{ name: 'converted.pdf', blob: pdfBlob, originalSize: totalOriginalSize }];
+        }
+        
+        /**
+         * Creates a favicon package (.ico and zipped PNGs) from a single image.
+         * This is a simplified version. A true ICO generator is complex.
+         * This version creates a multi-size ZIP package and a single-size (64x64) ICO as a placeholder.
+         * @param {File} file The input image.
+         * @param {HTMLElement} tab The current tab element.
+         * @returns {Promise<Array<{name: string, blob: Blob, originalSize: number, noPreview: boolean}>>}
+         */
+        async function createFavicon(file, tab) {
+            const SIZES = [16, 32, 48, 64, 128, 180, 192, 256, 512];
+            const zip = new JSZip();
+            const results = [];
+            const progressBar = tab.querySelector('.progress-bar-inner');
+
+            const sourceImage = await new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = URL.createObjectURL(file);
+            });
+
+            // Create different sized PNGs and add to zip
+            for (let i = 0; i < SIZES.length; i++) {
+                const size = SIZES[i];
+                updateProgress(progressBar, (i + 1) / (SIZES.length + 1) * 100);
+
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(sourceImage, 0, 0, size, size);
+
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                zip.file(`favicon-${size}x${size}.png`, blob);
+            }
+
+            // Create a simple ICO file (from the 64x64 version for broad compatibility)
+            const icoCanvas = document.createElement('canvas');
+            icoCanvas.width = 64;
+            icoCanvas.height = 64;
+            const icoCtx = icoCanvas.getContext('2d');
+            icoCtx.drawImage(sourceImage, 0, 0, 64, 64);
+            const icoBlob = await new Promise(resolve => icoCanvas.toBlob(resolve, 'image/vnd.microsoft.icon'));
+             
+            results.push({
+                name: 'favicon.ico',
+                blob: icoBlob,
+                originalSize: file.size
+            });
+
+            // Create the ZIP package
+            const zipBlob = await zip.generateAsync({ type: 'blob' });
+            updateProgress(progressBar, 100);
+            
+            results.push({
+                name: 'favicon-package.zip',
+                blob: zipBlob,
+                originalSize: file.size,
+                noPreview: true
+            });
+
+            return results;
+        }
+
+        // --- UI & Utility Functions ---
+
+        /**
+         * Displays the conversion results in the specified tab.
+         * @param {HTMLElement} tab The tab to display results in.
+         * @param {Array<{name: string, blob: Blob, originalSize: number, noPreview?: boolean}>} resultsData The conversion results.
+         */
+        function displayResults(tab, resultsData) {
+            const resultsContainer = tab.querySelector('.results');
+            resultsContainer.innerHTML = ''; // Clear previous results
+
+            if (resultsData.length > 1 && tab.id !== 'favicon') { // Create a single ZIP for multiple files
+                const zip = new JSZip();
+                resultsData.forEach(r => zip.file(r.name, r.blob));
+                
+                zip.generateAsync({ type: 'blob' }).then(zipBlob => {
+                    const totalOriginalSize = resultsData.reduce((sum, r) => sum + r.originalSize, 0);
+                    const resultItem = createResultItem({
+                        name: 'download-all.zip',
+                        blob: zipBlob,
+                        originalSize: totalOriginalSize,
+                        noPreview: true
+                    });
+                    resultsContainer.appendChild(resultItem);
+                });
+            } else { // Display individual results
+                 resultsData.forEach(result => {
+                    const resultItem = createResultItem(result);
+                    resultsContainer.appendChild(resultItem);
+                });
+            }
+        }
+        
+        /**
+         * Creates a DOM element for a single result item.
+         * @param {{name: string, blob: Blob, originalSize: number, noPreview?: boolean}} result The result data.
+         * @returns {HTMLElement}
+         */
+        function createResultItem(result) {
+            const item = document.createElement('div');
+            item.className = 'result-item';
+
+            const url = URL.createObjectURL(result.blob);
+            let previewHtml = '';
+            if (!result.noPreview) {
+                previewHtml = `<img src="${url}" alt="${result.name}">`;
+            }
+            
+            const sizeReduction = result.originalSize > 0 ? 
+                Math.round((1 - result.blob.size / result.originalSize) * 100) : 0;
+            const sizeInfo = result.originalSize > 0 ?
+                `(${formatBytes(result.originalSize)} → ${formatBytes(result.blob.size)}, ${sizeReduction}% 감소)` :
+                `(${formatBytes(result.blob.size)})`;
+
+            item.innerHTML = `
+                ${previewHtml}
+                <div class="result-info">
+                    <strong>${result.name}</strong>
+                    <p>${sizeInfo}</p>
+                </div>
+                <a href="${url}" download="${result.name}" class="download-button">다운로드</a>
+            `;
+            return item;
+        }
+
+        /**
+         * Displays an error message in a tab.
+         * @param {HTMLElement} tab The tab element.
+         * @param {string} message The error message to display.
+         */
+        function displayError(tab, message) {
+            const errorContainer = tab.querySelector('.error-message');
+            errorContainer.textContent = message;
+        }
+        
+        /**
+         * Clears previous results and errors from a tab.
+         * @param {HTMLElement} tab The tab element.
+         */
+        function clearResultsAndErrors(tab) {
+            tab.querySelector('.results').innerHTML = '';
+            tab.querySelector('.error-message').textContent = '';
+        }
+
+        /**
+         * Sets the in-progress state (shows/hides progress bar).
+         * @param {HTMLElement} tab The tab element.
+         * @param {boolean} inProgress Whether conversion is in progress.
+         */
+        function setInProgress(tab, inProgress) {
+            tab.querySelector('.convert-button').disabled = inProgress;
+            tab.querySelector('.progress-bar').style.display = inProgress ? 'block' : 'none';
+            if (!inProgress) {
+                 updateProgress(tab.querySelector('.progress-bar-inner'), 0);
+            }
+        }
+        
+        /**
+         * Updates the progress bar width.
+         * @param {HTMLElement} progressBar The progress bar's inner element.
+         * @param {number} percentage The progress percentage (0-100).
+         */
+        function updateProgress(progressBar, percentage) {
+            progressBar.style.width = `${percentage}%`;
+        }
+
+        /**
+         * Formats bytes into a human-readable string (KB, MB).
+         * @param {number} bytes The number of bytes.
+         * @returns {string} The formatted string.
+         */
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+    });
+    </script>
+
 </body>
 </html>
