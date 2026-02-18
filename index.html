@@ -1211,7 +1211,8 @@
             const assets = [
                 { name: "Worker Script", url: "/ocr/worker.min.js" },
                 { name: "WASM Core", url: "/ocr/tesseract-core.wasm.js" },
-                { name: "Language Data (English)", url: "/ocr/tessdata/eng.traineddata.gz" }
+                { name: "Language Data (English)", url: "/ocr/tessdata/eng.traineddata.gz" },
+                { name: "Language Data (Korean)", url: "/ocr/tessdata/kor.traineddata.gz" }
             ];
             const panel = document.getElementById('ocr-diagnostics');
             const list = document.getElementById('diag-list');
@@ -1254,21 +1255,48 @@
             try {
                 if (typeof Tesseract === 'undefined') throw new Error("Tesseract.js not loaded. Check script import order.");
                 
-                const initPromise = Tesseract.createWorker({
+                const timeoutSeconds = 60; // Increased to 60s
+                const workerOptions = {
                     workerPath: "/ocr/worker.min.js",
                     corePath: "/ocr/tesseract-core.wasm.js",
-                    langPath: "/ocr/tessdata"
-                });
+                    langPath: "/ocr/tessdata",
+                    logger: m => {
+                        console.log(m);
+                        const bar = document.getElementById('ocr-progress-bar');
+                        const output = document.getElementById('ocrResult');
+                        
+                        // Update diagnostics panel progress
+                        const diagList = document.getElementById('diag-list');
+                        if (diagList) {
+                            let progressItem = diagList.querySelector('.diag-progress');
+                            if (!progressItem) {
+                                progressItem = document.createElement('div');
+                                progressItem.className = 'diag-item diag-progress';
+                                diagList.appendChild(progressItem);
+                            }
+                            progressItem.innerHTML = `<span>Last Action</span><span class="diag-status">${m.status}: ${Math.round((m.progress || 0) * 100)}%</span>`;
+                        }
 
-                // 15s Timeout for initialization
+                        if (m.status === 'recognizing text') {
+                            const p = Math.round(m.progress * 100);
+                            if (bar) bar.style.width = p + '%';
+                            if (output) output.value = `Recognizing text... ${p}%`;
+                        } else {
+                            if (output && !output.value.includes('OCR engine ready')) {
+                                output.value = `${m.status}... ${m.progress ? Math.round(m.progress * 100) + '%' : ''}`;
+                            }
+                        }
+                    }
+                };
+
+                const initPromise = Tesseract.createWorker(['eng', 'kor'], 1, workerOptions);
+
+                // Timeout for initialization
                 const timeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error("OCR engine initialization timed out (15s)")), 15000)
+                    setTimeout(() => reject(new Error(`OCR engine initialization timed out (${timeoutSeconds}s)`)), timeoutSeconds * 1000)
                 );
 
                 ocrWorker = await Promise.race([initPromise, timeoutPromise]);
-                await ocrWorker.load();
-                await ocrWorker.loadLanguage("eng");
-                await ocrWorker.initialize("eng");
                 output.value = "OCR engine ready.";
                 return ocrWorker;
             } catch (error) {
@@ -1298,30 +1326,6 @@
                 const canvas = await preprocessForOCR(file);
                 const worker = await initOcrEngineOnce();
                 
-                output.value = 'Loading OCR engine (first run may take 5-10 seconds)...';
-                
-                // Update logger for progress
-                worker.setParameters({
-                    logger: m => {
-                        const diagList = document.getElementById('diag-list');
-                        let progressItem = diagList.querySelector('.diag-progress');
-                        if (!progressItem) {
-                            progressItem = document.createElement('div');
-                            progressItem.className = 'diag-item diag-progress';
-                            diagList.appendChild(progressItem);
-                        }
-                        progressItem.innerHTML = `<span>Last Action</span><span class="diag-status">${m.status}: ${Math.round((m.progress || 0) * 100)}%</span>`;
-
-                        if (m.status === 'recognizing text') {
-                            const p = Math.round(m.progress * 100);
-                            bar.style.width = p + '%';
-                            output.value = `Recognizing text... ${p}%`;
-                        } else {
-                            output.value = `${m.status}...`;
-                        }
-                    }
-                });
-
                 const { data: { text } } = await worker.recognize(canvas);
                 output.value = text || 'No text found.';
             } catch (error) {

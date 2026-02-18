@@ -8,15 +8,6 @@
     ],
     "headers": [
       {
-        "source": "/ocr/tesseract-core.wasm.js",
-        "headers": [
-          {
-            "key": "Content-Type",
-            "value": "application/wasm"
-          }
-        ]
-      },
-      {
         "source": "/ocr/**",
         "headers": [
           {
