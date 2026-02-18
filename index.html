@@ -197,11 +197,16 @@
         .drop-zone {
             border: 2px dashed var(--border-base);
             border-radius: var(--radius-lg);
-            padding: 6rem 2rem;
+            padding: 5rem 2rem;
             text-align: center;
             transition: all 0.4s;
             cursor: pointer;
             background: rgba(0,0,0,0.01);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
         }
 
         .drop-zone:hover, .drop-zone.dragover {
