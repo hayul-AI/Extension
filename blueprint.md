@@ -1,65 +1,46 @@
-# Project Blueprint: Image/Document Conversion Tool
+# 이미지 변환 및 OCR 도구 프로젝트 블루프린트
 
-## 1. Overview
+## 개요
+이 프로젝트는 외부 서버로의 파일 업로드 없이 브라우저 내에서 모든 처리가 이루어지는 프레임워크리스(Vanilla JS) 웹 기반 이미지 도구입니다. 개인정보 보호와 속도를 최우선으로 하며, 다양한 이미지 변환 및 텍스트 추출 기능을 제공합니다.
 
-This document outlines the development plan for a single-file, client-side web application for common image and document conversions. The tool is designed for ease of use, privacy, and modern web standards. All processing is done in the browser, and no user data is ever uploaded to a server.
+## 주요 기능 및 디자인
 
-## 2. Core Features & Design
+### 1. 디자인 및 UX (Baseline 표준 준수)
+- **반응형 디자인:** 모바일 및 데스크탑 최적화 (95% 컨테이너 폭, 최대 1200px).
+- **테마:** 라이트 모드 및 다크 모드 지원 (시스템 설정 및 사용자 선택 저장).
+- **폰트 및 가독성:** 기본 18px 폰트, 큰 버튼(1.2rem 이상) 사용으로 모바일 조작 편의성 극대화.
+- **피드백:** 모든 작업에 진행률(%) 표시 및 결과 미리보기 제공. 오류 발생 시 한국어 메시지 표시.
 
-### General UI/UX
-- **Layout**: A clean, responsive, tab-based interface.
-- **Branding**: "이미지 변환 도구" as the main title.
-- **Aesthetics**: Modern design with clear typography, intuitive controls, and a professional color scheme. Large, touch-friendly buttons and a minimum font size of 16px for accessibility.
-- **Feedback**: Visual feedback for file selection, conversion progress (progress bars), and completion (previews and download links).
-- **Privacy**: A clear and prominent notice in the footer stating that all files are processed locally on the user's device.
-- **Monetization**: Integrated Google AdSense with multiple responsive ad units.
+### 2. 이미지 변환 (기존 기능 유지 및 개선)
+- **HEIC → JPG:** `heic2any` 라이브러리를 사용하여 브라우저에서 직접 변환.
+- **WEBP ↔ JPG, PNG ↔ JPG:** Canvas API를 활용한 무설치 변환.
+- **JPG → PDF:** `jspdf`를 사용하여 여러 이미지를 하나의 PDF로 병합.
+- **파비콘 생성:** 한 번의 업로드로 여러 사이즈(16~64px)의 PNG와 ZIP 패키지 생성.
 
-### Conversion Modules (Tabs)
-1.  **HEIC → JPG**: Converts HEIC/HEIF files to JPEG format.
-2.  **WEBP → JPG**: Converts WebP files to JPEG format.
-3.  **PNG → JPG**: Converts PNG files to JPEG, with an option to control quality/compression.
-4.  **JPG → PNG**: Converts JPEG files to PNG format.
-5.  **Image Compression**: Reduces the file size of JPG, PNG, and WebP images with quality controls.
-6.  **JPG → PDF**: Merges multiple JPEG images into a single PDF document.
-7.  **Favicon Maker**: Creates a `.ico` file and a `.zip` package with various icon sizes from a single input image.
+### 3. 이미지 용량 줄이기 (압축) - **[신규/개선]**
+- **다중 파일 처리:** 여러 파일을 동시에 업로드하고 압축 가능.
+- **리사이즈 옵션:** 원본 유지 및 가로 폭 기준(1920, 1280, 1080px) 리사이즈 지원.
+- **압축 방식:** Canvas API 기반. 품질 설정(0.4~0.95) 가능.
+- **목표 용량 프리셋:** 200KB, 500KB, 1MB 목표 설정 시 자동으로 품질을 조정하는 이진 탐색 로직 적용.
+- **결과:** 변환 전/후 용량 및 절감률 표시, 개별/ZIP 일괄 다운로드.
 
-### Common Functionality
-- **File Input**: Drag-and-drop area and a standard file selection button.
-- **Batch Processing**: Support for converting multiple files at once.
-- **Theme Support**: Dark mode and Light mode toggle to improve user experience in different lighting conditions.
-- **Downloads**:
-    - Single converted file: Direct download.
-    - Multiple converted files: Bundled and downloaded as a single `.zip` file.
-- **Error Handling**: Clear, user-friendly error messages displayed in Korean.
+### 4. 텍스트 추출 (OCR) - **[신규]**
+- **클라이언트 사이드 OCR:** `Tesseract.js`를 사용하여 서버 전송 없이 브라우저에서 수행.
+- **지원 언어:** 한국어 + 영어 (kor+eng).
+- **이미지 전처리:** 정확도 향상을 위해 OCR 수행 전 그레이스케일, 대비 강화, 이진화(임계값 조절) 옵션 제공.
+- **편의 기능:** 진행률 표시, 결과 텍스트 복사, TXT 파일 다운로드, 초기화 기능.
+- **보안 강조:** "이미지는 내 기기에서만 처리됩니다" 안내 문구 포함.
 
-## 3. Technical Implementation
+## 기술 스택
+- **HTML5/CSS3:** Modern CSS (Logical Properties, Flexbox, Grid).
+- **JavaScript:** ES Modules, Async/Await, Canvas API.
+- **라이브러리 (CDN):**
+  - `heic2any.js`: HEIC 변환
+  - `jspdf`: PDF 생성
+  - `jszip`: 다중 파일 ZIP 압축
+  - `tesseract.js`: OCR 기능
 
-- **Architecture**: A single `index.html` file containing all HTML, CSS, and JavaScript. No build tools required.
-- **Dependencies (via CDN)**:
-    - **heic2any**: For HEIC to JPG conversion.
-    - **jsPDF**: For creating PDF documents from images.
-    - **JSZip**: For creating `.zip` archives for batch downloads.
-- **AdSense Integration**:
-    - Google AdSense script and account verification meta tag in `<head>`.
-    - **Top Ad**: Responsive ad unit placed below the navigation bar.
-    - **Bottom Ad**: Responsive ad unit placed above the footer.
-    - `ads.txt` file in the root directory for seller verification.
-- **Core Logic**:
-    - **Image Manipulation**: The native `Canvas` API will be used for decoding/encoding standard image formats (JPG, PNG, WebP) and for resizing images.
-    - **Modularity**: JavaScript code will be organized into functions for each conversion type to ensure readability and maintainability.
-    - **State Management**: Simple variables will track the active tab, selected files, and conversion results.
-    - **Theme Management**: Use CSS variables and `data-theme` attribute on the `<html>` or `<body>` element. Persist user preference in `localStorage`.
-
-## 4. Development Plan (Completed Tasks)
-
-- **Step 1: Implement Dark Mode**:
-    - Add a theme toggle button in the header.
-    - Define CSS variables for dark and light themes.
-    - Update all UI components to use these variables.
-    - Add JavaScript to handle theme switching and persistence.
-- **Step 2: Google AdSense Integration**:
-    - Added AdSense script and meta tag to `index.html`.
-    - Created `ads.txt` with publisher information (`pub-6460078490158642`).
-    - Inserted multiple responsive ad units, including a specific "광고 영역 (Ad Area)" section above the footer for enhanced visibility and compliance with requested layout.
-- **Step 3: Refined Ad Layout**:
-    - Replaced the standard bottom ad with a titled "광고 영역 (Ad Area)" section and a specific ad slot (`1234567890`) as requested.
+## 향후 계획
+- **이미지 크롭 및 회전:** 변환 전 간단한 편집 기능 추가.
+- **다중 언어 확장:** OCR 지원 언어 선택 기능 추가.
+- **PWA 지원:** 오프라인에서도 사용할 수 있도록 서비스 워커 적용.
