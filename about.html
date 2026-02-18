@@ -3,33 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - PixelConvert</title>
+    <title>About PixelConvert — Free Online Image Converter & OCR</title>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; padding: 40px 20px; max-width: 800px; margin: 0 auto; color: #1e293b; background-color: #f8fafc; }
-        h1 { font-weight: 800; color: #6366f1; margin-bottom: 20px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; padding: 40px 20px; max-width: 900px; margin: 0 auto; color: #1e293b; background-color: #f8fafc; }
+        h1 { font-weight: 800; color: #6366f1; margin-bottom: 20px; font-size: 2.5rem; text-align: center; }
+        h2 { font-weight: 700; color: #1e293b; margin-top: 40px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         p { margin-bottom: 20px; font-size: 1.1rem; color: #64748b; }
-        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .back-link { display: inline-block; margin-top: 30px; text-decoration: none; color: white; background: #6366f1; padding: 12px 24px; border-radius: 12px; font-weight: 700; transition: transform 0.2s; }
-        .back-link:hover { transform: translateY(-2px); }
+        ul { margin-bottom: 20px; padding-left: 20px; }
+        li { margin-bottom: 10px; color: #64748b; }
+        .card { background: white; padding: 40px; border-radius: 32px; box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.05); }
+        .back-link { display: inline-block; margin-top: 30px; text-decoration: none; color: white; background: #6366f1; padding: 14px 28px; border-radius: 16px; font-weight: 700; transition: all 0.3s; box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4); }
+        .back-link:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .footer-line { text-align: center; margin-top: 60px; color: #94a3b8; font-weight: 600; font-size: 0.9rem; }
+        a { color: #6366f1; text-decoration: none; font-weight: 600; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>About PixelConvert</h1>
-        <p>PixelConvert is a state-of-the-art web utility designed for fast, secure, and professional image processing.</p>
         
-        <p>Unlike traditional online converters that upload your private photos to a remote server, <strong>PixelConvert performs all operations 100% locally within your browser.</strong> This means your data never leaves your device, ensuring total privacy and near-instant processing speeds.</p>
+        <h2>What PixelConvert is</h2>
+        <p>PixelConvert is a modern, high-performance web utility built to make image processing simple, fast, and secure. We provide a suite of tools that allow you to convert, compress, and extract text from images without the need for complex software or risky server-side uploads.</p>
 
-        <p>Our mission is to provide high-quality creative tools that are accessible to everyone, for free, without the need for registration or software installation.</p>
-
-        <p>Key Technologies:</p>
+        <h2>Tools we offer</h2>
+        <p>We provide a comprehensive set of image utilities tailored for modern workflows:</p>
         <ul>
-            <li>WebAssembly (WASM) for high-performance OCR</li>
-            <li>HTML5 Canvas for lossless image conversion</li>
-            <li>Tesseract.js for localized text extraction</li>
+            <li><strong>Format Conversion:</strong> Seamlessly switch between <a href="index.html">HEIC to JPG</a>, <a href="index.html">WEBP to JPG</a>, <a href="index.html">PNG to JPG</a>, and <a href="index.html">JPG to PNG</a>.</li>
+            <li><strong>Image Compressor:</strong> Reduce file sizes significantly for web use or email without sacrificing visual quality.</li>
+            <li><strong>Image to Text (OCR):</strong> Powerful Optical Character Recognition to extract text from scanned documents or photos.</li>
+            <li><strong>Images to PDF:</strong> Combine multiple image files into a single, professional PDF document.</li>
+            <li><strong>Favicon Generator:</strong> Instantly create website icons in all standard sizes from a single logo.</li>
         </ul>
 
-        <a href="index.html" class="back-link">Back to PixelConvert</a>
+        <h2>Privacy-first approach</h2>
+        <p>At PixelConvert, your privacy isn't just a setting—it's our core architecture. Unlike most online converters, <strong>your files are never uploaded to a server.</strong> All processing happens locally in your browser's memory using technologies like WebAssembly and the Canvas API. This ensures that your private photos and sensitive documents stay exactly where they belong: on your device.</p>
+
+        <h2>Who it’s for</h2>
+        <p>PixelConvert is designed for anyone who values efficiency and security:</p>
+        <ul>
+            <li><strong>Students:</strong> Quickly convert lecture photos or merge scanned notes into PDFs for submissions.</li>
+            <li><strong>Content Creators:</strong> Optimize images for social media or convert modern formats for editing software.</li>
+            <li><strong>Online Sellers:</strong> Compress high-res product photos to meet marketplace file size requirements.</li>
+            <li><strong>Office Professionals:</strong> Securely extract text from receipts or documents without leaking data to third-party servers.</li>
+        </ul>
+
+        <h2>Limitations</h2>
+        <p>While we strive for perfection, please keep in mind:</p>
+        <ul>
+            <li><strong>OCR Accuracy:</strong> Text recognition results can vary depending on image quality, lighting, and font complexity.</li>
+            <li><strong>Device Performance:</strong> Since processing happens on your device, very large files or batch operations may take more time depending on your computer or mobile phone's hardware.</li>
+        </ul>
+
+        <h2>Updates & feedback</h2>
+        <p>We are constantly refining our algorithms and adding new features based on user needs. If you have suggestions or encounter an issue, please feel free to reach out through our <a href="contact.html">Contact page</a>. Your feedback helps us keep PixelConvert the best free tool on the web.</p>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-link">Start Converting Now</a>
+        </div>
     </div>
+
+    <p class="footer-line">PixelConvert — Built for privacy.</p>
 </body>
 </html>

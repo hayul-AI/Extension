@@ -5,33 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - PixelConvert</title>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; padding: 40px 20px; max-width: 800px; margin: 0 auto; color: #1e293b; background-color: #f8fafc; }
-        h1 { font-weight: 800; color: #6366f1; margin-bottom: 20px; }
-        h2 { font-weight: 700; color: #1e293b; margin-top: 30px; }
-        p { margin-bottom: 20px; color: #64748b; }
-        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .back-link { display: inline-block; margin-top: 30px; text-decoration: none; color: white; background: #6366f1; padding: 12px 24px; border-radius: 12px; font-weight: 700; transition: transform 0.2s; }
-        .back-link:hover { transform: translateY(-2px); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.6; padding: 40px 20px; max-width: 900px; margin: 0 auto; color: #1e293b; background-color: #f8fafc; }
+        h1 { font-weight: 800; color: #6366f1; margin-bottom: 20px; font-size: 2.5rem; text-align: center; }
+        h2 { font-weight: 700; color: #1e293b; margin-top: 40px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        p { margin-bottom: 20px; font-size: 1.1rem; color: #64748b; }
+        ul { margin-bottom: 20px; padding-left: 20px; }
+        li { margin-bottom: 10px; color: #64748b; }
+        .card { background: white; padding: 40px; border-radius: 32px; box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.05); }
+        .back-link { display: inline-block; margin-top: 30px; text-decoration: none; color: white; background: #6366f1; padding: 14px 28px; border-radius: 16px; font-weight: 700; transition: all 0.3s; box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4); }
+        .back-link:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .footer-line { text-align: center; margin-top: 60px; color: #94a3b8; font-weight: 600; font-size: 0.9rem; }
+        .last-updated { text-align: center; font-size: 0.9rem; color: #94a3b8; margin-bottom: 30px; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>Privacy Policy</h1>
-        <p>At PixelConvert, your privacy is our top priority. Our service is designed from the ground up to be "Local-Only."</p>
-        
-        <h2>1. Data Processing</h2>
-        <p>All image conversions, compression, and OCR (text recognition) tasks are performed entirely within your web browser. We do not upload your images to any remote server.</p>
+        <p class="last-updated">Last updated: February 18, 2026</p>
 
-        <h2>2. Information Collection</h2>
-        <p>We do not collect personal information, email addresses, or any image data. Since everything runs locally, we have no access to the files you process.</p>
+        <p>At PixelConvert, your privacy is our foundational principle. We believe that your digital assets should remain private, which is why our service is built to process data locally on your device.</p>
 
-        <h2>3. Third-Party Services</h2>
-        <p>We use Google AdSense to display advertisements. AdSense may use cookies to serve personalized ads based on your visit to this and other websites. You can opt out of personalized advertising by visiting Google's Ads Settings.</p>
+        <h2>Local Browser Processing</h2>
+        <p>Unlike most online conversion services, PixelConvert does not upload your images to a remote server. All image conversions (HEIC, WEBP, PNG, JPG) and image compression tasks are performed entirely within your web browser using modern technologies like WebAssembly and HTML5 Canvas. Your original files never leave your computer or mobile phone.</p>
 
-        <h2>4. OCR and LanguageTool</h2>
-        <p>The "Check Grammar" feature in our OCR tool uses the LanguageTool API. If you use this feature, only the <strong>extracted text</strong> is sent to their public endpoint for analysis. No images are sent.</p>
+        <h2>OCR and Online Features</h2>
+        <p>Our Optical Character Recognition (OCR) engine also runs locally on your device. However, PixelConvert offers an optional "Check Grammar" feature to help polish your extracted text. If you explicitly choose to use this grammar check, only the <strong>extracted text snippet</strong> is sent to the LanguageTool public API for analysis. <strong>No images are ever sent</strong> during this process, and this step only occurs if you click the "Check Grammar" button.</p>
 
-        <a href="index.html" class="back-link">Back to PixelConvert</a>
+        <h2>Information Collection & Usage</h2>
+        <p>We do not collect personal identifiers such as your name, address, or email unless you voluntarily provide them through our contact form. Because our core tools run locally, we have no technical means to see, store, or monitor the images you process.</p>
+
+        <h2>Basic Analytics and Logs</h2>
+        <p>We may collect non-identifiable technical data (such as browser type, device type, and page visit duration) to help us improve site performance. This data is aggregated and does not include any information about the contents of your processed files.</p>
+
+        <h2>Cookies and Advertising</h2>
+        <p>We use Google AdSense to serve advertisements on our site. Google uses cookies to serve ads based on a user's previous visits to our website or other websites. These "advertising cookies" enable Google and its partners to serve ads to you based on your visit to our sites and/or other sites on the Internet.</p>
+        <p>You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank">Ads Settings</a>. Alternatively, you can opt out of a third-party vendor's use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info" target="_blank">www.aboutads.info</a>.</p>
+
+        <h2>Third-Party Services</h2>
+        <p>We utilize the following third-party services:</p>
+        <ul>
+            <li><strong>Google AdSense:</strong> For displaying advertisements.</li>
+            <li><strong>LanguageTool API:</strong> For optional grammar and spell checking of extracted text.</li>
+            <li><strong>Google Fonts:</strong> For typography.</li>
+        </ul>
+
+        <h2>Data Retention</h2>
+        <p>Since we do not store your images on our servers, there is no image data to retain or delete. Any text extracted via OCR is held in your browser's temporary memory and is cleared once the tab is closed or the page is refreshed.</p>
+
+        <h2>User Choices</h2>
+        <p>You can manage your privacy by using your browser's built-in controls to block cookies or clear your cache. Because we do not require accounts, you have full control over your session at all times.</p>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-link">Back to Home</a>
+        </div>
     </div>
+
+    <p class="footer-line">PixelConvert — Built for privacy.</p>
 </body>
 </html>
