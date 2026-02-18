@@ -12,6 +12,7 @@ This document outlines the development plan for a single-file, client-side web a
 - **Aesthetics**: Modern design with clear typography, intuitive controls, and a professional color scheme. Large, touch-friendly buttons and a minimum font size of 16px for accessibility.
 - **Feedback**: Visual feedback for file selection, conversion progress (progress bars), and completion (previews and download links).
 - **Privacy**: A clear and prominent notice in the footer stating that all files are processed locally on the user's device.
+- **Monetization**: Integrated Google AdSense with multiple responsive ad units.
 
 ### Conversion Modules (Tabs)
 1.  **HEIC → JPG**: Converts HEIC/HEIF files to JPEG format.
@@ -38,19 +39,27 @@ This document outlines the development plan for a single-file, client-side web a
     - **heic2any**: For HEIC to JPG conversion.
     - **jsPDF**: For creating PDF documents from images.
     - **JSZip**: For creating `.zip` archives for batch downloads.
+- **AdSense Integration**:
+    - Google AdSense script and account verification meta tag in `<head>`.
+    - **Top Ad**: Responsive ad unit placed below the navigation bar.
+    - **Bottom Ad**: Responsive ad unit placed above the footer.
+    - `ads.txt` file in the root directory for seller verification.
 - **Core Logic**:
     - **Image Manipulation**: The native `Canvas` API will be used for decoding/encoding standard image formats (JPG, PNG, WebP) and for resizing images.
     - **Modularity**: JavaScript code will be organized into functions for each conversion type to ensure readability and maintainability.
     - **State Management**: Simple variables will track the active tab, selected files, and conversion results.
     - **Theme Management**: Use CSS variables and `data-theme` attribute on the `<html>` or `<body>` element. Persist user preference in `localStorage`.
 
-## 4. Development Plan (Current Task)
+## 4. Development Plan (Completed Tasks)
 
 - **Step 1: Implement Dark Mode**:
     - Add a theme toggle button in the header.
     - Define CSS variables for dark and light themes.
     - Update all UI components to use these variables.
     - Add JavaScript to handle theme switching and persistence.
-- **Step 2: Deployment**:
-    - Verify the functionality and design.
-    - Push the updated code to the GitHub repository.
+- **Step 2: Google AdSense Integration**:
+    - Added AdSense script and meta tag to `index.html`.
+    - Created `ads.txt` with publisher information (`pub-6460078490158642`).
+    - Inserted multiple responsive ad units, including a specific "광고 영역 (Ad Area)" section above the footer for enhanced visibility and compliance with requested layout.
+- **Step 3: Refined Ad Layout**:
+    - Replaced the standard bottom ad with a titled "광고 영역 (Ad Area)" section and a specific ad slot (`1234567890`) as requested.
