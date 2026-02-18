@@ -781,13 +781,48 @@
             const output = document.getElementById('ocrResult');
             container.style.display = 'block';
             bar.style.width = '0%';
+            output.value = 'Pre-flight check: Verifying CDN assets...';
+            
+            const paths = {
+                worker: "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js",
+                core: "https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js",
+                lang: "https://tessdata.projectnaptha.com/4.0.0_best"
+            };
+
+            // Debug step: Verify assets
+            try {
+                const checks = [
+                    fetch(paths.worker, { method: 'HEAD' }),
+                    fetch(paths.core, { method: 'HEAD' }),
+                    fetch(`${paths.lang}/eng.traineddata.gz`, { method: 'HEAD' }),
+                    fetch(`${paths.lang}/kor.traineddata.gz`, { method: 'HEAD' })
+                ];
+                const results = await Promise.all(checks);
+                const failed = results.findIndex(r => !r.ok);
+                if (failed !== -1) {
+                    const failedUrl = failed === 0 ? 'Worker' : failed === 1 ? 'Core (WASM)' : failed === 2 ? 'English Data' : 'Korean Data';
+                    throw new Error(`CDN Reachability Failed: ${failedUrl} could not be loaded.`);
+                }
+            } catch (e) {
+                output.value = `Error: ${e.message}\nThis usually happens due to firewall or network restrictions.`;
+                return;
+            }
+
             output.value = 'Initializing OCR engine...';
             
+            let worker;
+            const timeout = setTimeout(() => {
+                if (output.value.includes('Initializing') || output.value.includes('loading')) {
+                    output.value = "OCR engine failed to load (Timeout). Check network/CDN access and try again.";
+                    if (worker) worker.terminate();
+                }
+            }, 30000);
+
             try {
                 const canvas = await preprocessForOCR(file);
                 output.value = 'Engine loading...';
                 
-                const worker = await Tesseract.createWorker({
+                worker = await Tesseract.createWorker({
                     logger: m => {
                         if (m.status === 'recognizing text') {
                             const p = Math.round(m.progress * 100);
@@ -797,20 +832,23 @@
                             output.value = `${m.status}...`;
                         }
                     },
-                    workerPath: "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js",
-                    corePath: "https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js",
-                    langPath: "https://tessdata.projectnaptha.com/4.0.0_best"
+                    workerPath: paths.worker,
+                    corePath: paths.core,
+                    langPath: paths.lang
                 });
 
                 await worker.loadLanguage('eng+kor');
                 await worker.initialize('eng+kor');
+                
+                clearTimeout(timeout);
                 const { data: { text } } = await worker.recognize(canvas);
                 output.value = text || 'No text found in the image.';
                 await worker.terminate();
             } catch (error) {
+                clearTimeout(timeout);
                 console.error('OCR Error:', error);
-                output.value = `Error: ${error.message}\nPlease check your network connection and try again.`;
-                throw error;
+                output.value = `Critical Error: ${error.message}\nCheck console for details.`;
+                if (worker) await worker.terminate();
             }
         }
 
