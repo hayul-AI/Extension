@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Tools - Pro Browser Utility</title>
-    <meta name="description" content="Free online image converter. Convert HEIC to JPG, WEBP to JPG, PNG to JPG, compress images, extract text with OCR, merge JPG to PDF, and generate favicons securely in your browser.">
+    <title>ImageTools Pro - Advanced Browser Utility</title>
+    <meta name="description" content="Free online image converter. Convert HEIC, WEBP, PNG to JPG, compress images, and extract text securely in your browser.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,422 +16,305 @@
     <style>
         :root {
             --brand-primary: #6366f1;
-            --brand-secondary: #8b5cf6;
+            --brand-secondary: #a855f7;
+            --brand-accent: #f43f5e;
             --brand-success: #10b981;
-            --brand-danger: #f43f5e;
-            --bg-light: #f8fafc;
-            --bg-dark: #0f172a;
-            --text-light: #1e293b;
-            --text-dark: #f1f5f9;
-            --glass-light: rgba(255, 255, 255, 0.85);
-            --glass-dark: rgba(30, 41, 59, 0.85);
-            --border-light: rgba(255, 255, 255, 0.3);
-            --border-dark: rgba(255, 255, 255, 0.08);
-            --radius-xl: 28px;
+            --bg-light: #fdfdfe;
+            --bg-dark: #0b0f1a;
+            --card-light: rgba(255, 255, 255, 0.7);
+            --card-dark: rgba(17, 24, 39, 0.7);
+            --border-light: rgba(0, 0, 0, 0.06);
+            --border-dark: rgba(255, 255, 255, 0.06);
+            --text-main-light: #1e293b;
+            --text-main-dark: #f1f5f9;
+            --text-sub-light: #64748b;
+            --text-sub-dark: #94a3b8;
+            --radius-xl: 32px;
             --radius-lg: 20px;
-            --shadow-float: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.1);
         }
 
         [data-theme="dark"] {
             --bg-base: var(--bg-dark);
-            --text-base: var(--text-dark);
-            --glass-base: var(--glass-dark);
+            --card-base: var(--card-dark);
             --border-base: var(--border-dark);
-            --secondary-color: #94a3b8;
+            --text-main: var(--text-main-dark);
+            --text-sub: var(--text-sub-dark);
+            --glass-bg: rgba(15, 23, 42, 0.8);
         }
 
         [data-theme="light"] {
             --bg-base: var(--bg-light);
-            --text-base: var(--text-light);
-            --glass-base: var(--glass-light);
+            --card-base: var(--card-light);
             --border-base: var(--border-light);
-            --secondary-color: #64748b;
+            --text-main: var(--text-main-light);
+            --text-sub: var(--text-sub-light);
+            --glass-bg: rgba(255, 255, 255, 0.8);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb { 
-            background: var(--border-base); 
-            border-radius: 10px; 
-            border: 3px solid var(--bg-base);
-        }
-        ::-webkit-scrollbar-thumb:hover { background: var(--secondary-color); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-base);
-            color: var(--text-base);
-            line-height: 1.6;
-            transition: background-color 0.5s ease, color 0.5s ease;
+            color: var(--text-main);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-x: hidden;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
 
-        .bg-blobs {
+        /* Animated Background */
+        .ambient-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             overflow: hidden;
-            filter: blur(100px);
-            opacity: 0.5;
+            background: var(--bg-base);
         }
 
-        .blob {
+        .ambient-blob {
             position: absolute;
-            width: 50vw;
-            height: 50vw;
+            width: 60vw; height: 60vw;
             border-radius: 50%;
-            animation: move 25s infinite alternate ease-in-out;
+            filter: blur(120px);
+            opacity: 0.15;
+            animation: float 30s infinite alternate ease-in-out;
         }
 
         .blob-1 { top: -10%; left: -10%; background: var(--brand-primary); }
-        .blob-2 { bottom: -10%; right: -10%; background: var(--brand-secondary); animation-delay: -7s; }
-        .blob-3 { top: 30%; left: 20%; background: #ec4899; animation-duration: 30s; opacity: 0.3; }
+        .blob-2 { bottom: -10%; right: -10%; background: var(--brand-secondary); animation-delay: -10s; }
+        .blob-3 { top: 40%; left: 30%; background: var(--brand-accent); animation-duration: 40s; opacity: 0.1; }
 
-        @keyframes move {
-            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            100% { transform: translate(15vw, 20vh) scale(1.3) rotate(90deg); }
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(10vw, 15vh) rotate(120deg); }
         }
 
         .container {
             width: 95%;
-            max-width: 1050px;
+            max-width: 1100px;
             margin: 0 auto;
-            padding: 2.5rem 1rem;
+            padding: 3rem 1.5rem;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5rem;
+            margin-bottom: 6rem;
         }
 
-        .hero {
-            text-align: center;
-            margin-bottom: 5rem;
+        .logo-group {
+            display: flex; align-items: center; gap: 1rem;
+            text-decoration: none; color: inherit;
         }
 
+        .logo-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+            border-radius: 12px;
+            display: grid; place-items: center;
+            color: white;
+            box-shadow: 0 8px 16px -4px rgba(99, 102, 241, 0.4);
+        }
+
+        .logo-text { font-weight: 800; font-size: 1.5rem; letter-spacing: -0.04em; }
+
+        .theme-toggle {
+            padding: 0.75rem 1.5rem;
+            background: var(--card-base);
+            border: 1px solid var(--border-base);
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex; align-items: center; gap: 0.75rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover { transform: translateY(-2px); border-color: var(--brand-primary); }
+
+        .hero { text-align: center; margin-bottom: 6rem; }
         .hero h1 {
-            font-size: 4rem;
-            font-weight: 800;
-            letter-spacing: -0.05em;
-            margin-bottom: 1.25rem;
-            line-height: 1.1;
-            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary), #ec4899);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 4.5rem; font-weight: 800; letter-spacing: -0.06em;
+            line-height: 1; margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--text-main), var(--brand-primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
+        .hero p { font-size: 1.25rem; color: var(--text-sub); max-width: 600px; margin: 0 auto; font-weight: 500; }
 
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--secondary-color);
-            max-width: 650px;
-            margin: 0 auto;
-            font-weight: 500;
+        /* Modern Tabs */
+        .tabs-container {
+            position: sticky; top: 2rem; z-index: 100;
+            margin-bottom: 4rem;
         }
 
         .tabs {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            gap: 0.4rem;
-            padding: 0.5rem;
-            background: var(--glass-base);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+            display: flex; gap: 0.5rem; padding: 0.6rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             border: 1px solid var(--border-base);
             border-radius: 24px;
-            margin-bottom: 3.5rem;
+            overflow-x: auto;
             scrollbar-width: none;
-            box-shadow: var(--shadow-float);
+            box-shadow: var(--shadow-premium);
         }
-
         .tabs::-webkit-scrollbar { display: none; }
 
         .tab-button {
-            padding: 0.8rem 1.75rem;
-            font-size: 0.9rem;
-            font-weight: 700;
-            white-space: nowrap;
-            border: none;
-            background: transparent;
-            color: var(--secondary-color);
-            border-radius: 18px;
-            cursor: pointer;
+            padding: 0.8rem 1.75rem; font-size: 0.95rem; font-weight: 700;
+            white-space: nowrap; border: none; background: transparent;
+            color: var(--text-sub); border-radius: 18px; cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .tab-button:hover {
-            color: var(--brand-primary);
-            background: rgba(99, 102, 241, 0.08);
-        }
-
+        .tab-button:hover { color: var(--brand-primary); }
         .tab-button.active {
-            background: var(--brand-primary);
-            color: white;
-            box-shadow: 0 12px 20px -5px rgba(99, 102, 241, 0.4);
+            background: var(--brand-primary); color: white;
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
         }
 
         .tab-content {
-            display: none;
-            padding: 3.5rem;
-            background: var(--glass-base);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
+            display: none; padding: 4rem;
+            background: var(--card-base);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             border-radius: var(--radius-xl);
             border: 1px solid var(--border-base);
-            box-shadow: var(--shadow-float);
-            animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: var(--shadow-premium);
+            animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+        @keyframes reveal {
+            from { opacity: 0; transform: translateY(40px) scale(0.96); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .tab-content.active { display: block; }
 
-        .file-drop-area {
-            border: 2px dashed var(--brand-primary);
+        .drop-zone {
+            border: 2px dashed var(--border-base);
             border-radius: var(--radius-lg);
             padding: 6rem 2rem;
             text-align: center;
-            background: rgba(99, 102, 241, 0.015);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s;
             cursor: pointer;
-            position: relative;
+            background: rgba(0,0,0,0.01);
         }
 
-        .file-drop-area:hover {
-            border-color: var(--brand-secondary);
-            background: rgba(99, 102, 241, 0.04);
-            transform: translateY(-2px);
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--brand-primary);
+            background: rgba(99, 102, 241, 0.03);
+            transform: translateY(-4px);
         }
 
-        .file-label {
+        .btn-primary {
             background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-            padding: 0.9rem 2.5rem;
-            border-radius: 14px;
-            color: white;
-            font-weight: 700;
-            display: inline-block;
-            margin-top: 1.5rem;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-
-        .file-label:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
-        }
-
-        .convert-button {
-            display: block;
-            width: 100%;
-            padding: 1.125rem;
-            font-size: 1.125rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--brand-success), #059669);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            cursor: pointer;
-            margin-top: 2.5rem;
+            color: white; padding: 1rem 2.5rem; border-radius: 16px;
+            font-weight: 800; border: none; cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
         }
 
-        .convert-button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.4);
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px) scale(1.02);
             filter: brightness(1.1);
+            box-shadow: 0 20px 30px -8px rgba(99, 102, 241, 0.5);
         }
 
-        .convert-button:disabled {
-            background: var(--secondary-color);
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none;
+        .btn-success {
+            width: 100%; padding: 1.25rem; font-size: 1.1rem; font-weight: 800;
+            background: linear-gradient(135deg, var(--brand-success), #059669);
+            color: white; border: none; border-radius: 18px; cursor: pointer;
+            margin-top: 3rem; transition: all 0.3s;
+            box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3);
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 14px;
-            background-color: var(--border-base);
-            border-radius: 9999px;
-            margin-top: 2.5rem;
-            overflow: hidden;
-            display: none;
+        .btn-success:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.05); }
+
+        .progress-wrapper {
+            margin-top: 3rem; height: 16px;
+            background: var(--border-base); border-radius: 9999px;
+            overflow: hidden; display: none;
         }
 
-        .progress-bar-inner {
-            width: 0;
-            height: 100%;
-            background: linear-gradient(90deg, var(--brand-primary), #ec4899, var(--brand-secondary));
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite linear;
+        .progress-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
             transition: width 0.4s ease;
         }
 
-        @keyframes shimmer {
-            0% { background-position: 100% 0; }
-            100% { background-position: -100% 0; }
+        .results-grid {
+            margin-top: 4rem; display: grid; gap: 1.25rem;
         }
 
-        .result-item {
-            background: var(--glass-base);
+        .result-card {
+            background: var(--bg-base);
             border: 1px solid var(--border-base);
-            padding: 1.5rem;
-            border-radius: 22px;
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 1.25rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .result-item:hover {
-            transform: scale(1.02);
-            border-color: var(--brand-primary);
-            background: white;
-        }
-
-        [data-theme="dark"] .result-item:hover { background: #1e293b; }
-
-        .result-item img {
-            width: 80px;
-            height: 80px;
-            border-radius: 14px;
-            object-fit: cover;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .theme-toggle {
-            padding: 0.7rem 1.4rem;
-            background: var(--glass-base);
-            border: 1px solid var(--border-base);
-            border-radius: 16px;
-            cursor: pointer;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
+            padding: 1.5rem; border-radius: 24px;
+            display: flex; align-items: center; gap: 1.5rem;
             transition: all 0.3s;
         }
 
-        .theme-toggle:hover { background: var(--bg-base); transform: scale(1.05); }
+        .result-card:hover { transform: scale(1.02); border-color: var(--brand-primary); }
 
-        .faq-section {
-            margin-top: 8rem;
-            display: grid;
+        .faq-grid {
+            margin-top: 10rem; display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
+            gap: 2rem;
         }
 
-        .faq-card {
-            background: var(--glass-base);
-            padding: 2.5rem;
-            border-radius: var(--radius-xl);
-            border: 1px solid var(--border-base);
-            transition: all 0.3s;
+        .faq-item {
+            background: var(--card-base); padding: 2.5rem;
+            border-radius: var(--radius-xl); border: 1px solid var(--border-base);
         }
 
-        .faq-card:hover { transform: translateY(-5px); border-color: var(--brand-primary); }
-
-        .faq-card h4 {
-            color: var(--brand-primary);
-            margin-bottom: 1.25rem;
-            font-size: 1.25rem;
-            font-weight: 800;
-        }
+        .faq-item h4 { font-weight: 800; margin-bottom: 1rem; color: var(--brand-primary); }
 
         footer {
-            margin-top: 10rem;
-            padding: 5rem 0;
-            text-align: center;
+            margin-top: 12rem; padding: 6rem 0; text-align: center;
             border-top: 1px solid var(--border-base);
         }
 
-        .nav-links a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            font-weight: 700;
-            margin: 0 1.5rem;
-            transition: color 0.3s;
-            font-size: 0.95rem;
+        .footer-nav { margin-bottom: 3rem; }
+        .footer-nav a {
+            color: var(--text-sub); text-decoration: none; font-weight: 700;
+            margin: 0 1.5rem; transition: color 0.3s;
         }
+        .footer-nav a:hover { color: var(--brand-primary); }
 
-        .nav-links a:hover { color: var(--brand-primary); }
-
-        #ocr-result-area {
-            width: 100%;
-            height: 300px;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border-radius: 18px;
-            border: 1px solid var(--border-base);
-            background: rgba(0,0,0,0.02);
-            color: var(--text-base);
-            font-size: 1rem;
-            line-height: 1.7;
-            resize: vertical;
-        }
-
-        .preset-btn {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-            font-weight: 700;
-            border: 1px solid var(--border-base);
-            background: transparent;
-            color: var(--secondary-color);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .preset-btn.active {
-            background: var(--brand-primary);
-            color: white;
-            border-color: var(--brand-primary);
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-base); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-sub); }
 
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2.75rem; }
-            .tab-content { padding: 2rem 1.5rem; }
-            .container { padding: 1.5rem 1rem; }
-            .tabs { border-radius: 18px; }
+            .hero h1 { font-size: 3rem; }
+            .tab-content { padding: 2rem; }
+            .hero { margin-bottom: 4rem; }
         }
     </style>
 </head>
 <body data-theme="light">
-    <div class="bg-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+    <div class="ambient-bg">
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+        <div class="ambient-blob blob-3"></div>
     </div>
 
     <div class="container">
         <header>
-            <div class="header-title" style="display: flex; align-items: center; gap: 0.75rem;">
-                <svg width="36" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--brand-primary);">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                </svg>
-                <span style="font-weight: 800; font-size: 1.4rem; letter-spacing: -0.03em;">ImageTools <span style="font-weight: 400; color: var(--secondary-color);">Pro</span></span>
-            </div>
+            <a href="index.html" class="logo-group">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    </svg>
+                </div>
+                <span class="logo-text">ImageTools</span>
+            </a>
             <button class="theme-toggle" id="theme-toggle">
                 <span class="theme-icon">🌙</span>
                 <span class="theme-text">Dark Mode</span>
@@ -439,108 +322,112 @@
         </header>
 
         <section class="hero">
-            <h1>Smarter Images,<br>Better Privacy.</h1>
-            <p>Convert, compress, and extract text from your photos with pro-grade speed. All processing happens 100% on your device.</p>
+            <h1>Smarter Workflow.<br>Total Privacy.</h1>
+            <p>The web's most secure pro image toolkit. Zero uploads, zero logs, instant local processing.</p>
         </section>
 
-        <nav class="tabs">
-            <button class="tab-button active" data-tab="heic-to-jpg">HEIC to JPG</button>
-            <button class="tab-button" data-tab="webp-to-jpg">WEBP to JPG</button>
-            <button class="tab-button" data-tab="png-to-jpg">PNG to JPG</button>
-            <button class="tab-button" data-tab="jpg-to-png">JPG to PNG</button>
-            <button class="tab-button" data-tab="compress">Compress</button>
-            <button class="tab-button" data-tab="ocr">OCR</button>
-            <button class="tab-button" data-tab="jpg-to-pdf">PDF</button>
-            <button class="tab-button" data-tab="favicon">Favicon</button>
-        </nav>
+        <div class="tabs-container">
+            <nav class="tabs">
+                <button class="tab-button active" data-tab="heic-to-jpg">HEIC to JPG</button>
+                <button class="tab-button" data-tab="webp-to-jpg">WEBP to JPG</button>
+                <button class="tab-button" data-tab="png-to-jpg">PNG to JPG</button>
+                <button class="tab-button" data-tab="jpg-to-png">JPG to PNG</button>
+                <button class="tab-button" data-tab="compress">Compress</button>
+                <button class="tab-button" data-tab="ocr">OCR</button>
+                <button class="tab-button" data-tab="jpg-to-pdf">PDF</button>
+                <button class="tab-button" data-tab="favicon">Favicon</button>
+            </nav>
+        </div>
 
         <main>
-            <!-- Conversion Tabs -->
+            <!-- HEIC Tab -->
             <div id="heic-to-jpg" class="tab-content active">
                 <h2>Convert HEIC to JPG</h2>
-                <div class="file-drop-area">
-                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop HEIC files here</p>
-                    <p style="color: var(--secondary-color); font-size: 0.9rem;">or click to browse your folders</p>
-                    <label class="file-label">Select Files</label>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop HEIC files here</p>
+                    <p style="color: var(--text-sub); margin-bottom: 2rem;">Fast local conversion for Apple photos</p>
+                    <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".heic, .heif" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Generate JPGs</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-                <div class="results"></div>
+                <button class="btn-success convert-button" disabled>Process Images</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
             </div>
 
             <!-- WEBP Tab -->
             <div id="webp-to-jpg" class="tab-content">
                 <h2>Convert WEBP to JPG</h2>
-                <div class="file-drop-area">
-                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop WEBP files here</p>
-                    <label class="file-label">Select Files</label>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop WEBP files here</p>
+                    <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".webp" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Process to JPG</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-                <div class="results"></div>
+                <button class="btn-success convert-button" disabled>Convert Now</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
             </div>
 
             <!-- PNG Tab -->
             <div id="png-to-jpg" class="tab-content">
                 <h2>Convert PNG to JPG</h2>
-                <div class="file-drop-area">
-                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop PNG images here</p>
-                    <label class="file-label">Select Files</label>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop PNG images here</p>
+                    <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".png" style="display: none;">
                 </div>
-                <div class="options">
-                    <div class="option-group">
-                        <label>Output Quality:</label>
-                        <input type="range" id="png-to-jpg-quality" min="0.1" max="1.0" value="0.92" step="0.01">
-                        <span class="quality-value" style="font-weight: 800; min-width: 40px;">0.92</span>
+                <div class="options" style="margin-top: 3rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <label style="font-weight: 700;">Output Quality</label>
+                        <span class="quality-value" style="font-weight: 800; color: var(--brand-primary);">0.92</span>
                     </div>
+                    <input type="range" id="png-to-jpg-quality" min="0.1" max="1.0" value="0.92" step="0.01">
                 </div>
-                <button class="convert-button" disabled>Convert Now</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-                <div class="results"></div>
+                <button class="btn-success convert-button" disabled>Generate JPGs</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
             </div>
 
             <!-- JPG to PNG Tab -->
             <div id="jpg-to-png" class="tab-content">
                  <h2>Convert JPG to PNG</h2>
-                <div class="file-drop-area">
-                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop JPG photos here</p>
-                    <label class="file-label">Select Files</label>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop JPG photos here</p>
+                    <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Convert to PNG</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-                <div class="results"></div>
+                <button class="btn-success convert-button" disabled>Convert to PNG</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
             </div>
 
             <!-- Compress Tab -->
             <div id="compress" class="tab-content">
                 <h2>Optimize & Compress</h2>
-                <div class="file-drop-area">
-                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop images to reduce size</p>
-                    <label class="file-label">Select Files</label>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop images to shrink</p>
+                    <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
                 </div>
-                 <div class="options">
-                    <div class="option-group">
-                        <label>Quality:</label>
+                 <div class="options" style="margin-top: 3rem; display: grid; gap: 2rem;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                            <label style="font-weight: 700;">Quality Level</label>
+                            <span class="quality-value" style="font-weight: 800; color: var(--brand-primary);">0.8</span>
+                        </div>
                         <input type="range" id="compress-quality" min="0.4" max="0.95" value="0.8" step="0.01">
-                        <span class="quality-value" style="font-weight: 800; min-width: 40px;">0.8</span>
                     </div>
-                    <div class="option-group">
-                        <label>Max Width:</label>
-                        <select id="compress-resize" style="padding: 0.6rem; border-radius: 12px; border: 1px solid var(--border-base); background: var(--bg-base); color: inherit; font-weight: 600;">
-                            <option value="original">Keep Original</option>
-                            <option value="1920">1920px (Full HD)</option>
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <label style="font-weight: 700;">Maximum Width</label>
+                        <select id="compress-resize" style="padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border-base); background: var(--bg-base); color: inherit; font-weight: 700;">
+                            <option value="original">Original</option>
+                            <option value="1920">1920px (FHD)</option>
                             <option value="1280">1280px (HD)</option>
                             <option value="1080">1080px</option>
                         </select>
                     </div>
-                    <div class="option-group">
-                        <label>Target File Size:</label>
-                        <div class="preset-buttons">
+                    <div>
+                        <label style="font-weight: 700; display: block; margin-bottom: 1rem;">Auto-Target Presets</label>
+                        <div style="display: flex; gap: 0.75rem;">
                             <button class="preset-btn" data-target="204800">200KB</button>
                             <button class="preset-btn" data-target="512000">500KB</button>
                             <button class="preset-btn" data-target="1048576">1MB</button>
@@ -548,90 +435,90 @@
                         </div>
                     </div>
                 </div>
-                <button class="convert-button" disabled>Compress Images</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-                <div class="results"></div>
+                <button class="btn-success convert-button" disabled>Optimize Now</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
             </div>
 
             <!-- OCR Tab -->
             <div id="ocr" class="tab-content">
-                <h2>Text Recognition (OCR)</h2>
-                <div class="file-drop-area">
-                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop image with text</p>
-                    <label class="file-label">Select Image</label>
+                <h2>Text Extraction (OCR)</h2>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop image with text</p>
+                    <label class="btn-primary">Select Image</label>
                     <input type="file" class="file-input" accept="image/*" style="display: none;">
                 </div>
-                <div class="options">
-                    <div style="display: flex; gap: 2rem; margin-bottom: 1.5rem;">
-                        <label style="display: flex; align-items: center; gap: 0.6rem; font-weight: 600; cursor: pointer;"><input type="checkbox" id="ocr-grayscale" checked style="width: 18px; height: 18px;"> Grayscale</label>
-                        <label style="display: flex; align-items: center; gap: 0.6rem; font-weight: 600; cursor: pointer;"><input type="checkbox" id="ocr-contrast" checked style="width: 18px; height: 18px;"> Sharp Contrast</label>
+                <div class="options" style="margin-top: 3rem;">
+                    <div style="display: flex; gap: 2rem; margin-bottom: 2rem;">
+                        <label style="display: flex; align-items: center; gap: 0.75rem; font-weight: 700; cursor: pointer;"><input type="checkbox" id="ocr-grayscale" checked style="width: 20px; height: 20px; accent-color: var(--brand-primary);"> Grayscale</label>
+                        <label style="display: flex; align-items: center; gap: 0.75rem; font-weight: 700; cursor: pointer;"><input type="checkbox" id="ocr-contrast" checked style="width: 20px; height: 20px; accent-color: var(--brand-primary);"> High Contrast</label>
                     </div>
-                    <div class="option-group">
-                        <label>Threshold:</label>
-                        <input type="range" id="ocr-threshold" min="0" max="255" value="128">
-                        <span id="threshold-value" style="font-weight: 800; min-width: 40px;">128</span>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <label style="font-weight: 700;">Clean-up Threshold</label>
+                        <span id="threshold-value" style="font-weight: 800; color: var(--brand-primary);">128</span>
                     </div>
+                    <input type="range" id="ocr-threshold" min="0" max="255" value="128">
                 </div>
-                <button class="convert-button" id="ocr-start-btn" disabled>Scan for Text</button>
-                <div class="progress-bar" id="ocr-progress-container"><div class="progress-bar-inner" id="ocr-progress-bar"></div></div>
-                <textarea id="ocr-result-area" placeholder="Extracted text will appear here..." readonly></textarea>
-                <div class="ocr-controls">
-                    <button class="ocr-btn copy" id="ocr-copy-btn">Copy Text</button>
-                    <button class="ocr-btn download" id="ocr-download-btn">Save as TXT</button>
-                    <button class="ocr-btn reset" id="ocr-reset-btn">Reset</button>
+                <button class="btn-success convert-button" id="ocr-start-btn" disabled>Scan & Extract</button>
+                <div class="progress-wrapper" id="ocr-progress-container"><div class="progress-fill" id="ocr-progress-bar"></div></div>
+                <textarea id="ocr-result-area" placeholder="Recognized text will appear here..." readonly></textarea>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 2rem;">
+                    <button class="btn-primary" id="ocr-copy-btn" style="padding: 0.75rem;">Copy</button>
+                    <button class="btn-primary" id="ocr-download-btn" style="padding: 0.75rem; background: var(--brand-success); box-shadow: none;">Save</button>
+                    <button class="btn-primary" id="ocr-reset-btn" style="padding: 0.75rem; background: var(--text-sub); box-shadow: none;">Reset</button>
                 </div>
             </div>
 
             <!-- PDF Tab -->
             <div id="jpg-to-pdf" class="tab-content">
                 <h2>Merge to PDF</h2>
-                <div class="file-drop-area">
-                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop images to merge</p>
-                    <label class="file-label">Select Files</label>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop images to merge</p>
+                    <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Generate PDF</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-                <div class="results"></div>
+                <button class="btn-success convert-button" disabled>Create Document</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
             </div>
 
             <!-- Favicon Tab -->
             <div id="favicon" class="tab-content">
-                 <h2>Generate Favicon</h2>
-                <div class="file-drop-area">
-                    <p style="font-weight: 700; color: var(--text-base); font-size: 1.1rem; margin-bottom: 0.5rem;">Drop brand logo (1:1 ratio)</p>
-                    <label class="file-label">Select File</label>
+                 <h2>Favicon Generator</h2>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop your logo</p>
+                    <label class="btn-primary">Select Image</label>
                     <input type="file" class="file-input" accept=".png, .jpg, .jpeg" style="display: none;">
                 </div>
-                <button class="convert-button" disabled>Create Favicon Pack</button>
-                <div class="progress-bar"><div class="progress-bar-inner"></div></div>
-                <div class="results"></div>
+                <button class="btn-success convert-button" disabled>Generate Pack</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
             </div>
         </main>
 
-        <section class="faq-section">
-            <div class="faq-card">
-                <h4>Privacy First</h4>
-                <p>We believe in absolute data ownership. That's why we built this tool to run entirely in your local RAM. No uploads, no logs, no risks.</p>
+        <section class="faq-grid">
+            <div class="faq-item">
+                <h4>Ironclad Privacy</h4>
+                <p>By leveraging WebAssembly and the Canvas API, we ensure your files never leave your computer. Privacy isn't a feature; it's our foundation.</p>
             </div>
-            <div class="faq-card">
-                <h4>Pro Formats</h4>
-                <p>Handle modern web formats like WEBP and Apple's HEIC effortlessly. Perfect for developers and photography enthusiasts alike.</p>
+            <div class="faq-item">
+                <h4>Lightning Speed</h4>
+                <p>No network latency. Batch process dozens of high-res photos in seconds with optimized local algorithms.</p>
             </div>
-            <div class="faq-card">
-                <h4>Fast & Simple</h4>
-                <p>Optimized algorithms ensure that even batch processing of 50+ images is fast and fluid. Free to use with zero registration.</p>
+            <div class="faq-item">
+                <h4>Always Free</h4>
+                <p>No subscriptions, no watermarks, no registration. Professional tools accessible to everyone, anywhere.</p>
             </div>
         </section>
 
         <footer>
-            <div class="nav-links">
+            <nav class="footer-nav">
                 <a href="about.html">About</a>
                 <a href="privacy.html">Privacy</a>
                 <a href="terms.html">Terms</a>
                 <a href="contact.html">Contact</a>
-            </div>
-            <p style="font-size: 0.9rem; color: var(--secondary-color); font-weight: 500;">© 2024 ImageTools Pro. Built for Privacy.</p>
+            </nav>
+            <p style="font-size: 0.95rem; color: var(--text-sub); font-weight: 600;">© 2024 ImageTools Pro. Safe. Private. Fast.</p>
         </footer>
     </div>
 
@@ -677,7 +564,7 @@
         });
 
         tabContents.forEach(tab => {
-            const dropArea = tab.querySelector('.file-drop-area');
+            const dropArea = tab.querySelector('.drop-zone');
             const fileInput = tab.querySelector('.file-input');
             const convertButton = tab.querySelector('.convert-button');
             const tabId = tab.id;
@@ -689,8 +576,7 @@
             
             ['dragover', 'dragleave', 'drop'].forEach(evt => {
                 dropArea.addEventListener(evt, e => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    e.preventDefault(); e.stopPropagation();
                     if (evt === 'dragover') dropArea.classList.add('dragover');
                     if (evt === 'dragleave' || evt === 'drop') dropArea.classList.remove('dragover');
                     if (evt === 'drop') handleFiles(e.dataTransfer.files);
@@ -783,7 +669,7 @@
 
         async function convertHeic(files, tab) {
             const res = [];
-            const bar = tab.querySelector('.progress-bar-inner');
+            const bar = tab.querySelector('.progress-fill');
             for (let i = 0; i < files.length; i++) {
                 bar.style.width = (i/files.length)*100 + '%';
                 const blob = await heic2any({ blob: files[i], toType: 'image/jpeg', quality: 0.9 });
@@ -794,7 +680,7 @@
 
         async function convertCanvas(files, tab, format, ext, quality) {
             const res = [];
-            const bar = tab.querySelector('.progress-bar-inner');
+            const bar = tab.querySelector('.progress-fill');
             for (let i = 0; i < files.length; i++) {
                 bar.style.width = (i/files.length)*100 + '%';
                 const blob = await new Promise(r => {
@@ -814,7 +700,7 @@
 
         async function compressLogic(files, tab) {
             const res = [];
-            const bar = tab.querySelector('.progress-bar-inner');
+            const bar = tab.querySelector('.progress-fill');
             const tw = tab.querySelector('#compress-resize').value;
             const mq = parseFloat(tab.querySelector('#compress-quality').value);
 
@@ -850,16 +736,47 @@
             return res;
         }
 
+        async function preprocessImage(file) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width; canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    const isGrayscale = document.getElementById('ocr-grayscale').checked;
+                    const isContrast = document.getElementById('ocr-contrast').checked;
+                    const threshold = parseInt(document.getElementById('ocr-threshold').value);
+                    for (let i = 0; i < data.length; i += 4) {
+                        let r = data[i], g = data[i+1], b = data[i+2];
+                        if (isGrayscale || isContrast) {
+                            let gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                            if (isContrast) gray = (gray - 128) * 1.5 + 128;
+                            if (threshold > 0) gray = gray >= threshold ? 255 : 0;
+                            data[i] = data[i+1] = data[i+2] = gray;
+                        }
+                    }
+                    ctx.putImageData(imageData, 0, 0);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.onerror = reject;
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
         async function performOCR(file, tab) {
             const container = document.getElementById('ocr-progress-container');
             const bar = document.getElementById('ocr-progress-bar');
             container.style.display = 'block';
-            ocrResult.value = 'Analyzing image...';
+            ocrResult.value = 'Preparing OCR engine...';
             
+            const processed = await preprocessImage(file);
             const worker = await Tesseract.createWorker('eng+kor', 1, {
                 logger: m => { if (m.status === 'recognizing text') bar.style.width = (m.progress*100) + '%'; }
             });
-            const { data: { text } } = await worker.recognize(file);
+            const { data: { text } } = await worker.recognize(processed);
             ocrResult.value = text || 'No text found.';
             await worker.terminate();
         }
@@ -878,7 +795,7 @@
                 const ratio = img.width / img.height;
                 pdf.addImage(dataUrl, 'JPEG', 0, 0, 210, 210/ratio);
             }
-            return [{ name: 'merged.pdf', blob: pdf.output('blob'), originalSize: 0 }];
+            return [{ name: 'document.pdf', blob: pdf.output('blob'), originalSize: 0 }];
         }
 
         async function convertFavicon(file, tab) {
@@ -904,37 +821,37 @@
                 const zip = new JSZip();
                 data.forEach(r => zip.file(r.name, r.blob));
                 zip.generateAsync({ type: 'blob' }).then(b => {
-                    container.prepend(createResultItem({ name: 'download_all.zip', blob: b, originalSize: 0, noPreview: true }));
+                    container.prepend(createResultCard({ name: 'all_files.zip', blob: b, originalSize: 0, noPreview: true }));
                 });
             }
-            data.forEach(r => container.appendChild(createResultItem(r)));
+            data.forEach(r => container.appendChild(createResultCard(r)));
         }
 
-        function createResultItem(res) {
+        function createResultCard(res) {
             const div = document.createElement('div');
-            div.className = 'result-item';
+            div.className = 'result-card';
             const url = URL.createObjectURL(res.blob);
             const reduction = res.originalSize ? Math.round((1 - res.blob.size/res.originalSize)*100) : 0;
             div.innerHTML = `
                 ${res.noPreview ? '' : `<img src="${url}">`}
-                <div class="result-info">
+                <div style="flex-grow: 1;">
                     <strong style="display:block; margin-bottom: 0.25rem;">${res.name}</strong>
-                    <p>${formatBytes(res.blob.size)} ${reduction > 0 ? `<span style="color: var(--brand-success); font-weight: 700;">(${reduction}% smaller)</span>` : ''}</p>
+                    <p style="font-size: 0.85rem; color: var(--text-sub);">${formatBytes(res.blob.size)} ${reduction > 0 ? `<span style="color: var(--brand-success); font-weight: 800;">(${reduction}% optimized)</span>` : ''}</p>
                 </div>
-                <a href="${url}" download="${res.name}" class="download-button">Download</a>
+                <a href="${url}" download="${res.name}" class="btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.85rem; box-shadow: none;">Download</a>
             `;
             return div;
         }
 
         function updateSelectedFilesDisplay(tab, files) {
-            const p = tab.querySelector('.file-drop-area p:first-child');
+            const p = tab.querySelector('.drop-zone p:first-child');
             if (!p) return;
             p.textContent = (!files || files.length === 0) ? 'Drop files here' : (files.length === 1 ? `Selected: ${files[0].name}` : `${files.length} files selected`);
         }
 
         function setInProgress(tab, busy) {
             const btn = tab.querySelector('.convert-button');
-            const bar = tab.querySelector('.progress-bar');
+            const bar = tab.querySelector('.progress-wrapper');
             if (btn) btn.disabled = busy;
             if (bar) bar.style.display = busy ? 'block' : 'none';
         }
