@@ -353,6 +353,22 @@
             font-size: 0.85rem;
         }
 
+        .diagnostics-panel {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.02);
+            border: 1px solid var(--border-base);
+            border-radius: 16px;
+            display: none;
+        }
+        .diag-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.5rem 0; border-bottom: 1px solid var(--border-base);
+            font-size: 0.9rem;
+        }
+        .diag-item:last-child { border-bottom: none; }
+        .diag-status { font-weight: 800; }
+
         .faq-grid {
             margin-top: 10rem; display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -432,7 +448,14 @@
         </div>
 
         <main>
-            <div class="ad-container top-ad">Advertisement Space</div>
+            <div class="ad-container top-ad">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-6460078490158642"
+                     data-ad-slot="1234567890"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
 
             <!-- HEIC Tab -->
             <div id="heic-to-jpg" class="tab-content active">
@@ -446,7 +469,14 @@
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
                 
-                <div class="ad-container middle-ad">Advertisement Space</div>
+                <div class="ad-container middle-ad">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6460078490158642"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
 
                 <div class="tool-info">
                     <h3>Professional HEIC to JPG Converter</h3>
@@ -491,7 +521,14 @@
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
 
-                <div class="ad-container middle-ad">Advertisement Space</div>
+                <div class="ad-container middle-ad">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6460078490158642"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
 
                 <div class="tool-info">
                     <h3>Fast WEBP to JPG Converter</h3>
@@ -543,7 +580,14 @@
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
 
-                <div class="ad-container middle-ad">Advertisement Space</div>
+                <div class="ad-container middle-ad">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6460078490158642"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
 
                 <div class="tool-info">
                     <h3>High-Quality PNG to JPG Converter</h3>
@@ -588,7 +632,14 @@
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
 
-                <div class="ad-container middle-ad">Advertisement Space</div>
+                <div class="ad-container middle-ad">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6460078490158642"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
 
                 <div class="tool-info">
                     <h3>Lossless JPG to PNG Converter</h3>
@@ -660,7 +711,14 @@
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
 
-                <div class="ad-container middle-ad">Advertisement Space</div>
+                <div class="ad-container middle-ad">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6460078490158642"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
 
                 <div class="tool-info">
                     <h3>Smart Image Compressor</h3>
@@ -727,7 +785,19 @@
                     <button class="btn-primary" id="apply-all-fixes" style="margin-top: 1rem; width: 100%;">Apply Cleanup & Normalization</button>
                 </div>
 
-                <div class="ad-container middle-ad">Advertisement Space</div>
+                <div id="ocr-diagnostics" class="diagnostics-panel">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">OCR Engine Diagnostics</h3>
+                    <div id="diag-list"></div>
+                </div>
+
+                <div class="ad-container middle-ad">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6460078490158642"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
 
                 <div class="tool-info">
                     <h3>Free Image to Text (OCR) Converter</h3>
@@ -772,7 +842,14 @@
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
 
-                <div class="ad-container middle-ad">Advertisement Space</div>
+                <div class="ad-container middle-ad">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6460078490158642"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
 
                 <div class="tool-info">
                     <h3>Professional Images to PDF Converter</h3>
@@ -817,7 +894,14 @@
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
 
-                <div class="ad-container middle-ad">Advertisement Space</div>
+                <div class="ad-container middle-ad">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-6460078490158642"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                </div>
 
                 <div class="tool-info">
                     <h3>Free Favicon Generator</h3>
@@ -850,7 +934,14 @@
                 </div>
             </div>
 
-            <div class="ad-container bottom-ad">Advertisement Space</div>
+            <div class="ad-container bottom-ad">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-6460078490158642"
+                     data-ad-slot="1234567890"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+            </div>
         </main>
 
         <section class="faq-grid">
@@ -905,7 +996,7 @@
         const { jsPDF } = window.jspdf;
         const fileStore = new Map();
         let currentTargetSize = 0;
-        let ocrWorker = null; // Cached OCR worker
+        let ocrWorker = null; // Cached OCR worker (if preloading)
 
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
@@ -998,6 +1089,7 @@
             document.getElementById('ocr-start-btn').disabled = true;
             document.getElementById('ocr-progress-container').style.display = 'none';
             document.getElementById('grammar-issues').style.display = 'none';
+            document.getElementById('ocr-diagnostics').style.display = 'none';
         });
 
         async function executeConversion(tabId, files) {
@@ -1125,28 +1217,34 @@
             });
         }
 
-        async function getWorker(logger, retry = true) {
-            if (ocrWorker) return ocrWorker;
-
-            try {
-                const worker = await Tesseract.createWorker({
-                    logger: logger,
-                    workerPath: "/ocr/worker.min.js",
-                    corePath: "/ocr/tesseract-core.wasm.js",
-                    langPath: "/ocr/tessdata"
-                });
-                await worker.loadLanguage('eng');
-                await worker.initialize('eng');
-                ocrWorker = worker;
-                return ocrWorker;
-            } catch (error) {
-                console.error("OCR Init Error:", error);
-                if (retry) {
-                    console.log("Retrying OCR initialization...");
-                    return getWorker(logger, false);
+        async function checkOcrAssets() {
+            const assets = [
+                { name: "Worker Script", url: "/ocr/worker.min.js" },
+                { name: "WASM Core", url: "/ocr/tesseract-core.wasm.js" },
+                { name: "Language Data (English)", url: "/ocr/tessdata/eng.traineddata.gz" }
+            ];
+            const panel = document.getElementById('ocr-diagnostics');
+            const list = document.getElementById('diag-list');
+            panel.style.display = 'block';
+            list.innerHTML = '';
+            
+            let allOk = true;
+            for (const asset of assets) {
+                const item = document.createElement('div');
+                item.className = 'diag-item';
+                try {
+                    const res = await fetch(asset.url, { method: 'HEAD' });
+                    const status = res.status;
+                    const ok = res.ok;
+                    if (!ok) allOk = false;
+                    item.innerHTML = `<span>${asset.name}</span><span class="diag-status" style="color: ${ok ? 'var(--brand-success)' : 'var(--brand-accent)'}">${ok ? '✅' : '❌'} (HTTP ${status})</span>`;
+                } catch (e) {
+                    allOk = false;
+                    item.innerHTML = `<span>${asset.name}</span><span class="diag-status" style="color: var(--brand-accent)">❌ (Error: ${e.message})</span>`;
                 }
-                throw error;
+                list.appendChild(item);
             }
+            return allOk;
         }
 
         async function performOCR(file, tab) {
@@ -1156,26 +1254,48 @@
             
             container.style.display = 'block';
             bar.style.width = '0%';
+            output.value = 'Running diagnostics...';
+
+            const assetsOk = await checkOcrAssets();
+            if (!assetsOk) {
+                output.value = "CRITICAL ERROR: One or more OCR assets are missing or inaccessible. Check diagnostics below.";
+                return;
+            }
+
             output.value = 'Loading OCR engine (first run may take 5-10 seconds)...';
 
+            let worker = null;
             try {
                 const canvas = await preprocessForOCR(file);
-                const worker = await getWorker(m => {
-                    if (m.status === 'recognizing text') {
-                        const p = Math.round(m.progress * 100);
-                        bar.style.width = p + '%';
-                        output.value = `Recognizing text... ${p}%`;
-                    } else {
-                        output.value = `${m.status}...`;
-                    }
+                
+                worker = await Tesseract.createWorker({
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            const p = Math.round(m.progress * 100);
+                            bar.style.width = p + '%';
+                            output.value = `Recognizing text... ${p}%`;
+                        } else {
+                            output.value = `${m.status}...`;
+                        }
+                    },
+                    workerPath: "/ocr/worker.min.js",
+                    corePath: "/ocr/tesseract-core.wasm.js",
+                    langPath: "/ocr/tessdata"
                 });
+
+                await worker.load();
+                await worker.loadLanguage("eng");
+                await worker.initialize("eng");
 
                 const { data: { text } } = await worker.recognize(canvas);
                 output.value = text || 'No text found.';
             } catch (error) {
                 console.error('OCR Error:', error);
                 output.value = `OCR Error: ${error.message}. Please check if the /ocr/ folder contains all necessary files.`;
-                ocrWorker = null; // Clear cached worker on fatal error
+            } finally {
+                if (worker) {
+                    await worker.terminate();
+                }
             }
         }
 
