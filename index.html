@@ -1,27 +1,27 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이미지 변환 도구</title>
-    <meta name="description" content="무료 이미지 변환 도구. HEIC JPG 변환, WEBP JPG 변환, PNG JPG 변환, 이미지 용량 줄이기, OCR 텍스트 추출, PDF 병합, 파비콘 생성을 브라우저에서 안전하게 수행하세요.">
-    <meta name="keywords" content="이미지 변환, HEIC JPG 변환, WEBP 변환, 이미지 압축, 무료 OCR, 텍스트 추출, JPG PDF 변환, 파비콘 만들기, 브라우저 변환">
-    <meta property="og:title" content="이미지 변환 도구 - 무료 & 안전한 브라우저 기반 툴">
-    <meta property="og:description" content="서버 전송 없이 내 기기에서 바로 변환하세요. HEIC, WEBP, 압축, OCR, PDF 등 다양한 기능을 제공합니다.">
+    <title>Image Converter Tool - Free & Secure Online Tool</title>
+    <meta name="description" content="Free online image converter. Convert HEIC to JPG, WEBP to JPG, PNG to JPG, compress images, extract text with OCR, merge JPG to PDF, and generate favicons securely in your browser.">
+    <meta name="keywords" content="image converter, HEIC to JPG, WEBP to JPG, image compression, free OCR, extract text from image, JPG to PDF, favicon maker, browser-based converter">
+    <meta property="og:title" content="Image Converter Tool - Free & Secure Browser-based Utility">
+    <meta property="og:description" content="Convert and edit images directly on your device without uploading to a server. Supports HEIC, WEBP, Compression, OCR, PDF, and more.">
     <meta property="og:type" content="website">
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
-      "name": "이미지 변환 도구",
+      "name": "Image Converter Tool",
       "applicationCategory": "MultimediaApplication",
       "operatingSystem": "Web Browser",
       "offers": {
         "@type": "Offer",
         "price": "0",
-        "priceCurrency": "KRW"
+        "priceCurrency": "USD"
       },
-      "description": "브라우저 기반 무료 이미지 변환, 압축, OCR 텍스트 추출 도구. 서버 업로드 없이 안전하게 사용하세요.",
+      "description": "Browser-based free image conversion, compression, and OCR tool. Use securely without server uploads.",
       "featureList": "HEIC to JPG, WEBP to JPG, Image Compression, OCR, Image to PDF, Favicon Generator"
     }
     </script>
@@ -383,10 +383,10 @@
 
     <div class="container">
         <header>
-            <h1>이미지 변환 도구</h1>
-            <button class="theme-toggle" id="theme-toggle" aria-label="테마 전환">
+            <h1>Image Tools</h1>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle Theme">
                 <span class="theme-icon">🌙</span>
-                <span class="theme-text">다크 모드</span>
+                <span class="theme-text">Dark Mode</span>
             </button>
         </header>
 
@@ -395,10 +395,10 @@
             <button class="tab-button" data-tab="webp-to-jpg">WEBP → JPG</button>
             <button class="tab-button" data-tab="png-to-jpg">PNG → JPG</button>
             <button class="tab-button" data-tab="jpg-to-png">JPG → PNG</button>
-            <button class="tab-button" data-tab="compress">이미지 압축</button>
-            <button class="tab-button" data-tab="ocr">텍스트 추출(OCR)</button>
+            <button class="tab-button" data-tab="compress">Compress</button>
+            <button class="tab-button" data-tab="ocr">OCR (Text)</button>
             <button class="tab-button" data-tab="jpg-to-pdf">JPG → PDF</button>
-            <button class="tab-button" data-tab="favicon">파비콘 만들기</button>
+            <button class="tab-button" data-tab="favicon">Favicon</button>
         </nav>
 
         <!-- Google AdSense - Top Responsive Ad -->
@@ -417,13 +417,13 @@
         <main>
             <!-- Tab Content: HEIC to JPG -->
             <div id="heic-to-jpg" class="tab-content active">
-                <h2>HEIC를 JPG로 변환</h2>
+                <h2>Convert HEIC to JPG</h2>
                 <div class="file-drop-area">
                     <input type="file" class="file-input" multiple accept=".heic, .heif">
-                    <p>여기에 HEIC 파일을 드래그 앤 드롭하거나</p>
-                    <label class="file-label">파일 선택</label>
+                    <p>Drag and drop HEIC files here or</p>
+                    <label class="file-label">Select Files</label>
                 </div>
-                <button class="convert-button" disabled>변환하기</button>
+                <button class="convert-button" disabled>Convert Now</button>
                 <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
                 <div class="error-message"></div>
                 <div class="results"></div>
@@ -431,13 +431,13 @@
 
             <!-- Tab Content: WEBP to JPG -->
             <div id="webp-to-jpg" class="tab-content">
-                <h2>WEBP를 JPG로 변환</h2>
+                <h2>Convert WEBP to JPG</h2>
                 <div class="file-drop-area">
                     <input type="file" class="file-input" multiple accept=".webp">
-                    <p>여기에 WEBP 파일을 드래그 앤 드롭하거나</p>
-                    <label class="file-label">파일 선택</label>
+                    <p>Drag and drop WEBP files here or</p>
+                    <label class="file-label">Select Files</label>
                 </div>
-                <button class="convert-button" disabled>변환하기</button>
+                <button class="convert-button" disabled>Convert Now</button>
                 <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
                 <div class="error-message"></div>
                 <div class="results"></div>
@@ -445,20 +445,20 @@
             
             <!-- Tab Content: PNG to JPG -->
             <div id="png-to-jpg" class="tab-content">
-                <h2>PNG를 JPG로 변환</h2>
+                <h2>Convert PNG to JPG</h2>
                 <div class="file-drop-area">
                     <input type="file" class="file-input" multiple accept=".png">
-                    <p>여기에 PNG 파일을 드래그 앤 드롭하거나</p>
-                    <label class="file-label">파일 선택</label>
+                    <p>Drag and drop PNG files here or</p>
+                    <label class="file-label">Select Files</label>
                 </div>
                 <div class="options">
                     <div class="option-group">
-                        <label for="png-to-jpg-quality">품질 (0.1-1.0):</label>
+                        <label for="png-to-jpg-quality">Quality (0.1-1.0):</label>
                         <input type="range" id="png-to-jpg-quality" min="0.1" max="1.0" value="0.92" step="0.01">
                         <span class="quality-value">0.92</span>
                     </div>
                 </div>
-                <button class="convert-button" disabled>변환하기</button>
+                <button class="convert-button" disabled>Convert Now</button>
                 <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
                 <div class="error-message"></div>
                 <div class="results"></div>
@@ -466,13 +466,13 @@
 
             <!-- Tab Content: JPG to PNG -->
             <div id="jpg-to-png" class="tab-content">
-                 <h2>JPG를 PNG로 변환</h2>
+                 <h2>Convert JPG to PNG</h2>
                 <div class="file-drop-area">
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg">
-                    <p>여기에 JPG 파일을 드래그 앤 드롭하거나</p>
-                    <label class="file-label">파일 선택</label>
+                    <p>Drag and drop JPG files here or</p>
+                    <label class="file-label">Select Files</label>
                 </div>
-                <button class="convert-button" disabled>변환하기</button>
+                <button class="convert-button" disabled>Convert Now</button>
                 <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
                 <div class="error-message"></div>
                 <div class="results"></div>
@@ -480,38 +480,38 @@
 
             <!-- Tab Content: Image Compression -->
             <div id="compress" class="tab-content">
-                <h2>이미지 용량 줄이기 (JPG, PNG, WEBP)</h2>
+                <h2>Compress Images (Reduce Size)</h2>
                 <div class="file-drop-area">
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg, .png, .webp">
-                    <p>여기에 압축할 이미지 파일을 드래그 앤 드롭하거나</p>
-                    <label class="file-label">파일 선택</label>
+                    <p>Drag and drop images here or</p>
+                    <label class="file-label">Select Files</label>
                 </div>
                  <div class="options">
                     <div class="option-group">
-                        <label for="compress-quality">품질 설정:</label>
+                        <label for="compress-quality">Quality Setting:</label>
                         <input type="range" id="compress-quality" min="0.4" max="0.95" value="0.8" step="0.01">
                         <span class="quality-value">0.8</span>
                     </div>
                     <div class="option-group">
-                        <label for="compress-resize">리사이즈 (가로):</label>
+                        <label for="compress-resize">Resize (Width):</label>
                         <select id="compress-resize">
-                            <option value="original">원본 유지</option>
+                            <option value="original">Original Size</option>
                             <option value="1920">1920px (Full HD)</option>
                             <option value="1280">1280px (HD)</option>
                             <option value="1080">1080px</option>
                         </select>
                     </div>
                     <div class="option-group">
-                        <label>목표 용량 (자동):</label>
+                        <label>Target Size (Auto):</label>
                         <div class="preset-buttons">
                             <button class="preset-btn" data-target="204800">200KB</button>
                             <button class="preset-btn" data-target="512000">500KB</button>
                             <button class="preset-btn" data-target="1048576">1MB</button>
-                            <button class="preset-btn active" data-target="0">수동 설정</button>
+                            <button class="preset-btn active" data-target="0">Manual</button>
                         </div>
                     </div>
                 </div>
-                <button class="convert-button" disabled>압축 시작하기</button>
+                <button class="convert-button" disabled>Start Compression</button>
                 <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
                 <div class="error-message"></div>
                 <div class="results"></div>
@@ -519,60 +519,60 @@
 
             <!-- Tab Content: OCR -->
             <div id="ocr" class="tab-content">
-                <h2>이미지에서 텍스트 추출 (OCR)</h2>
+                <h2>Extract Text from Image (OCR)</h2>
                 <p style="font-size: 0.9rem; color: var(--secondary-color); margin-bottom: 1rem;">
-                    🔒 이미지는 내 기기에서만 처리되며 서버로 업로드되지 않습니다.
+                    🔒 Images are processed entirely on your device and are never uploaded to a server.
                 </p>
                 <div class="file-drop-area">
                     <input type="file" class="file-input" accept="image/*">
-                    <p>텍스트를 추출할 이미지를 드래그 앤 드롭하거나</p>
-                    <label class="file-label">이미지 선택</label>
+                    <p>Drag and drop an image here or</p>
+                    <label class="file-label">Select Image</label>
                 </div>
                 
                 <div class="options">
                     <div class="preprocessing-options">
                         <div class="checkbox-group">
                             <input type="checkbox" id="ocr-grayscale" checked>
-                            <label for="ocr-grayscale">그레이스케일(흑백)</label>
+                            <label for="ocr-grayscale">Grayscale</label>
                         </div>
                         <div class="checkbox-group">
                             <input type="checkbox" id="ocr-contrast" checked>
-                            <label for="ocr-contrast">대비 강화</label>
+                            <label for="ocr-contrast">Boost Contrast</label>
                         </div>
                     </div>
                     <div class="option-group">
-                        <label for="ocr-threshold">이진화 임계값:</label>
+                        <label for="ocr-threshold">Binarization Threshold:</label>
                         <input type="range" id="ocr-threshold" min="0" max="255" value="128">
                         <span id="threshold-value">128</span>
                     </div>
                 </div>
 
-                <button class="convert-button" id="ocr-start-btn" disabled>텍스트 추출 시작</button>
+                <button class="convert-button" id="ocr-start-btn" disabled>Start Extraction</button>
                 
                 <div class="progress-bar" id="ocr-progress-container">
                     <div class="progress-bar-inner" id="ocr-progress-bar"></div>
-                    <div class="progress-text" id="ocr-progress-text">준비 완료</div>
+                    <div class="progress-text" id="ocr-progress-text">Ready</div>
                 </div>
 
-                <textarea id="ocr-result-area" placeholder="추출된 텍스트가 여기에 표시됩니다..." readonly></textarea>
+                <textarea id="ocr-result-area" placeholder="Extracted text will appear here..." readonly></textarea>
                 
                 <div class="ocr-controls">
-                    <button class="ocr-btn copy" id="ocr-copy-btn">복사하기</button>
-                    <button class="ocr-btn download" id="ocr-download-btn">TXT 다운로드</button>
-                    <button class="ocr-btn reset" id="ocr-reset-btn">초기화</button>
+                    <button class="ocr-btn copy" id="ocr-copy-btn">Copy to Clipboard</button>
+                    <button class="ocr-btn download" id="ocr-download-btn">Download .txt</button>
+                    <button class="ocr-btn reset" id="ocr-reset-btn">Reset</button>
                 </div>
                 <div class="error-message" id="ocr-error"></div>
             </div>
 
             <!-- Tab Content: JPG to PDF -->
             <div id="jpg-to-pdf" class="tab-content">
-                <h2>JPG를 PDF로 변환</h2>
+                <h2>Convert JPG to PDF</h2>
                 <div class="file-drop-area">
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg">
-                    <p>여기에 PDF로 만들 JPG 파일을 드래그 앤 드롭하거나</p>
-                    <label class="file-label">파일 선택 (여러 파일 선택 가능)</label>
+                    <p>Drag and drop JPG files here or</p>
+                    <label class="file-label">Select Files (Multiple Allowed)</label>
                 </div>
-                <button class="convert-button" disabled>PDF로 변환하기</button>
+                <button class="convert-button" disabled>Convert to PDF</button>
                 <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
                 <div class="error-message"></div>
                 <div class="results"></div>
@@ -580,22 +580,40 @@
 
             <!-- Tab Content: Favicon Maker -->
             <div id="favicon" class="tab-content">
-                 <h2>파비콘 만들기 (PNG, JPG)</h2>
+                 <h2>Create Favicon (PNG, JPG)</h2>
                 <div class="file-drop-area">
                     <input type="file" class="file-input" accept=".png, .jpg, .jpeg">
-                    <p>여기에 파비콘으로 만들 파일을 드래그 앤 드롭하거나</p>
-                    <label class="file-label">파일 선택 (1개만)</label>
+                    <p>Drag and drop an image here or</p>
+                    <label class="file-label">Select File (Only 1)</label>
                 </div>
-                <button class="convert-button" disabled>파비콘 생성하기</button>
+                <button class="convert-button" disabled>Generate Favicon</button>
                 <div class="progress-bar"><div class="progress-bar-inner"></div><div class="progress-text">0%</div></div>
                 <div class="error-message"></div>
                 <div class="results"></div>
             </div>
         </main>
 
+        <section style="margin-top: 4rem; padding: 2rem; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 12px var(--shadow-color);">
+            <h3>Frequently Asked Questions (FAQ)</h3>
+            <div style="display: grid; gap: 1.5rem;">
+                <div>
+                    <h4 style="color: var(--primary-color);">Is it safe to use this tool?</h4>
+                    <p>Yes. All image processing happens locally in your browser. We never upload your files to any server, ensuring 100% privacy.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--primary-color);">What formats are supported?</h4>
+                    <p>We support HEIC, WEBP, PNG, and JPG. You can convert between these formats and also generate PDFs or Favicons.</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--primary-color);">How does the "OCR" feature work?</h4>
+                    <p>It uses Tesseract.js to analyze images and extract text. This is useful for copying text from scanned documents or screenshots without typing them out manually.</p>
+                </div>
+            </div>
+        </section>
+
         <!-- 광고 영역 (Ad Area) -->
         <div style="margin: 30px 0; text-align: center;">
-            <p style="font-size: 0.8rem; color: var(--secondary-color); margin-bottom: 10px;">광고 영역 (Ad Area)</p>
+            <p style="font-size: 0.8rem; color: var(--secondary-color); margin-bottom: 10px;">Advertisement</p>
             <ins class="adsbygoogle"
               style="display:block"
               data-ad-client="ca-pub-6460078490158642"
@@ -608,12 +626,12 @@
         </div>
 
         <footer>
-            <p>🔒 모든 변환은 내 기기에서만 처리됩니다. 파일은 서버로 절대 업로드되지 않습니다.</p>
+            <p>🔒 All conversions are processed on your device. Files are never uploaded to our servers.</p>
             <nav>
-                <a href="/about">소개</a>
-                <a href="/privacy">개인정보처리방침</a>
-                <a href="/terms">이용약관</a>
-                <a href="/contact">문의하기</a>
+                <a href="about.html">About</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms of Service</a>
+                <a href="contact.html">Contact</a>
             </nav>
         </footer>
     </div>
@@ -640,10 +658,10 @@
             localStorage.setItem('theme', theme);
             if (theme === 'dark') {
                 themeIcon.textContent = '☀️';
-                themeText.textContent = '라이트 모드';
+                themeText.textContent = 'Light Mode';
             } else {
                 themeIcon.textContent = '🌙';
-                themeText.textContent = '다크 모드';
+                themeText.textContent = 'Dark Mode';
             }
         }
 
@@ -728,7 +746,7 @@
                 const qualityInput = compressTab.querySelector('#compress-quality');
                 if (currentTargetSize > 0) {
                     qualityInput.disabled = true;
-                    compressTab.querySelector('.quality-value').textContent = '자동';
+                    compressTab.querySelector('.quality-value').textContent = 'Auto';
                 } else {
                     qualityInput.disabled = false;
                     compressTab.querySelector('.quality-value').textContent = qualityInput.value;
@@ -753,7 +771,7 @@
         document.getElementById('ocr-copy-btn').addEventListener('click', () => {
             ocrResultArea.select();
             document.execCommand('copy');
-            alert('텍스트가 클립보드에 복사되었습니다.');
+            alert('Text copied to clipboard.');
         });
 
         document.getElementById('ocr-download-btn').addEventListener('click', () => {
@@ -774,7 +792,7 @@
             ocrStartBtn.disabled = true;
             ocrProgressContainer.style.display = 'none';
             ocrProgressBar.style.width = '0%';
-            ocrProgressText.textContent = '준비 완료';
+            ocrProgressText.textContent = 'Ready';
         });
 
         /**
@@ -819,7 +837,7 @@
 
             } catch (error) {
                 console.error('Error:', error);
-                displayError(tab, `오류: ${error.message}`);
+                displayError(tab, `Error: ${error.message}`);
             } finally {
                 setInProgress(tab, false);
             }
@@ -875,7 +893,7 @@
                             canvas.toBlob(resolve, 'image/jpeg', manualQuality);
                         }
                     };
-                    img.onerror = () => reject(new Error(`${file.name} 로드 실패`));
+                    img.onerror = () => reject(new Error(`Failed to load ${file.name}`));
                     img.src = URL.createObjectURL(file);
                 });
                 results.push({ name: file.name.replace(/\.[^/.]+$/, "") + "_compressed.jpg", blob, originalSize: file.size });
@@ -886,13 +904,13 @@
 
         async function performOCR(file, tab) {
             ocrProgressContainer.style.display = 'block';
-            ocrResultArea.value = '이미지 처리 중...';
+            ocrResultArea.value = 'Processing image...';
             
             try {
                 // Preprocessing
                 const processedImg = await preprocessImage(file);
                 
-                const worker = await Tesseract.createWorker('kor+eng', 1, {
+                const worker = await Tesseract.createWorker('eng+kor', 1, {
                     logger: m => {
                         if (m.status === 'recognizing text') {
                             const p = Math.round(m.progress * 100);
@@ -904,10 +922,10 @@
                 });
 
                 const { data: { text } } = await worker.recognize(processedImg);
-                ocrResultArea.value = text || '추출된 텍스트가 없습니다.';
+                ocrResultArea.value = text || 'No text extracted.';
                 await worker.terminate();
             } catch (e) {
-                throw new Error('OCR 처리 중 오류가 발생했습니다: ' + e.message);
+                throw new Error('Error during OCR: ' + e.message);
             }
         }
 
@@ -948,7 +966,7 @@
             });
         }
 
-        // --- Helper Functions from previous version (maintained) ---
+        // --- Helper Functions ---
         async function convertHeicToJpg(files, tab) {
             const results = [];
             const bar = tab.querySelector('.progress-bar-inner');
@@ -958,7 +976,7 @@
                 try {
                     const blob = await heic2any({ blob: files[i], toType: "image/jpeg", quality: 0.9 });
                     results.push({ name: files[i].name.replace(/\.(heic|heif)$/i, '') + '.jpg', blob, originalSize: files[i].size });
-                } catch (e) { displayError(tab, `${files[i].name} 변환 실패`); }
+                } catch (e) { displayError(tab, `Failed to convert ${files[i].name}`); }
             }
             updateProgress(bar, txt, 100);
             return results;
@@ -995,7 +1013,7 @@
                     reader.readAsDataURL(files[i]);
                 });
                 if (i > 0) pdf.addPage();
-                pdf.addImage(dataUrl, 'JPEG', 0, 0, 210, 297 * (210/210)); // Simplified A4 fit
+                pdf.addImage(dataUrl, 'JPEG', 0, 0, 210, 297); // Simplified A4 fit
             }
             return [{ name: 'converted.pdf', blob: pdf.output('blob'), originalSize: 0 }];
         }
@@ -1040,17 +1058,17 @@
                 ${res.noPreview ? '' : `<img src="${url}">`}
                 <div class="result-info">
                     <strong>${res.name}</strong>
-                    <p>${formatBytes(res.blob.size)} ${reduction > 0 ? `(${reduction}% 절감)` : ''}</p>
+                    <p>${formatBytes(res.blob.size)} ${reduction > 0 ? `(${reduction}% reduced)` : ''}</p>
                 </div>
-                <a href="${url}" download="${res.name}" class="download-button">다운로드</a>
+                <a href="${url}" download="${res.name}" class="download-button">Download</a>
             `;
             return div;
         }
 
         function updateSelectedFilesDisplay(tab, files) {
             const p = tab.querySelector('.file-drop-area p');
-            if (!files || files.length === 0) p.textContent = '파일을 선택하거나 드래그하세요.';
-            else p.textContent = files.length === 1 ? `선택됨: ${files[0].name}` : `${files.length}개 파일 선택됨`;
+            if (!files || files.length === 0) p.textContent = 'Select or drag files here.';
+            else p.textContent = files.length === 1 ? `Selected: ${files[0].name}` : `${files.length} files selected`;
         }
 
         function setInProgress(tab, busy) {

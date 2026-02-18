@@ -1,53 +1,53 @@
-# 이미지 변환 및 OCR 도구 프로젝트 블루프린트
+# Image Converter & OCR Tool Project Blueprint
 
-## 개요
-이 프로젝트는 외부 서버로의 파일 업로드 없이 브라우저 내에서 모든 처리가 이루어지는 프레임워크리스(Vanilla JS) 웹 기반 이미지 도구입니다. 개인정보 보호와 속도를 최우선으로 하며, 다양한 이미지 변환 및 텍스트 추출 기능을 제공합니다. Google AdSense 승인을 위한 최적화 작업이 적용되어 있습니다.
+## Overview
+This project is a framework-less (Vanilla JS) web-based image tool where all processing occurs within the browser without uploading files to an external server. It prioritizes privacy and speed, offering various image conversion and text extraction features. It includes optimizations for Google AdSense approval.
 
-## 주요 기능 및 디자인
+## Key Features & Design
 
-### 1. 디자인 및 UX (Baseline 표준 준수)
-- **반응형 디자인:** 모바일 및 데스크탑 최적화 (95% 컨테이너 폭, 최대 1200px).
-- **테마:** 라이트 모드 및 다크 모드 지원 (시스템 설정 및 사용자 선택 저장).
-- **폰트 및 가독성:** 기본 18px 폰트, 큰 버튼(1.2rem 이상) 사용으로 모바일 조작 편의성 극대화.
-- **피드백:** 모든 작업에 진행률(%) 표시 및 결과 미리보기 제공. 오류 발생 시 한국어 메시지 표시.
+### 1. Design & UX (Baseline Standard Compliant)
+- **Responsive Design:** Optimized for mobile and desktop (95% container width, max 1200px).
+- **Themes:** Supports Light and Dark modes (saved based on system settings and user choice).
+- **Typography & Readability:** 18px base font, large buttons (1.2rem+) for improved mobile usability.
+- **Feedback:** Progress percentages (%) for all tasks and result previews provided. Error messages displayed in English.
 
-### 2. 이미지 변환 (기존 기능 유지 및 개선)
-- **HEIC → JPG:** `heic2any` 라이브러리를 사용하여 브라우저에서 직접 변환.
-- **WEBP ↔ JPG, PNG ↔ JPG:** Canvas API를 활용한 무설치 변환.
-- **JPG → PDF:** `jspdf`를 사용하여 여러 이미지를 하나의 PDF로 병합.
-- **파비콘 생성:** 한 번의 업로드로 여러 사이즈(16~64px)의 PNG와 ZIP 패키지 생성.
+### 2. Image Conversion
+- **HEIC → JPG:** Direct browser-side conversion using the `heic2any` library.
+- **WEBP ↔ JPG, PNG ↔ JPG:** No-install conversion using the Canvas API.
+- **JPG → PDF:** Merging multiple images into a single PDF using `jspdf`.
+- **Favicon Generation:** Generate multiple sizes (16-64px) of PNGs and a ZIP package from a single upload.
 
-### 3. 이미지 용량 줄이기 (압축)
-- **다중 파일 처리:** 여러 파일을 동시에 업로드하고 압축 가능.
-- **리사이즈 옵션:** 원본 유지 및 가로 폭 기준(1920, 1280, 1080px) 리사이즈 지원.
-- **압축 방식:** Canvas API 기반. 품질 설정(0.4~0.95) 가능.
-- **목표 용량 프리셋:** 200KB, 500KB, 1MB 목표 설정 시 자동으로 품질을 조정하는 이진 탐색 로직 적용.
-- **결과:** 변환 전/후 용량 및 절감률 표시, 개별/ZIP 일괄 다운로드.
+### 3. Image Compression (Reduce Size)
+- **Batch Processing:** Upload and compress multiple files simultaneously.
+- **Resize Options:** Supports maintaining original size or resizing based on width (1920, 1280, 1080px).
+- **Compression Method:** Canvas API-based. Adjustable quality settings (0.4-0.95).
+- **Target Size Presets:** Binary search logic to automatically adjust quality when 200KB, 500KB, or 1MB targets are set.
+- **Results:** Display pre/post-conversion sizes and reduction ratios, with individual/ZIP batch downloads.
 
-### 4. 텍스트 추출 (OCR)
-- **클라이언트 사이드 OCR:** `Tesseract.js`를 사용하여 서버 전송 없이 브라우저에서 수행.
-- **지원 언어:** 한국어 + 영어 (kor+eng).
-- **이미지 전처리:** 정확도 향상을 위해 OCR 수행 전 그레이스케일, 대비 강화, 이진화(임계값 조절) 옵션 제공.
-- **편의 기능:** 진행률 표시, 결과 텍스트 복사, TXT 파일 다운로드, 초기화 기능.
-- **보안 강조:** "이미지는 내 기기에서만 처리됩니다" 안내 문구 포함.
+### 4. Text Extraction (OCR)
+- **Client-side OCR:** Performed in the browser using `Tesseract.js` without server transmission.
+- **Supported Languages:** English + Korean (eng+kor).
+- **Image Preprocessing:** Options for Grayscale, Contrast Enhancement, and Binarization (adjustable threshold) to improve accuracy.
+- **Convenience Features:** Progress display, text copying, TXT file download, and reset functionality.
+- **Security Emphasis:** Includes notice: "Images are processed only on my device."
 
-## SEO 및 AdSense 최적화
-- **메타 태그:** `description`, `keywords`, `OG(Open Graph)` 태그 적용으로 검색 엔진 최적화.
-- **구조화된 데이터:** `SoftwareApplication` 스키마(Schema.org JSON-LD) 적용.
-- **필수 정책 페이지:** `privacy.html`, `terms.html`, `about.html`, `contact.html` 생성 및 푸터 링크 연결.
-- **크롤러 지원:** `robots.txt`, `sitemap.xml` 생성.
-- **콘텐츠 보강:** 도구 설명 및 FAQ 섹션을 통해 텍스트 콘텐츠 볼륨 확보 (Thin Content 방지).
+## SEO & AdSense Optimization
+- **Meta Tags:** Search engine optimization using `description`, `keywords`, and `OG (Open Graph)` tags.
+- **Structured Data:** Applied `SoftwareApplication` schema (Schema.org JSON-LD).
+- **Mandatory Policy Pages:** Created `privacy.html`, `terms.html`, `about.html`, and `contact.html` with footer links.
+- **Crawler Support:** Created `robots.txt` and `sitemap.xml`.
+- **Content Enrichment:** Secured textual content volume through tool descriptions and FAQ sections to prevent "Thin Content."
 
-## 기술 스택
+## Tech Stack
 - **HTML5/CSS3:** Modern CSS (Logical Properties, Flexbox, Grid).
 - **JavaScript:** ES Modules, Async/Await, Canvas API.
-- **라이브러리 (CDN):**
-  - `heic2any.js`: HEIC 변환
-  - `jspdf`: PDF 생성
-  - `jszip`: 다중 파일 ZIP 압축
-  - `tesseract.js`: OCR 기능
+- **Libraries (CDN):**
+  - `heic2any.js`: HEIC conversion
+  - `jspdf`: PDF generation
+  - `jszip`: Multi-file ZIP compression
+  - `tesseract.js`: OCR functionality
 
-## 향후 계획
-- **이미지 크롭 및 회전:** 변환 전 간단한 편집 기능 추가.
-- **다중 언어 확장:** OCR 지원 언어 선택 기능 추가.
-- **PWA 지원:** 오프라인에서도 사용할 수 있도록 서비스 워커 적용.
+## Future Plans
+- **Image Crop & Rotate:** Add simple editing features before conversion.
+- **Multi-language Expansion:** Add more language selection options for OCR.
+- **PWA Support:** Apply Service Workers for offline use.
