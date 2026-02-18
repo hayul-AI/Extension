@@ -25,6 +25,7 @@ This document outlines the development plan for a single-file, client-side web a
 ### Common Functionality
 - **File Input**: Drag-and-drop area and a standard file selection button.
 - **Batch Processing**: Support for converting multiple files at once.
+- **Theme Support**: Dark mode and Light mode toggle to improve user experience in different lighting conditions.
 - **Downloads**:
     - Single converted file: Direct download.
     - Multiple converted files: Bundled and downloaded as a single `.zip` file.
@@ -41,18 +42,15 @@ This document outlines the development plan for a single-file, client-side web a
     - **Image Manipulation**: The native `Canvas` API will be used for decoding/encoding standard image formats (JPG, PNG, WebP) and for resizing images.
     - **Modularity**: JavaScript code will be organized into functions for each conversion type to ensure readability and maintainability.
     - **State Management**: Simple variables will track the active tab, selected files, and conversion results.
+    - **Theme Management**: Use CSS variables and `data-theme` attribute on the `<html>` or `<body>` element. Persist user preference in `localStorage`.
 
 ## 4. Development Plan (Current Task)
 
-- **Step 1: Project Cleanup**: Remove existing `main.js` and `style.css` to prepare for a single-file structure.
-- **Step 2: Create `index.html`**:
-    - **HTML Structure**: Set up the main page layout with the header, tab navigation, content sections for each tool, and the footer.
-    - **CSS Styling**: Embed all styles within a `<style>` tag for a modern, responsive, and visually appealing interface.
-    - **JavaScript Implementation**: Embed all application logic within a `<script>` tag.
-        - Import necessary libraries (heic2any, jsPDF, JSZip) from CDNs.
-        - Implement tab switching logic.
-        - Develop file handling and drag-and-drop functionality.
-        - Write the core conversion functions for each of the 7 modules.
-        - Add utility functions for file download, zip creation, and displaying results/errors.
-        - Attach all necessary event listeners to UI elements.
-- **Step 3: Finalization**: Add comprehensive comments to the code and perform a final review to ensure all requirements are met.
+- **Step 1: Implement Dark Mode**:
+    - Add a theme toggle button in the header.
+    - Define CSS variables for dark and light themes.
+    - Update all UI components to use these variables.
+    - Add JavaScript to handle theme switching and persistence.
+- **Step 2: Deployment**:
+    - Verify the functionality and design.
+    - Push the updated code to the GitHub repository.
