@@ -193,9 +193,9 @@
         .tab-content.active { display: block; }
 
         .tool-info {
-            margin-bottom: 3rem;
-            border-bottom: 1px solid var(--border-base);
-            padding-bottom: 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-base);
+            padding-top: 3rem;
         }
 
         .tool-info h3 { font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; color: var(--brand-primary); }
@@ -420,6 +420,18 @@
 
             <!-- HEIC Tab -->
             <div id="heic-to-jpg" class="tab-content active">
+                <h2>Convert HEIC to JPG</h2>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop HEIC files here</p>
+                    <label class="btn-primary">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".heic, .heif" style="display: none;">
+                </div>
+                <button class="btn-success convert-button" disabled>Process Images</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
+                
+                <div class="ad-container middle-ad">Advertisement Space</div>
+
                 <div class="tool-info">
                     <h3>Professional HEIC to JPG Converter</h3>
                     <p>Easily convert Apple's high-efficiency image format (HEIC) to universally compatible JPG files. Our converter preserves image metadata and quality while ensuring your photos can be opened on any device.</p>
@@ -449,18 +461,22 @@
                     </div>
                     <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
                 </div>
-                <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem;">Drop HEIC files here</p>
-                    <label class="btn-primary">Select Files</label>
-                    <input type="file" class="file-input" multiple accept=".heic, .heif" style="display: none;">
-                </div>
-                <button class="btn-success convert-button" disabled>Process Images</button>
-                <div class="progress-wrapper"><div class="progress-fill"></div></div>
-                <div class="results-grid results"></div>
             </div>
 
             <!-- WEBP Tab -->
             <div id="webp-to-jpg" class="tab-content">
+                <h2>Convert WEBP to JPG</h2>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop WEBP files here</p>
+                    <label class="btn-primary">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".webp" style="display: none;">
+                </div>
+                <button class="btn-success convert-button" disabled>Convert Now</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
+
+                <div class="ad-container middle-ad">Advertisement Space</div>
+
                 <div class="tool-info">
                     <h3>Fast WEBP to JPG Converter</h3>
                     <p>Convert modern WEBP images back to standard JPG format in seconds. While WEBP is great for the web, JPG remains the standard for editing, printing, and sharing across all software.</p>
@@ -490,18 +506,29 @@
                     </div>
                     <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
                 </div>
-                <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem;">Drop WEBP files here</p>
-                    <label class="btn-primary">Select Files</label>
-                    <input type="file" class="file-input" multiple accept=".webp" style="display: none;">
-                </div>
-                <button class="btn-success convert-button" disabled>Convert Now</button>
-                <div class="progress-wrapper"><div class="progress-fill"></div></div>
-                <div class="results-grid results"></div>
             </div>
 
             <!-- PNG Tab -->
             <div id="png-to-jpg" class="tab-content">
+                <h2>Convert PNG to JPG</h2>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop PNG images here</p>
+                    <label class="btn-primary">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".png" style="display: none;">
+                </div>
+                <div class="options" style="margin-top: 3rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <label style="font-weight: 700;">Output Quality</label>
+                        <span class="quality-value" style="font-weight: 800; color: var(--brand-primary);">0.92</span>
+                    </div>
+                    <input type="range" id="png-to-jpg-quality" min="0.1" max="1.0" value="0.92" step="0.01">
+                </div>
+                <button class="btn-success convert-button" disabled>Generate JPGs</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
+
+                <div class="ad-container middle-ad">Advertisement Space</div>
+
                 <div class="tool-info">
                     <h3>High-Quality PNG to JPG Converter</h3>
                     <p>Convert transparent PNG images to optimized JPG files. This is perfect for reducing file sizes for web use while maintaining high visual fidelity.</p>
@@ -531,25 +558,22 @@
                     </div>
                     <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
                 </div>
-                <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem;">Drop PNG images here</p>
-                    <label class="btn-primary">Select Files</label>
-                    <input type="file" class="file-input" multiple accept=".png" style="display: none;">
-                </div>
-                <div class="options" style="margin-top: 3rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                        <label style="font-weight: 700;">Output Quality</label>
-                        <span class="quality-value" style="font-weight: 800; color: var(--brand-primary);">0.92</span>
-                    </div>
-                    <input type="range" id="png-to-jpg-quality" min="0.1" max="1.0" value="0.92" step="0.01">
-                </div>
-                <button class="btn-success convert-button" disabled>Generate JPGs</button>
-                <div class="progress-wrapper"><div class="progress-fill"></div></div>
-                <div class="results-grid results"></div>
             </div>
 
             <!-- JPG to PNG Tab -->
             <div id="jpg-to-png" class="tab-content">
+                 <h2>Convert JPG to PNG</h2>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop JPG photos here</p>
+                    <label class="btn-primary">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
+                </div>
+                <button class="btn-success convert-button" disabled>Convert to PNG</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
+
+                <div class="ad-container middle-ad">Advertisement Space</div>
+
                 <div class="tool-info">
                     <h3>Lossless JPG to PNG Converter</h3>
                     <p>Convert JPG photos to PNG format when you need a lossless container for further editing or web development. PNG is the preferred format for graphics that require high precision.</p>
@@ -579,47 +603,11 @@
                     </div>
                     <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
                 </div>
-                <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem;">Drop JPG photos here</p>
-                    <label class="btn-primary">Select Files</label>
-                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
-                </div>
-                <button class="btn-success convert-button" disabled>Convert to PNG</button>
-                <div class="progress-wrapper"><div class="progress-fill"></div></div>
-                <div class="results-grid results"></div>
             </div>
 
             <!-- Compress Tab -->
             <div id="compress" class="tab-content">
-                <div class="tool-info">
-                    <h3>Smart Image Compressor</h3>
-                    <p>Reduce the file size of your images without losing visible quality. Our compressor uses advanced Canvas algorithms to shrink JPG, PNG, and WEBP files for faster website loading and easier email sharing.</p>
-                    <p>Use our "Auto-Target" presets to quickly hit specific file size limits (like 200KB or 1MB) required by many government and corporate portals.</p>
-                    <ul class="tool-steps">
-                        <li>Select multiple images to compress in batch.</li>
-                        <li>Choose a target size preset or adjust quality manually.</li>
-                        <li>Download the optimized images instantly.</li>
-                    </ul>
-                    <div class="faq-block">
-                        <div class="faq-item-small">
-                            <strong>What is "Manual" mode?</strong>
-                            <span>Manual mode lets you pick a specific quality percentage (0.1 to 0.95) for the compression.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>How does "Auto-Target" work?</strong>
-                            <span>The tool performs a binary search to find the highest quality setting that stays under your chosen file size limit.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>Are my original images deleted?</strong>
-                            <span>We never have your images. They stay on your computer. Your originals remain untouched in your folders.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>Which formats can I compress?</strong>
-                            <span>We support JPG, JPEG, PNG, and WEBP compression.</span>
-                        </div>
-                    </div>
-                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
-                </div>
+                <h2>Optimize & Compress</h2>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop images to shrink</p>
                     <label class="btn-primary">Select Files</label>
@@ -655,39 +643,43 @@
                 <button class="btn-success convert-button" disabled>Optimize Now</button>
                 <div class="progress-wrapper"><div class="progress-fill"></div></div>
                 <div class="results-grid results"></div>
-            </div>
 
-            <!-- OCR Tab -->
-            <div id="ocr" class="tab-content">
+                <div class="ad-container middle-ad">Advertisement Space</div>
+
                 <div class="tool-info">
-                    <h3>Free Image to Text (OCR) Converter</h3>
-                    <p>Extract text from any image using our powerful Optical Character Recognition (OCR) engine. Perfect for digitizing scanned documents, receipts, or notes from your camera. All processing is done locally via WebAssembly.</p>
-                    <p>Our engine supports both English and Korean text recognition, with built-in grammar checking and text cleanup tools to ensure your digitized data is accurate and ready for use.</p>
+                    <h3>Smart Image Compressor</h3>
+                    <p>Reduce the file size of your images without losing visible quality. Our compressor uses advanced Canvas algorithms to shrink JPG, PNG, and WEBP files for faster website loading and easier email sharing.</p>
+                    <p>Use our "Auto-Target" presets to quickly hit specific file size limits (like 200KB or 1MB) required by many government and corporate portals.</p>
                     <ul class="tool-steps">
-                        <li>Upload an image containing text (JPG, PNG, or WEBP).</li>
-                        <li>Wait for the OCR engine to analyze and extract the content.</li>
-                        <li>Review, copy, or save the extracted text as a .txt file.</li>
+                        <li>Select multiple images to compress in batch.</li>
+                        <li>Choose a target size preset or adjust quality manually.</li>
+                        <li>Download the optimized images instantly.</li>
                     </ul>
                     <div class="faq-block">
                         <div class="faq-item-small">
-                            <strong>Which languages are supported?</strong>
-                            <span>Currently, our local engine is optimized for English and Korean (Hangul).</span>
+                            <strong>What is "Manual" mode?</strong>
+                            <span>Manual mode lets you pick a specific quality percentage (0.1 to 0.95) for the compression.</span>
                         </div>
                         <div class="faq-item-small">
-                            <strong>Can I extract text from handwriting?</strong>
-                            <span>Our tool works best with printed text. Recognition accuracy for handwriting varies based on legibility.</span>
+                            <strong>How does "Auto-Target" work?</strong>
+                            <span>The tool performs a binary search to find the highest quality setting that stays under your chosen file size limit.</span>
                         </div>
                         <div class="faq-item-small">
-                            <strong>Is there a character limit?</strong>
-                            <span>No, you can process entire pages of text at once.</span>
+                            <strong>Are my original images deleted?</strong>
+                            <span>We never have your images. They stay on your computer. Your originals remain untouched in your folders.</span>
                         </div>
                         <div class="faq-item-small">
-                            <strong>What is "Check Grammar"?</strong>
-                            <span>It uses the LanguageTool API to find and fix spelling or grammar errors in the extracted text.</span>
+                            <strong>Which formats can I compress?</strong>
+                            <span>We support JPG, JPEG, PNG, and WEBP compression.</span>
                         </div>
                     </div>
                     <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
                 </div>
+            </div>
+
+            <!-- OCR Tab -->
+            <div id="ocr" class="tab-content">
+                <h2>Text Extraction (OCR)</h2>
                 <div class="drop-zone">
                     <p style="font-weight: 800; font-size: 1.25rem;">Drop image with text</p>
                     <label class="btn-primary">Select Image</label>
@@ -718,10 +710,54 @@
                     <div id="issues-list"></div>
                     <button class="btn-primary" id="apply-all-fixes" style="margin-top: 1rem; width: 100%;">Apply Cleanup & Normalization</button>
                 </div>
+
+                <div class="ad-container middle-ad">Advertisement Space</div>
+
+                <div class="tool-info">
+                    <h3>Free Image to Text (OCR) Converter</h3>
+                    <p>Extract text from any image using our powerful Optical Character Recognition (OCR) engine. Perfect for digitizing scanned documents, receipts, or notes from your camera. All processing is done locally via WebAssembly.</p>
+                    <p>Our engine supports both English and Korean text recognition, with built-in grammar checking and text cleanup tools to ensure your digitized data is accurate and ready for use.</p>
+                    <ul class="tool-steps">
+                        <li>Upload an image containing text (JPG, PNG, or WEBP).</li>
+                        <li>Wait for the OCR engine to analyze and extract the content.</li>
+                        <li>Review, copy, or save the extracted text as a .txt file.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>Which languages are supported?</strong>
+                            <span>Currently, our local engine is optimized for English and Korean (Hangul).</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Can I extract text from handwriting?</strong>
+                            <span>Our tool works best with printed text. Recognition accuracy for handwriting varies based on legibility.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Is there a character limit?</strong>
+                            <span>No, you can process entire pages of text at once.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>What is "Check Grammar"?</strong>
+                            <span>It uses the LanguageTool API to find and fix spelling or grammar errors in the extracted text.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
             </div>
 
             <!-- PDF Tab -->
             <div id="jpg-to-pdf" class="tab-content">
+                <h2>Merge to PDF</h2>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop images to merge</p>
+                    <label class="btn-primary">Select Files</label>
+                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
+                </div>
+                <button class="btn-success convert-button" disabled>Create Document</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
+
+                <div class="ad-container middle-ad">Advertisement Space</div>
+
                 <div class="tool-info">
                     <h3>Professional Images to PDF Converter</h3>
                     <p>Combine multiple JPG images into a single, high-quality PDF document. This is ideal for creating digital portfolios, submitting assignments, or organizing scanned receipts into a single file.</p>
@@ -751,18 +787,22 @@
                     </div>
                     <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
                 </div>
-                <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem;">Drop images to merge</p>
-                    <label class="btn-primary">Select Files</label>
-                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
-                </div>
-                <button class="btn-success convert-button" disabled>Create Document</button>
-                <div class="progress-wrapper"><div class="progress-fill"></div></div>
-                <div class="results-grid results"></div>
             </div>
 
             <!-- Favicon Tab -->
             <div id="favicon" class="tab-content">
+                 <h2>Favicon Generator</h2>
+                <div class="drop-zone">
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop your logo</p>
+                    <label class="btn-primary">Select Image</label>
+                    <input type="file" class="file-input" accept=".png, .jpg, .jpeg" style="display: none;">
+                </div>
+                <button class="btn-success convert-button" disabled>Generate Pack</button>
+                <div class="progress-wrapper"><div class="progress-fill"></div></div>
+                <div class="results-grid results"></div>
+
+                <div class="ad-container middle-ad">Advertisement Space</div>
+
                 <div class="tool-info">
                     <h3>Free Favicon Generator</h3>
                     <p>Convert your brand logo into a complete set of favicons for your website. A favicon is the small icon that appears in browser tabs and bookmarks, essential for a professional web presence.</p>
@@ -792,14 +832,6 @@
                     </div>
                     <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
                 </div>
-                <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem;">Drop your logo</p>
-                    <label class="btn-primary">Select Image</label>
-                    <input type="file" class="file-input" accept=".png, .jpg, .jpeg" style="display: none;">
-                </div>
-                <button class="btn-success convert-button" disabled>Generate Pack</button>
-                <div class="progress-wrapper"><div class="progress-fill"></div></div>
-                <div class="results-grid results"></div>
             </div>
 
             <div class="ad-container bottom-ad">Advertisement Space</div>
