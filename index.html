@@ -64,7 +64,6 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Animated Background */
         .ambient-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -144,7 +143,6 @@
         }
         .hero p { font-size: 1.25rem; color: var(--text-sub); max-width: 600px; margin: 0 auto; font-weight: 500; }
 
-        /* Modern Tabs */
         .tabs-container {
             position: sticky; top: 2rem; z-index: 100;
             margin-bottom: 4rem;
@@ -206,7 +204,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .drop-zone:hover, .drop-zone.dragover {
@@ -265,6 +263,14 @@
 
         .result-card:hover { transform: scale(1.02); border-color: var(--brand-primary); }
 
+        #ocr-result-area, #ocrResult {
+            width: 100%; height: 300px;
+            margin-top: 2rem; padding: 1.5rem;
+            border-radius: 18px; border: 1px solid var(--border-base);
+            background: rgba(0,0,0,0.02); color: var(--text-main);
+            font-size: 1rem; line-height: 1.7; resize: vertical;
+        }
+
         .faq-grid {
             margin-top: 10rem; display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -290,7 +296,6 @@
         }
         .footer-nav a:hover { color: var(--brand-primary); }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-base); border-radius: 10px; }
@@ -349,8 +354,7 @@
             <div id="heic-to-jpg" class="tab-content active">
                 <h2>Convert HEIC to JPG</h2>
                 <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop HEIC files here</p>
-                    <p style="color: var(--text-sub); margin-bottom: 2rem;">Fast local conversion for Apple photos</p>
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop HEIC files here</p>
                     <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".heic, .heif" style="display: none;">
                 </div>
@@ -363,7 +367,7 @@
             <div id="webp-to-jpg" class="tab-content">
                 <h2>Convert WEBP to JPG</h2>
                 <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop WEBP files here</p>
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop WEBP files here</p>
                     <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".webp" style="display: none;">
                 </div>
@@ -376,7 +380,7 @@
             <div id="png-to-jpg" class="tab-content">
                 <h2>Convert PNG to JPG</h2>
                 <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop PNG images here</p>
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop PNG images here</p>
                     <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".png" style="display: none;">
                 </div>
@@ -396,7 +400,7 @@
             <div id="jpg-to-png" class="tab-content">
                  <h2>Convert JPG to PNG</h2>
                 <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop JPG photos here</p>
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop JPG photos here</p>
                     <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
                 </div>
@@ -409,7 +413,7 @@
             <div id="compress" class="tab-content">
                 <h2>Optimize & Compress</h2>
                 <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop images to shrink</p>
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop images to shrink</p>
                     <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg, .png, .webp" style="display: none;">
                 </div>
@@ -449,7 +453,7 @@
             <div id="ocr" class="tab-content">
                 <h2>Text Extraction (OCR)</h2>
                 <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop image with text</p>
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop image with text</p>
                     <label class="btn-primary">Select Image</label>
                     <input type="file" class="file-input" accept="image/*" style="display: none;">
                 </div>
@@ -466,7 +470,7 @@
                 </div>
                 <button class="btn-success convert-button" id="ocr-start-btn" disabled>Scan & Extract</button>
                 <div class="progress-wrapper" id="ocr-progress-container"><div class="progress-fill" id="ocr-progress-bar"></div></div>
-                <textarea id="ocr-result-area" placeholder="Recognized text will appear here..." readonly></textarea>
+                <textarea id="ocrResult" placeholder="Recognized text will appear here..." readonly></textarea>
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 2rem;">
                     <button class="btn-primary" id="ocr-copy-btn" style="padding: 0.75rem;">Copy</button>
                     <button class="btn-primary" id="ocr-download-btn" style="padding: 0.75rem; background: var(--brand-success); box-shadow: none;">Save</button>
@@ -478,7 +482,7 @@
             <div id="jpg-to-pdf" class="tab-content">
                 <h2>Merge to PDF</h2>
                 <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop images to merge</p>
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop images to merge</p>
                     <label class="btn-primary">Select Files</label>
                     <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
                 </div>
@@ -491,7 +495,7 @@
             <div id="favicon" class="tab-content">
                  <h2>Favicon Generator</h2>
                 <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Drop your logo</p>
+                    <p style="font-weight: 800; font-size: 1.25rem;">Drop your logo</p>
                     <label class="btn-primary">Select Image</label>
                     <input type="file" class="file-input" accept=".png, .jpg, .jpeg" style="display: none;">
                 </div>
@@ -623,23 +627,23 @@
             });
         });
 
-        const ocrResult = document.getElementById('ocr-result-area');
+        const ocrOutput = document.getElementById('ocrResult');
         document.getElementById('ocr-copy-btn').addEventListener('click', () => {
-            ocrResult.select();
+            ocrOutput.select();
             document.execCommand('copy');
             alert('Text copied!');
         });
 
         document.getElementById('ocr-download-btn').addEventListener('click', () => {
-            if (!ocrResult.value) return;
+            if (!ocrOutput.value) return;
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(new Blob([ocrResult.value], { type: 'text/plain' }));
+            a.href = URL.createObjectURL(new Blob([ocrOutput.value], { type: 'text/plain' }));
             a.download = 'extracted_text.txt';
             a.click();
         });
 
         document.getElementById('ocr-reset-btn').addEventListener('click', () => {
-            ocrResult.value = '';
+            ocrOutput.value = '';
             fileStore.delete('ocr');
             updateSelectedFilesDisplay(document.getElementById('ocr'), null);
             document.getElementById('ocr-start-btn').disabled = true;
@@ -650,7 +654,7 @@
             const tab = document.getElementById(tabId);
             setInProgress(tab, true);
             const resultsContainer = tab.querySelector('.results');
-            resultsContainer.innerHTML = '';
+            if (resultsContainer) resultsContainer.innerHTML = '';
 
             try {
                 let results = [];
@@ -664,7 +668,7 @@
                     case 'jpg-to-pdf': results = await convertPdf(files, tab); break;
                     case 'favicon': results = await convertFavicon(files[0], tab); break;
                 }
-                if (results.length > 0) displayResults(tab, results);
+                if (results && results.length > 0) displayResults(tab, results);
             } catch (e) {
                 alert('Error: ' + e.message);
             } finally {
@@ -741,7 +745,7 @@
             return res;
         }
 
-        async function preprocessImage(file) {
+        async function preprocessForOCR(file) {
             return new Promise((resolve, reject) => {
                 const img = new Image();
                 img.onload = () => {
@@ -764,7 +768,7 @@
                         }
                     }
                     ctx.putImageData(imageData, 0, 0);
-                    resolve(canvas.toDataURL('image/png'));
+                    resolve(canvas);
                 };
                 img.onerror = reject;
                 img.src = URL.createObjectURL(file);
@@ -774,16 +778,40 @@
         async function performOCR(file, tab) {
             const container = document.getElementById('ocr-progress-container');
             const bar = document.getElementById('ocr-progress-bar');
+            const output = document.getElementById('ocrResult');
             container.style.display = 'block';
-            ocrResult.value = 'Preparing OCR engine...';
+            bar.style.width = '0%';
+            output.value = 'Initializing OCR engine...';
             
-            const processed = await preprocessImage(file);
-            const worker = await Tesseract.createWorker('eng+kor', 1, {
-                logger: m => { if (m.status === 'recognizing text') bar.style.width = (m.progress*100) + '%'; }
-            });
-            const { data: { text } } = await worker.recognize(processed);
-            ocrResult.value = text || 'No text found.';
-            await worker.terminate();
+            try {
+                const canvas = await preprocessForOCR(file);
+                output.value = 'Engine loading...';
+                
+                const worker = await Tesseract.createWorker({
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            const p = Math.round(m.progress * 100);
+                            bar.style.width = p + '%';
+                            output.value = `Recognizing text... ${p}%`;
+                        } else {
+                            output.value = `${m.status}...`;
+                        }
+                    },
+                    workerPath: "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js",
+                    corePath: "https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js",
+                    langPath: "https://tessdata.projectnaptha.com/4.0.0_best"
+                });
+
+                await worker.loadLanguage('eng+kor');
+                await worker.initialize('eng+kor');
+                const { data: { text } } = await worker.recognize(canvas);
+                output.value = text || 'No text found in the image.';
+                await worker.terminate();
+            } catch (error) {
+                console.error('OCR Error:', error);
+                output.value = `Error: ${error.message}\nPlease check your network connection and try again.`;
+                throw error;
+            }
         }
 
         async function convertPdf(files, tab) {
@@ -822,6 +850,7 @@
 
         function displayResults(tab, data) {
             const container = tab.querySelector('.results');
+            if (!container) return;
             if (data.length > 1) {
                 const zip = new JSZip();
                 data.forEach(r => zip.file(r.name, r.blob));
@@ -838,7 +867,7 @@
             const url = URL.createObjectURL(res.blob);
             const reduction = res.originalSize ? Math.round((1 - res.blob.size/res.originalSize)*100) : 0;
             div.innerHTML = `
-                ${res.noPreview ? '' : `<img src="${url}">`}
+                ${res.noPreview ? '' : `<img src="${url}" style="width: 60px; height: 60px; border-radius: 12px; object-fit: cover;">`}
                 <div style="flex-grow: 1;">
                     <strong style="display:block; margin-bottom: 0.25rem;">${res.name}</strong>
                     <p style="font-size: 0.85rem; color: var(--text-sub);">${formatBytes(res.blob.size)} ${reduction > 0 ? `<span style="color: var(--brand-success); font-weight: 800;">(${reduction}% optimized)</span>` : ''}</p>
@@ -851,7 +880,7 @@
         function updateSelectedFilesDisplay(tab, files) {
             const p = tab.querySelector('.drop-zone p:first-child');
             if (!p) return;
-            p.textContent = (!files || files.length === 0) ? 'Drop files here' : (files.length === 1 ? `Selected: ${files[0].name}` : `${files.length} files selected`);
+            p.textContent = (!files || files.length === 0) ? `Drop ${tab.dataset.tab === 'ocr' ? 'image' : 'files'} here` : (files.length === 1 ? `Selected: ${files[0].name}` : `${files.length} files selected`);
         }
 
         function setInProgress(tab, busy) {
