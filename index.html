@@ -781,15 +781,15 @@
             const output = document.getElementById('ocrResult');
             container.style.display = 'block';
             bar.style.width = '0%';
-            output.value = 'Pre-flight check: Verifying CDN assets...';
+            output.value = 'Self-check: Verifying local OCR assets...';
             
             const paths = {
-                worker: "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js",
-                core: "https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core.wasm.js",
-                lang: "https://tessdata.projectnaptha.com/4.0.0_best"
+                worker: "/ocr/worker.min.js",
+                core: "/ocr/tesseract-core.wasm.js",
+                lang: "/ocr/tessdata"
             };
 
-            // Debug step: Verify assets
+            // Self-check step: Verify local assets
             try {
                 const checks = [
                     fetch(paths.worker, { method: 'HEAD' }),
@@ -800,20 +800,20 @@
                 const results = await Promise.all(checks);
                 const failed = results.findIndex(r => !r.ok);
                 if (failed !== -1) {
-                    const failedUrl = failed === 0 ? 'Worker' : failed === 1 ? 'Core (WASM)' : failed === 2 ? 'English Data' : 'Korean Data';
-                    throw new Error(`CDN Reachability Failed: ${failedUrl} could not be loaded.`);
+                    const failedFile = failed === 0 ? 'worker.min.js' : failed === 1 ? 'tesseract-core.wasm.js' : failed === 2 ? 'eng.traineddata.gz' : 'kor.traineddata.gz';
+                    throw new Error(`Missing local asset: ${failedFile}. Please ensure the /ocr/ folder is correctly deployed.`);
                 }
             } catch (e) {
-                output.value = `Error: ${e.message}\nThis usually happens due to firewall or network restrictions.`;
+                output.value = `Asset Error: ${e.message}\nMake sure you've uploaded the /ocr/ folder to your server.`;
                 return;
             }
 
-            output.value = 'Initializing OCR engine...';
+            output.value = 'Initializing local OCR engine...';
             
             let worker;
             const timeout = setTimeout(() => {
                 if (output.value.includes('Initializing') || output.value.includes('loading')) {
-                    output.value = "OCR engine failed to load (Timeout). Check network/CDN access and try again.";
+                    output.value = "OCR engine failed to load (Timeout). Local assets might be blocked or incorrectly served.";
                     if (worker) worker.terminate();
                 }
             }, 30000);
@@ -834,7 +834,8 @@
                     },
                     workerPath: paths.worker,
                     corePath: paths.core,
-                    langPath: paths.lang
+                    langPath: paths.lang,
+                    cacheMethod: 'none' // Ensure it loads from local server path
                 });
 
                 await worker.loadLanguage('eng+kor');
@@ -847,7 +848,7 @@
             } catch (error) {
                 clearTimeout(timeout);
                 console.error('OCR Error:', error);
-                output.value = `Critical Error: ${error.message}\nCheck console for details.`;
+                output.value = `Critical Error: ${error.message}\nCheck if /ocr/ assets are served with correct MIME types.`;
                 if (worker) await worker.terminate();
             }
         }
