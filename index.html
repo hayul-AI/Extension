@@ -162,24 +162,46 @@
         .tabs-container {
             position: sticky; top: 2rem; z-index: 100;
             margin-bottom: 4rem;
+            position: relative;
+            overflow: visible !important;
+        }
+
+        .tabs-container::after {
+            content: "";
+            position: absolute;
+            top: 0; right: 0;
+            width: 60px; height: 100%;
+            background: linear-gradient(to right, transparent, var(--bg-base));
+            pointer-events: none;
+            z-index: 101;
+            border-radius: 0 24px 24px 0;
+            opacity: 0.8;
         }
 
         .tabs {
-            display: flex; gap: 0.5rem; padding: 0.6rem;
+            display: flex !important;
+            gap: 0.5rem;
+            padding: 0.6rem !important;
+            padding-right: 60px !important;
             background: var(--glass-bg);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid var(--border-base);
             border-radius: 24px;
-            overflow-x: auto;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            white-space: nowrap !important;
+            flex-wrap: nowrap !important;
             scrollbar-width: none;
             box-shadow: var(--shadow-premium);
+            -webkit-overflow-scrolling: touch;
         }
         .tabs::-webkit-scrollbar { display: none; }
 
         .tab-button {
+            flex: 0 0 auto !important;
             padding: 0.8rem 1.75rem; font-size: 0.95rem; font-weight: 700;
-            white-space: nowrap; border: none; background: transparent;
+            white-space: nowrap !important; border: none; background: transparent;
             color: var(--text-sub); border-radius: 18px; cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
