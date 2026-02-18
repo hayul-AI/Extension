@@ -33,6 +33,8 @@ This project is a framework-less (Vanilla JS) web-based image tool where all pro
 - **Initialization Fix:** Resolved timeout issue by increasing initialization timeout to 60s and optimizing Tesseract.js v5 creation logic.
 - **Asset Delivery Fix:** Fixed incorrect Content-Type headers in `firebase.json` that caused execution failures for OCR scripts.
 - **Image Preprocessing:** Options for Grayscale, Contrast Enhancement, and Binarization (adjustable threshold) to improve accuracy.
+- **Grammar Check Enhancement:** (New) Automated language detection (KR/EN) for grammar checking. Removed manual language selector.
+- **Resilient Engine Connectivity:** Improved error handling for LanguageTool API with retry logic and descriptive connectivity alerts.
 - **Convenience Features:** Progress display, text copying, TXT file download, and reset functionality.
 
 ### 5. Utility Tools
