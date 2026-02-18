@@ -32,6 +32,11 @@
             --radius-xl: 32px;
             --radius-lg: 20px;
             --shadow-premium: 0 20px 50px -12px rgba(0, 0, 0, 0.1);
+            
+            /* Theme Text Color System */
+            --text-primary: #111111;
+            --text-inverse: #ffffff;
+            --button-text: #111111;
         }
 
         [data-theme="dark"] {
@@ -41,6 +46,10 @@
             --text-main: var(--text-main-dark);
             --text-sub: var(--text-sub-dark);
             --glass-bg: rgba(15, 23, 42, 0.8);
+            
+            --text-primary: #e5e7eb;
+            --text-inverse: #ffffff;
+            --button-text: #ffffff;
         }
 
         [data-theme="light"] {
@@ -130,6 +139,13 @@
             display: flex; align-items: center; gap: 0.75rem;
             backdrop-filter: blur(10px);
             transition: all 0.3s;
+            color: var(--button-text) !important;
+        }
+
+        .theme-toggle svg,
+        .theme-toggle i {
+            color: var(--button-text);
+            fill: var(--button-text);
         }
 
         .theme-toggle:hover { transform: translateY(-2px); border-color: var(--brand-primary); }
