@@ -166,6 +166,12 @@
             overflow: visible !important;
         }
 
+        @media (min-width: 768px) {
+            .tabs-container::after {
+                display: none;
+            }
+        }
+
         .tabs-container::after {
             content: "";
             position: absolute;
@@ -198,12 +204,30 @@
         }
         .tabs::-webkit-scrollbar { display: none; }
 
+        @media (min-width: 768px) {
+            .tabs {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr); /* 4열 고정 */
+                grid-template-rows: repeat(2, auto);   /* 2행 자동 */
+                white-space: normal !important;
+                overflow: visible !important;
+                padding-right: 0.6rem !important;      /* 모바일용 패딩 리셋 */
+            }
+        }
+
         .tab-button {
             flex: 0 0 auto !important;
             padding: 0.8rem 1.75rem; font-size: 0.95rem; font-weight: 700;
             white-space: nowrap !important; border: none; background: transparent;
             color: var(--text-sub); border-radius: 18px; cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (min-width: 768px) {
+            .tab-button {
+                width: 100%;
+                padding: 0.8rem 0.5rem; /* 그리드 내부 여백 최적화 */
+            }
         }
 
         .tab-button:hover { color: var(--brand-primary); }
