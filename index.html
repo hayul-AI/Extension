@@ -501,33 +501,33 @@
 
         /* Palette 전용 스타일 */
         .history-chip {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
+            width: 44px; height: 44px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        .history-chip:hover { transform: scale(1.1); }
-        .history-chip .chip-circle {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
             border: 3px solid #fff;
-            box-shadow: var(--shadow-premium);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .history-chip .chip-hex {
-            font-size: 0.7rem;
-            font-weight: 800;
-            font-family: monospace;
-            color: var(--text-sub);
-        }
+        .history-chip:hover { transform: translateY(-4px) scale(1.1); box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
+        #eyedropper-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
         #picker-container canvas {
             image-rendering: -moz-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
             image-rendering: pixelated;
             image-rendering: optimizeSpeed;
+            cursor: crosshair;
         }
+
+        .history-chip {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .history-chip:hover { transform: translateY(-4px) scale(1.1); box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
+        #eyedropper-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
     </style>
 </head>
 <body data-theme="light">
@@ -1119,6 +1119,12 @@
                     <input type="file" class="file-input" accept="image/*" style="display: none;">
                 </div>
                 
+                <div id="eyedropper-container" style="display: none; margin-top: 1.5rem; text-align: center;">
+                    <button id="eyedropper-btn" class="btn-primary" style="background: var(--text-main); color: var(--bg-base); box-shadow: none;">
+                        <span style="margin-right: 8px;">🎨</span> Use System Eyedropper
+                    </button>
+                </div>
+
                 <div id="palette-workspace" style="display:none; margin-top: 2rem;">
                     <!-- Canvas & Loupe Container -->
                     <div id="picker-container" style="position: relative; cursor: crosshair; user-select: none; line-height: 0; touch-action: none; overflow: hidden; border-radius: 16px; box-shadow: var(--shadow-lg);">
@@ -1137,10 +1143,10 @@
                     <div id="selection-info" style="margin-top: 2rem; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem; background: var(--bg-card); border-radius: 20px; border: 1px solid #eee;">
                         <div id="current-color-chip" style="width: 80px; height: 80px; border-radius: 16px; border: 4px solid #fff; box-shadow: var(--shadow-md); background: #eee;"></div>
                         <div style="flex-grow: 1;">
-                            <label style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--text-sub); margin-bottom: 0.5rem; text-transform: uppercase;">Selected Hex</label>
+                            <label style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--text-sub); margin-bottom: 0.5rem; text-transform: uppercase;">Selected Color</label>
                             <div style="display: flex; gap: 0.75rem;">
                                 <input type="text" id="selected-hex" readonly value="#------" style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.5rem; border: none; background: transparent; padding: 0; color: var(--text-main); width: 140px;">
-                                <button class="btn-primary" id="copy-hex-btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">Copy</button>
+                                <button class="btn-primary" id="copy-hex-btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; box-shadow: none;">Copy HEX</button>
                             </div>
                         </div>
                     </div>
@@ -1266,6 +1272,11 @@
                     fileStore.set(tabId, files);
                     updateSelectedFilesDisplay(tab, files);
                     if (convertButton) convertButton.disabled = false;
+                    
+                    // Palette tab auto-execution
+                    if (tabId === 'palette') {
+                        executeConversion('palette', files);
+                    }
                 }
             }
 
@@ -1588,7 +1599,7 @@
         }
 
         let paletteHistory = [];
-        const MAX_HISTORY = 8;
+        const MAX_HISTORY = 6;
 
         async function processPalette(file) {
             const workspace = document.getElementById('palette-workspace');
@@ -1600,60 +1611,92 @@
             const loupeHex = document.getElementById('loupe-hex');
             const selectedHex = document.getElementById('selected-hex');
             const colorChip = document.getElementById('current-color-chip');
+            const edContainer = document.getElementById('eyedropper-container');
             
             workspace.style.display = 'block';
             
+            if (window.EyeDropper) {
+                edContainer.style.display = 'block';
+                document.getElementById('eyedropper-btn').onclick = async () => {
+                    try {
+                        const result = await new EyeDropper().open();
+                        window.copyHex(result.sRGBHex);
+                        addToHistory(result.sRGBHex);
+                    } catch (e) {}
+                };
+            }
+
             const img = new Image();
             img.src = URL.createObjectURL(file);
             await new Promise(r => img.onload = r);
 
-            // Performance optimization: limit max width to 1200px
             const maxW = 1200;
             let w = img.width, h = img.height;
             if (w > maxW) { h = (maxW / w) * h; w = maxW; }
             canvas.width = w; canvas.height = h;
             ctx.drawImage(img, 0, 0, w, h);
 
-            const updateUI = (hex) => {
-                selectedHex.value = hex;
-                colorChip.style.background = hex;
-                loupeHex.textContent = hex;
-            };
-
             const getPixelColor = (e) => {
                 const rect = canvas.getBoundingClientRect();
-                const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-                const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+                // Client relative coordinates to Canvas resolution coordinates
+                let x = (e.clientX - rect.left) * (canvas.width / rect.width);
+                let y = (e.clientY - rect.top) * (canvas.height / rect.height);
                 
-                const data = ctx.getImageData(Math.floor(x), Math.floor(y), 1, 1).data;
-                const hex = `#${((1 << 24) + (data[0] << 16) + (data[1] << 8) + data[2]).toString(16).slice(1).toUpperCase()}`;
+                // Clamp coordinates to image bounds
+                x = Math.max(0, Math.min(canvas.width - 1, x));
+                y = Math.max(0, Math.min(canvas.height - 1, y));
                 
-                // Loupe rendering (8x zoom)
+                let r, g, b;
+                if (e.shiftKey) {
+                    // 5x5 average color calculation with boundary protection
+                    let sr = 0, sg = 0, sb = 0, count = 0;
+                    const size = 5;
+                    const half = Math.floor(size / 2);
+                    const ix = Math.max(0, Math.min(canvas.width - size, Math.floor(x) - half));
+                    const iy = Math.max(0, Math.min(canvas.height - size, Math.floor(y) - half));
+                    
+                    const data = ctx.getImageData(ix, iy, size, size).data;
+                    for(let i=0; i<data.length; i+=4) {
+                        sr += data[i]; sg += data[i+1]; sb += data[i+2];
+                        count++;
+                    }
+                    r = sr/count; g = sg/count; b = sb/count;
+                } else {
+                    const data = ctx.getImageData(Math.floor(x), Math.floor(y), 1, 1).data;
+                    r = data[0]; g = data[1]; b = data[2];
+                }
+
+                const hex = `#${((1 << 24) + (Math.round(r) << 16) + (Math.round(g) << 8) + Math.round(b)).toString(16).slice(1).toUpperCase()}`;
+                
+                // Loupe rendering
                 const zoom = 8;
-                const size = loupeCanvas.width / zoom;
-                loupeCtx.clearRect(0, 0, loupeCanvas.width, loupeCanvas.height);
+                const loupeSize = loupeCanvas.width / zoom;
                 loupeCtx.imageSmoothingEnabled = false;
-                loupeCtx.drawImage(canvas, x - size/2, y - size/2, size, size, 0, 0, loupeCanvas.width, loupeCanvas.height);
+                loupeCtx.clearRect(0, 0, loupeCanvas.width, loupeCanvas.height);
+                loupeCtx.drawImage(canvas, x - loupeSize/2, y - loupeSize/2, loupeSize, loupeSize, 0, 0, loupeCanvas.width, loupeCanvas.height);
                 
-                return { hex, x: e.clientX - rect.left, y: e.clientY - rect.top };
+                return { hex, displayX: e.clientX - rect.left, displayY: e.clientY - rect.top };
             };
 
             const handlePointer = (e) => {
-                const { hex, x, y } = getPixelColor(e);
+                const { hex, displayX, displayY } = getPixelColor(e);
                 loupe.style.display = 'block';
-                loupe.style.left = `${x}px`;
-                loupe.style.top = `${y}px`;
-                updateUI(hex);
+                loupe.style.left = `${displayX}px`;
+                loupe.style.top = `${displayY}px`;
+                
+                selectedHex.value = hex;
+                colorChip.style.background = hex;
+                loupeHex.textContent = hex + (e.shiftKey ? ' (Avg)' : '');
                 
                 if (e.type === 'pointerdown') {
+                    window.copyHex(hex);
                     addToHistory(hex);
-                    navigator.clipboard.writeText(hex).catch(() => {});
                 }
             };
 
-            canvas.addEventListener('pointermove', handlePointer);
-            canvas.addEventListener('pointerdown', handlePointer);
-            canvas.addEventListener('pointerleave', () => loupe.style.display = 'none');
+            canvas.onpointermove = handlePointer;
+            canvas.onpointerdown = handlePointer;
+            canvas.onpointerleave = () => loupe.style.display = 'none';
         }
 
         function addToHistory(hex) {
@@ -1665,18 +1708,23 @@
         function renderHistory() {
             const container = document.getElementById('color-history');
             container.innerHTML = paletteHistory.map(hex => `
-                <div class="history-chip" onclick="copyHex('${hex}')">
-                    <div class="chip-circle" style="background: ${hex}"></div>
-                    <span class="chip-hex">${hex}</span>
-                </div>
+                <div class="history-chip" style="background: ${hex}" title="${hex}" onclick="window.copyHex('${hex}')"></div>
             `).join('');
         }
 
         window.copyHex = (hex) => {
-            navigator.clipboard.writeText(hex);
+            navigator.clipboard.writeText(hex).then(() => {
+                const btn = document.getElementById('copy-hex-btn');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = 'var(--brand-success)';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 1000);
+            });
             document.getElementById('selected-hex').value = hex;
             document.getElementById('current-color-chip').style.background = hex;
-            alert(`Copied: ${hex}`);
         }
 
         document.getElementById('copy-hex-btn').addEventListener('click', () => {
