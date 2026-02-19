@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Remove GPS and EXIF Metadata from Photos — PixelConvert</title>
+    <meta name="description" content="Protect your privacy by stripping hidden metadata from your images. Learn what EXIF data is, why it's dangerous, and how to remove it without uploading files.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        :root { --brand-primary: #6366f1; --brand-secondary: #a855f7; --text-main: #1e293b; --text-sub: #64748b; --bg-light: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; line-height: 1.7; color: var(--text-main); background-color: var(--bg-light); margin: 0; padding: 0; }
+        .container { max-width: 900px; margin: 0 auto; padding: 60px 20px; }
+        .card { background: white; padding: 60px; border-radius: 32px; box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.05); }
+        h1 { font-size: 3rem; font-weight: 800; color: var(--brand-primary); margin-bottom: 30px; line-height: 1.2; letter-spacing: -0.04em; }
+        h2 { font-size: 1.8rem; font-weight: 700; margin-top: 50px; margin-bottom: 20px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        h3 { font-size: 1.4rem; font-weight: 700; margin-top: 30px; color: var(--brand-secondary); }
+        p { margin-bottom: 20px; font-size: 1.1rem; }
+        ul, ol { margin-bottom: 20px; padding-left: 20px; }
+        li { margin-bottom: 12px; font-size: 1.1rem; }
+        .hero-img { width: 100%; height: 300px; background: linear-gradient(135deg, #0b0f1a, #6366f1); border-radius: 24px; margin-bottom: 40px; display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem; font-weight: 800; }
+        .privacy-box { background: rgba(15, 23, 42, 0.05); border-left: 4px solid #0b0f1a; padding: 25px; border-radius: 0 16px 16px 0; margin: 40px 0; }
+        .privacy-box strong { color: #0b0f1a; }
+        .back-link { display: inline-block; margin-top: 40px; text-decoration: none; color: var(--brand-primary); font-weight: 700; font-size: 1rem; }
+        .footer-nav { text-align: center; margin-top: 60px; padding-top: 40px; border-top: 1px solid #e2e8f0; }
+        .footer-nav a { color: var(--text-sub); text-decoration: none; margin: 0 15px; font-weight: 600; }
+        .cta-btn { display: inline-block; background: var(--brand-primary); color: white; padding: 16px 32px; border-radius: 16px; text-decoration: none; font-weight: 800; margin-top: 20px; transition: all 0.3s; }
+        .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="hero-img">EXIF REMOVER</div>
+            <h1>Photo Privacy: How to Strip EXIF and GPS Data</h1>
+            
+            <p>Every time you take a photo with your smartphone or digital camera, a hidden file called <strong>EXIF</strong> (Exchangeable Image File Format) is created. This file is embedded within your image and contains a wealth of technical and personal information that you might not want to share with the world.</p>
+            
+            <p>In this guide, we'll explain the risks of metadata and show you how to scrub your photos clean before posting them online.</p>
+
+            <h2>What is hidden in your photos?</h2>
+            <p>A standard EXIF profile can reveal:</p>
+            <ul>
+                <li><strong>GPS Coordinates:</strong> The exact latitude and longitude where the photo was taken (accurate to within a few meters).</li>
+                <li><strong>Device Info:</strong> The make and model of your phone, and even its unique serial number.</li>
+                <li><strong>Timestamps:</strong> Exactly when the photo was captured, down to the second.</li>
+                <li><strong>Technical Settings:</strong> Shutter speed, aperture, ISO, and whether you used a flash.</li>
+            </ul>
+
+            <div class="privacy-box">
+                <strong>Why Local Stripping Matters:</strong> Online metadata removers often ask you to upload your photos to "clean" them. But by uploading, you've already given a third-party server your location data. <strong>PixelConvert strips EXIF data locally in your browser.</strong> The GPS coordinates are removed before the data ever leaves your device's memory.
+            </div>
+
+            <h2>How to Remove Metadata with PixelConvert</h2>
+            <ol>
+                <li><strong>Navigate:</strong> Go to the "EXIF Remover" tab on our home page.</li>
+                <li><strong>Select JPGs:</strong> Upload the images you want to anonymize. Currently, we focus on JPG as it's the primary carrier of GPS data.</li>
+                <li><strong>Strip and Download:</strong> Click "Strip Metadata." Our engine identifies the EXIF headers and replaces them with a clean slate. Your new, private image is ready for download instantly.</li>
+            </ol>
+
+            <h2>Why You Should Strip Metadata</h2>
+            <h3>1. Protect Your Home Location</h3>
+            <p>Posting a "for sale" ad or a casual selfie from your living room can reveal your home address to anyone who downloads the original file. Stripping GPS data is a vital safety step.</p>
+            
+            <h3>2. Professionalism</h3>
+            <p>When sending photos to clients or publishers, you might not want them to see the amateur settings or the specific older camera model you're using. A "clean" file looks more professional.</p>
+
+            <h3>3. Avoid Tracking</h3>
+            <p>Some platforms use metadata to track user behavior and build profiles. By removing EXIF data, you break one more link in the digital tracking chain.</p>
+
+            <h2>FAQ: Metadata and Privacy</h2>
+            <h3>Does removing EXIF data reduce image quality?</h3>
+            <p>No. Metadata is just text stored in the "header" of the image file. Removing it does not touch the actual pixels of the photo. Your image remains just as sharp as the original.</p>
+
+            <h3>Do social media sites remove this for me?</h3>
+            <p>Platforms like Facebook, Instagram, and Twitter usually strip metadata for images you post publicly. However, if you send a photo via email, Discord, or a file-sharing service, the metadata is often preserved.</p>
+
+            <h3>Can I see my own metadata?</h3>
+            <p>Yes. On Windows, right-click an image > Properties > Details. On Mac, open in Preview > Tools > Show Inspector > GPS tab.</p>
+
+            <div style="text-align: center;">
+                <a href="../index.html" class="cta-btn">Clean Your Photos Now</a>
+            </div>
+
+            <a href="index.html" class="back-link">← All Guides</a>
+        </div>
+
+        <div class="footer-nav">
+            <a href="../index.html">Home</a>
+            <a href="heic-to-jpg.html">HEIC Guide</a>
+            <a href="webp-to-jpg.html">WebP Guide</a>
+            <a href="compress-to-200kb.html">Compression Guide</a>
+            <a href="ocr-best-practices.html">OCR Guide</a>
+        </div>
+    </div>
+</body>
+</html>
