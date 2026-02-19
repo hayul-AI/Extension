@@ -51,6 +51,7 @@ This project is a framework-less (Vanilla JS) web-based image tool where all pro
 
 ## SEO & AdSense Optimization
 - **Meta Tags:** Search engine optimization using `description`, `keywords`, and `OG (Open Graph)` tags.
+- **Site Verification:** Added Naver site verification meta tag for improved search visibility in the Korean market.
 - **Structured Data:** Applied `SoftwareApplication` schema (Schema.org JSON-LD).
 - **Mandatory Policy Pages:** Created `privacy.html`, `terms.html`, `about.html`, and `contact.html` with footer links.
 - **Crawler Support:** Created `robots.txt` and `sitemap.xml`.
