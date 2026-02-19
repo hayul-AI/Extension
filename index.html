@@ -500,6 +500,18 @@
         }
 
         /* Palette 전용 스타일 */
+        .palette-instruction {
+            text-align: center;
+            color: #8b90a0;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 1.5rem 0 -0.5rem 0;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .history-chip {
             width: 44px; height: 44px;
             border-radius: 12px;
@@ -1093,6 +1105,33 @@
                 </div>
                 <button class="btn-success convert-button" disabled>Apply & Download</button>
                 <div class="results-grid results"></div>
+
+                <div class="tool-info">
+                    <h3>Smart Image Resizer & Center Cropper</h3>
+                    <p>Perfectly resize and crop your images for social media, profile pictures, or web content. Our tool intelligently focuses on the center of your image to ensure the most important subject remains in frame while meeting your exact pixel dimensions.</p>
+                    <p>Whether you need a square 1:1 post, a 16:9 HD thumbnail, or a custom resolution, our browser-based engine processes everything locally, maintaining high visual fidelity without data usage.</p>
+                    <ul class="tool-steps">
+                        <li>Upload your image (JPG, PNG, or WEBP).</li>
+                        <li>Enter your target width and height or select a preset.</li>
+                        <li>The tool automatically center-crops and resizes to fit.</li>
+                        <li>Download your perfectly framed image instantly.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>What is center-cropping?</strong>
+                            <span>It's a technique that takes the middle portion of your image to fit a specific aspect ratio, preventing "stretching" or distortion.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Can I choose the crop area?</strong>
+                            <span>This tool is optimized for fast, automatic center-focus. For manual adjustment, keep the subject centered before uploading.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Does it support transparent PNGs?</strong>
+                            <span>Yes, resizing preserves transparency if you choose the PNG output format.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
             </div>
 
             <!-- EXIF Remover Tab -->
@@ -1108,6 +1147,33 @@
                 </div>
                 <button class="btn-success convert-button" disabled>Strip Metadata</button>
                 <div class="results-grid results"></div>
+
+                <div class="tool-info">
+                    <h3>Professional EXIF & Metadata Remover</h3>
+                    <p>Protect your digital footprint by stripping sensitive hidden data from your photos. Every JPG you take contains "EXIF" data—hidden information that can reveal your exact GPS coordinates, camera serial number, and exact time of capture.</p>
+                    <p>Our metadata scrubber deep-cleans your files by removing these tags entirely, ensuring that when you share a photo online, you only share the image, not your location or privacy.</p>
+                    <ul class="tool-steps">
+                        <li>Select the JPG photos you want to anonymize.</li>
+                        <li>Our engine identifies and strips all GPS and technical tags.</li>
+                        <li>The process is instant and happens entirely on your device.</li>
+                        <li>Download "cleaned" versions of your photos for safe sharing.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>What data is actually removed?</strong>
+                            <span>We remove GPS coordinates, device models, software info, and timestamps (Date/Time Original).</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Does this reduce image quality?</strong>
+                            <span>No. We only remove the text-based metadata headers; the actual pixel data remains untouched.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Why only JPG?</strong>
+                            <span>JPG is the most common format for EXIF metadata. We are working on supporting other formats soon.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                </div>
             </div>
 
             <!-- Palette Tab -->
@@ -1139,6 +1205,11 @@
                         </div>
                     </div>
 
+                    <!-- 안내 문구 추가 -->
+                    <p class="palette-instruction">
+                        Click a color to copy the HEX code automatically
+                    </p>
+
                     <!-- Selection Info -->
                     <div id="selection-info" style="margin-top: 2rem; display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem; background: var(--bg-card); border-radius: 20px; border: 1px solid #eee;">
                         <div id="current-color-chip" style="width: 80px; height: 80px; border-radius: 16px; border: 4px solid #fff; box-shadow: var(--shadow-md); background: #eee;"></div>
@@ -1158,6 +1229,33 @@
                             <!-- History chips go here -->
                         </div>
                     </div>
+                </div>
+
+                <div class="tool-info">
+                    <h3>Precision Image Color Picker & Dropper</h3>
+                    <p>Extract the exact HEX color codes from any image or photograph. This tool acts as a virtual eyedropper, allowing you to sample colors from your brand assets, UI designs, or inspiring photos with pixel-perfect accuracy.</p>
+                    <p>Designed for designers and developers, it provides instant HEX conversion and maintains a local history of your recently picked shades, making it easy to build a cohesive color palette for your next project.</p>
+                    <ul class="tool-steps">
+                        <li>Upload an image to open the color workspace.</li>
+                        <li>Hover and click on any pixel to capture its color.</li>
+                        <li>Use the zoom loupe for precise selection of fine details.</li>
+                        <li>Click "Copy HEX" to save the code to your clipboard.</li>
+                    </ul>
+                    <div class="faq-block">
+                        <div class="faq-item-small">
+                            <strong>How accurate is the color picking?</strong>
+                            <span>It uses raw Canvas getImageData, providing 100% accurate RGB-to-HEX values from the original file.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>What is the average color (Shift+Click)?</strong>
+                            <span>By holding Shift, you can sample a 5x5 area to get a smoother, averaged color instead of a single noisy pixel.</span>
+                        </div>
+                        <div class="faq-item-small">
+                            <strong>Does it save my history?</strong>
+                            <span>Yes, your last 6 selections are stored temporarily in your browser session for quick reference.</span>
+                        </div>
+                    </div>
+                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
                 </div>
                 
                 <button class="btn-success convert-button" disabled style="display: none;">Extract Palette</button>
