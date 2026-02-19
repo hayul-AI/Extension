@@ -1989,20 +1989,37 @@
         });
 
         async function convertPdf(files, tab) {
-            const pdf = new jsPDF();
+            let pdf;
             for (let i = 0; i < files.length; i++) {
-                if (i > 0) pdf.addPage();
+                const file = files[i];
                 const dataUrl = await new Promise(r => {
                     const reader = new FileReader();
                     reader.onload = e => r(e.target.result);
-                    reader.readAsDataURL(files[i]);
+                    reader.readAsDataURL(file);
                 });
+
                 const img = new Image();
-                await new Promise(r => { img.onload = r; img.src = dataUrl; });
-                const ratio = img.width / img.height;
-                pdf.addImage(dataUrl, 'JPEG', 0, 0, 210, 210/ratio);
+                await new Promise(r => { 
+                    img.onload = r; 
+                    img.src = dataUrl; 
+                });
+
+                const w = img.naturalWidth;
+                const h = img.naturalHeight;
+                const type = file.type.toLowerCase().includes('png') ? 'PNG' : 'JPEG';
+
+                if (i === 0) {
+                    pdf = new jsPDF({
+                        unit: 'px',
+                        format: [w, h],
+                        orientation: w > h ? 'l' : 'p'
+                    });
+                } else {
+                    pdf.addPage([w, h], w > h ? 'l' : 'p');
+                }
+                pdf.addImage(dataUrl, type, 0, 0, w, h);
             }
-            return [{ name: 'document.pdf', blob: pdf.output('blob'), originalSize: 0 }];
+            return [{ name: 'merged-images.pdf', blob: pdf.output('blob'), originalSize: 0 }];
         }
 
         async function convertFavicon(file, tab) {
