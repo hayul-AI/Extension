@@ -20,7 +20,11 @@ This project is a framework-less (Vanilla JS) web-based image tool where all pro
 ### 2. Image Conversion & Transformation
 - **HEIC → JPG:** Direct browser-side conversion using `heic2any`.
 - **WEBP ↔ JPG, PNG ↔ JPG:** No-install conversion using the Canvas API.
-- **Resize & Center Crop:** (New) center-crops images to specific dimensions (1:1, 16:9, 9:16) or custom sizes using Canvas.
+- **Resize & Center Crop:** 
+    - Center-crops images to specific dimensions (1:1, 16:9, 9:16) or custom sizes using Canvas.
+    - **Contained Preview Viewport:** (New) Implemented a responsive preview container (`preview-viewport`) with a fixed max-height (520px). The preview frame automatically scales to fit within this viewport while perfectly maintaining the target aspect ratio.
+    - **Live Aspect Updates:** Real-time visual feedback when changing dimensions or clicking presets (HD, Square, Story).
+    - **Advanced Interactions:** Supports move (pan) and zoom within the crop frame using mouse/touch. Includes a reset feature to re-center.
 - **EXIF / Metadata Remover:** (New) Strips private information (GPS, device model, date) from JPG images using `piexifjs`.
 - **JPG → PDF:** Merging multiple images into a single PDF using `jspdf`.
 - **Favicon Generation:** Generate multiple sizes (16-64px) of PNGs and a ZIP package from a single upload.
@@ -61,6 +65,11 @@ This project is a framework-less (Vanilla JS) web-based image tool where all pro
   - `jszip`: Multi-file ZIP compression
   - `tesseract.js`: OCR functionality
   - `piexifjs`: Metadata removal
+
+## Guides & SEO Optimization
+- **Tutorial Content:** Created a dedicated `/guides/` directory with 5 initial technical tutorials covering HEIC, WebP, Compression, OCR, and EXIF privacy.
+- **Routing Fix:** Implemented absolute path routing (`/guides/<slug>.html`) to ensure compatibility with Firebase Hosting `cleanUrls` configuration, resolving 404 errors.
+- **Navigation:** Integrated a "PixelConvert Guides" index page and linked it globally in the application header and footer.
 
 ## Future Plans
 - **Advanced Editing:** Add manual crop area selection and filters.
