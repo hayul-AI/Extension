@@ -10,7 +10,12 @@ This project is a framework-less (Vanilla JS) web-based image tool where all pro
 - **Themes:** Supports Light and Dark modes (saved based on system settings and user choice).
 - **Typography & Readability:** 18px base font, large buttons (1.2rem+) for improved mobile usability.
 - **Feedback:** Progress percentages (%) for all tasks and result previews provided. Error messages displayed in English.
-- **Navigation:** Desktop uses a 4x2 grid for tabs to ensure all 11 tools are visible at once.
+- **Navigation (Enhanced):** 
+    - Desktop uses a high-readability grid for tool tabs.
+    - **Font Sizes:** Increased to 20px (Desktop default), 22px (Active tab), and 16-18px (Mobile).
+    - **Visual Prominence:** Active tab is larger (`scale(1.05)`) with a prominent shadow and distinct color contrast.
+    - **Interactivity:** Added smooth hover feedback (background shifts, elevation) using cubic-bezier transitions.
+    - **AdSense Ready:** Clean, modern SaaS aesthetic with clear spacing and touch-friendly targets.
 
 ### 2. Image Conversion & Transformation
 - **HEIC → JPG:** Direct browser-side conversion using `heic2any`.

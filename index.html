@@ -187,14 +187,14 @@
 
         .tabs {
             display: flex !important;
-            gap: 0.5rem;
-            padding: 0.6rem !important;
+            gap: 0.75rem;
+            padding: 0.75rem !important;
             padding-right: 60px !important;
             background: var(--glass-bg);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid var(--border-base);
-            border-radius: 24px;
+            border-radius: 28px;
             overflow-x: auto !important;
             overflow-y: hidden !important;
             white-space: nowrap !important;
@@ -208,33 +208,56 @@
         @media (min-width: 768px) {
             .tabs {
                 display: grid !important;
-                grid-template-columns: repeat(4, 1fr); /* 4열 고정 */
-                grid-template-rows: repeat(2, auto);   /* 2행 자동 */
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: auto;
                 white-space: normal !important;
                 overflow: visible !important;
-                padding-right: 0.6rem !important;      /* 모바일용 패딩 리셋 */
+                padding-right: 0.75rem !important;
             }
         }
 
         .tab-button {
             flex: 0 0 auto !important;
-            padding: 0.8rem 1.75rem; font-size: 0.95rem; font-weight: 700;
+            padding: 1rem 1.5rem; font-size: 20px; font-weight: 700;
             white-space: nowrap !important; border: none; background: transparent;
-            color: var(--text-sub); border-radius: 18px; cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-sub); border-radius: 20px; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @media (min-width: 768px) {
             .tab-button {
                 width: 100%;
-                padding: 0.8rem 0.5rem; /* 그리드 내부 여백 최적화 */
+                padding: 1rem 0.75rem;
             }
         }
 
-        .tab-button:hover { color: var(--brand-primary); }
+        @media (max-width: 768px) {
+            .tab-button {
+                font-size: 16px;
+                padding: 0.8rem 1.25rem;
+            }
+        }
+
+        .tab-button:hover { 
+            color: var(--brand-primary); 
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-2px);
+        }
+
         .tab-button.active {
-            background: var(--brand-primary); color: white;
-            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+            background: var(--brand-primary); 
+            color: white;
+            font-size: 22px;
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .tab-button.active {
+                font-size: 18px;
+                transform: scale(1.08);
+            }
         }
 
         .tab-content {
@@ -540,6 +563,64 @@
         }
         .history-chip:hover { transform: translateY(-4px) scale(1.1); box-shadow: 0 8px 15px rgba(0,0,0,0.15); }
         #eyedropper-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+        /* Resize & Crop Enhancements */
+        .resize-toolbar {
+            display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;
+        }
+        .tool-toggle {
+            background: var(--card-base); border: 1px solid var(--border-base);
+            padding: 0.6rem 1.25rem; border-radius: 12px; cursor: pointer;
+            font-weight: 700; color: var(--text-main); transition: all 0.2s;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .tool-toggle:hover { background: rgba(99, 102, 241, 0.05); }
+        .tool-toggle.active {
+            background: var(--brand-primary); color: white; border-color: var(--brand-primary);
+        }
+        .palette-container {
+            display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap;
+            justify-content: center; padding: 1rem; background: rgba(0,0,0,0.02);
+            border-radius: 16px;
+        }
+        .swatch {
+            width: 40px; height: 40px; border-radius: 10px; cursor: pointer;
+            border: 2px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s; position: relative;
+        }
+        .swatch:hover { transform: scale(1.15) translateY(-2px); z-index: 2; }
+        .swatch::after {
+            content: attr(data-hex); position: absolute; bottom: -20px; left: 50%;
+            transform: translateX(-50%); font-size: 10px; font-weight: 800;
+            opacity: 0; transition: opacity 0.2s; white-space: nowrap;
+        }
+        .swatch:hover::after { opacity: 1; }
+        
+        .brush-controls {
+            background: var(--card-base); border: 1px solid var(--border-base);
+            padding: 1.25rem; border-radius: 20px; margin-top: 1rem;
+            display: none; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+            box-shadow: var(--shadow-premium);
+        }
+        .brush-controls.active { display: grid; }
+        .control-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .control-group label { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; opacity: 0.7; }
+        
+        #pick-info {
+            display: none; align-items: center; gap: 1rem; margin-top: 1rem;
+            padding: 0.75rem 1.25rem; background: var(--brand-primary);
+            color: white; border-radius: 14px; animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .toast {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            background: #1e293b; color: white; padding: 0.75rem 1.5rem;
+            border-radius: 99px; font-weight: 700; z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); pointer-events: none;
+            opacity: 0; transition: all 0.3s;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
     </style>
 </head>
 <body data-theme="light">
@@ -1071,11 +1152,86 @@
             <!-- Resize & Crop Tab -->
             <div id="resize-crop" class="tab-content">
                 <h2>Resize & Center Crop</h2>
-                <div class="drop-zone">
-                    <p>Drop image to resize or crop</p>
-                    <label class="btn-primary">Select Image</label>
-                    <input type="file" class="file-input" accept="image/png, image/jpeg, image/webp" style="display: none;">
+                
+                <div id="resize-workspace" style="border: 2px dashed var(--border-base); border-radius: var(--radius-xl); position: relative; overflow: hidden; min-height: 450px; background: rgba(0,0,0,0.02); display: flex; align-items: center; justify-content: center; transition: all 0.3s; margin-bottom: 2rem;">
+                    <!-- Drop Zone View -->
+                    <div class="drop-zone" id="resize-drop-zone" style="border: none; margin: 0; width: 100%; height: 100%; background: transparent; position: absolute; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <p style="font-weight: 800; font-size: 1.25rem; color: var(--text-sub);">Drop image to start editing</p>
+                        <label class="btn-primary">Select Image</label>
+                        <input type="file" class="file-input" accept="image/png, image/jpeg, image/webp" style="display: none;">
+                    </div>
+
+                    <!-- Enhanced Preview View -->
+                    <div id="resize-preview-container" style="display: none; width: 100%; height: 100%; position: relative; z-index: 10; background: #000; line-height: 0;">
+                        <!-- Top Toolbar -->
+                        <div class="resize-toolbar" style="position: absolute; top: 1rem; left: 1rem; right: 1rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; pointer-events: none;">
+                            <div style="display: flex; gap: 0.5rem; pointer-events: auto;">
+                                <button class="tool-toggle active" id="tool-pan" title="Move & Zoom">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
+                                    <span>Pan</span>
+                                </button>
+                                <button class="tool-toggle" id="tool-pick" title="Pick Color">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                                    <span>Pick</span>
+                                </button>
+                                <button class="tool-toggle" id="tool-mosaic" title="Paint Mosaic">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                                    <span>Mosaic</span>
+                                </button>
+                            </div>
+                            
+                            <button id="resize-change-img" style="pointer-events: auto; background: rgba(255,255,255,0.2); border: none; color: #fff; padding: 0.5rem; border-radius: 50%; width: 36px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(8px); transition: all 0.2s;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </div>
+
+                        <!-- Main Preview Canvas -->
+                        <canvas id="resize-preview-canvas" style="width: 100%; height: auto; cursor: grab; touch-action: none;"></canvas>
+                        
+                        <!-- Pick Info Overlay -->
+                        <div id="pick-info" style="position: absolute; top: 4.5rem; left: 1rem; z-index: 90; pointer-events: auto;">
+                            <div id="pick-color-chip" style="width: 24px; height: 24px; border-radius: 6px; border: 2px solid white;"></div>
+                            <span id="pick-hex" style="font-family: monospace; font-weight: 800; font-size: 0.9rem;">#FFFFFF</span>
+                            <button id="pick-copy-btn" style="background: none; border: none; color: white; cursor: pointer; padding: 2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                        </div>
+
+                        <!-- Zoom Controls -->
+                        <div id="resize-zoom-controls" style="position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 0.75rem 1.25rem; border-radius: 99px; display: flex; align-items: center; gap: 1rem; color: #fff; width: 90%; max-width: 340px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100;">
+                            <span style="font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8;">Zoom</span>
+                            <input type="range" id="resize-zoom-slider" min="1" max="5" step="0.001" value="1" style="flex-grow: 1; accent-color: var(--brand-primary); cursor: pointer; height: 4px;">
+                            <button id="resize-reset-btn" style="background: rgba(255,255,255,0.2); border: none; color: #fff; font-weight: 800; font-size: 0.65rem; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; white-space: nowrap; transition: all 0.2s;">RESET</button>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Mosaic Brush Controls -->
+                <div class="brush-controls" id="mosaic-controls">
+                    <div class="control-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <label>Brush Size</label>
+                            <span id="brush-size-val" style="font-weight: 800; color: var(--brand-primary); font-size: 0.8rem;">40px</span>
+                        </div>
+                        <input type="range" id="brush-size" min="10" max="150" value="40" style="accent-color: var(--brand-primary);">
+                    </div>
+                    <div class="control-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <label>Mosaic Size</label>
+                            <span id="mosaic-strength-val" style="font-weight: 800; color: var(--brand-primary); font-size: 0.8rem;">15px</span>
+                        </div>
+                        <input type="range" id="mosaic-strength" min="5" max="50" value="15" style="accent-color: var(--brand-primary);">
+                    </div>
+                    <div style="grid-column: span 2; display: flex; gap: 0.75rem;">
+                        <button class="btn-primary" id="mosaic-undo" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; background: var(--text-sub); box-shadow: none;">Undo</button>
+                        <button class="btn-primary" id="mosaic-clear" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; background: var(--brand-accent); box-shadow: none;">Clear Mosaic</button>
+                    </div>
+                </div>
+
+                <!-- Palette Extraction View -->
+                <div id="extracted-palette" style="display: none; margin-top: 1.5rem;">
+                    <label style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; opacity: 0.6; display: block; text-align: center;">Extracted Image Palette</label>
+                    <div class="palette-container" id="palette-swatches"></div>
+                </div>
+
                 <div class="options" style="margin-top: 3rem; display: grid; gap: 2rem;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div>
@@ -1325,6 +1481,209 @@
         let currentTargetSize = 0;
         let ocrWorker = null; // Cached OCR worker
 
+        // Resize & Center Crop State
+        let resizeState = {
+            img: null,
+            zoom: 1,
+            x: 0,
+            y: 0,
+            isDragging: false,
+            lastX: 0,
+            lastY: 0,
+            canvas: document.getElementById('resize-preview-canvas'),
+            ctx: document.getElementById('resize-preview-canvas').getContext('2d'),
+            targetW: 1080,
+            targetH: 1080,
+            displayW: 0,
+            displayH: 0,
+            baseScale: 1
+        };
+
+        function updateResizePreview() {
+            if (!resizeState.img) return;
+            const { canvas, ctx, img, zoom, targetW, targetH } = resizeState;
+            
+            // Calculate display dimensions based on workspace width
+            const workspace = document.getElementById('resize-workspace');
+            const displayW = workspace.offsetWidth - 4; // subtract border
+            const displayH = displayW * (targetH / targetW);
+            
+            resizeState.displayW = displayW;
+            resizeState.displayH = displayH;
+
+            // Adjust canvas resolution for high DPI
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = displayW * dpr;
+            canvas.height = displayH * dpr;
+            canvas.style.width = displayW + 'px';
+            canvas.style.height = displayH + 'px';
+            ctx.scale(dpr, dpr);
+            
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, displayW, displayH);
+            
+            // Base scale to cover the frame
+            const baseScale = Math.max(displayW / img.width, displayH / img.height);
+            resizeState.baseScale = baseScale;
+            const s = baseScale * zoom;
+            
+            // Clamp position to ensure image always covers frame
+            const minX = displayW - img.width * s;
+            const minY = displayH - img.height * s;
+            
+            if (resizeState.x > 0) resizeState.x = 0;
+            if (resizeState.y > 0) resizeState.y = 0;
+            if (resizeState.x < minX) resizeState.x = minX;
+            if (resizeState.y < minY) resizeState.y = minY;
+            
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, resizeState.x, resizeState.y, img.width * s, img.height * s);
+            
+            // Indicators
+            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(0.5, 0.5, displayW - 1, displayH - 1);
+        }
+
+        function initResizePreview(file) {
+            const container = document.getElementById('resize-preview-container');
+            const dropZone = document.getElementById('resize-drop-zone');
+            const slider = document.getElementById('resize-zoom-slider');
+            const img = new Image();
+            img.onload = () => {
+                resizeState.img = img;
+                resizeState.zoom = 1;
+                resizeState.targetW = parseInt(document.getElementById('resize-w').value) || 1080;
+                resizeState.targetH = parseInt(document.getElementById('resize-h').value) || 1080;
+                
+                // Initial centered position
+                const workspace = document.getElementById('resize-workspace');
+                const displayW = workspace.offsetWidth - 4;
+                const displayH = displayW * (resizeState.targetH / resizeState.targetW);
+                const s = Math.max(displayW / img.width, displayH / img.height);
+                resizeState.x = (displayW - img.width * s) / 2;
+                resizeState.y = (displayH - img.height * s) / 2;
+                
+                dropZone.style.display = 'none';
+                container.style.display = 'block';
+                slider.value = 1;
+                updateResizePreview();
+            };
+            img.src = URL.createObjectURL(file);
+        }
+
+        // Event Listeners for Resize Preview
+        const resizeCanvas = document.getElementById('resize-preview-canvas');
+        const resizeSlider = document.getElementById('resize-zoom-slider');
+        const resizeResetBtn = document.getElementById('resize-reset-btn');
+        const resizeChangeImgBtn = document.getElementById('resize-change-img');
+
+        resizeCanvas.addEventListener('pointerdown', e => {
+            if (!resizeState.img) return;
+            resizeState.isDragging = true;
+            resizeState.lastX = e.clientX;
+            resizeState.lastY = e.clientY;
+            resizeCanvas.style.cursor = 'grabbing';
+            resizeCanvas.setPointerCapture(e.pointerId);
+        });
+
+        resizeCanvas.addEventListener('pointermove', e => {
+            if (!resizeState.isDragging) return;
+            const dx = e.clientX - resizeState.lastX;
+            const dy = e.clientY - resizeState.lastY;
+            resizeState.x += dx;
+            resizeState.y += dy;
+            resizeState.lastX = e.clientX;
+            resizeState.lastY = e.clientY;
+            updateResizePreview();
+        });
+
+        resizeCanvas.addEventListener('pointerup', () => {
+            resizeState.isDragging = false;
+            resizeCanvas.style.cursor = 'grab';
+        });
+
+        resizeCanvas.addEventListener('wheel', e => {
+            if (!resizeState.img) return;
+            e.preventDefault();
+            
+            const rect = resizeCanvas.getBoundingClientRect();
+            const px = e.clientX - rect.left;
+            const py = e.clientY - rect.top;
+            
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            const oldZoom = resizeState.zoom;
+            const newZoom = Math.max(1, Math.min(10, oldZoom * delta));
+            
+            if (oldZoom !== newZoom) {
+                const s = resizeState.baseScale * oldZoom;
+                const newS = resizeState.baseScale * newZoom;
+                
+                // Zoom around cursor
+                const ix = (px - resizeState.x) / s;
+                const iy = (py - resizeState.y) / s;
+                
+                resizeState.x = px - ix * newS;
+                resizeState.y = py - iy * newS;
+                resizeState.zoom = newZoom;
+                resizeSlider.value = newZoom;
+                updateResizePreview();
+            }
+        }, { passive: false });
+
+        resizeSlider.addEventListener('input', e => {
+            const oldZoom = resizeState.zoom;
+            const newZoom = parseFloat(e.target.value);
+            
+            // Zoom around center of frame when using slider
+            const px = resizeState.displayW / 2;
+            const py = resizeState.displayH / 2;
+            
+            const s = resizeState.baseScale * oldZoom;
+            const newS = resizeState.baseScale * newZoom;
+            
+            const ix = (px - resizeState.x) / s;
+            const iy = (py - resizeState.y) / s;
+            
+            resizeState.x = px - ix * newS;
+            resizeState.y = py - iy * newS;
+            resizeState.zoom = newZoom;
+            updateResizePreview();
+        });
+
+        resizeResetBtn.addEventListener('click', () => {
+            resizeState.zoom = 1;
+            const s = resizeState.baseScale;
+            resizeState.x = (resizeState.displayW - resizeState.img.width * s) / 2;
+            resizeState.y = (resizeState.displayH - resizeState.img.height * s) / 2;
+            resizeSlider.value = 1;
+            updateResizePreview();
+        });
+
+        resizeChangeImgBtn.addEventListener('click', () => {
+            document.getElementById('resize-preview-container').style.display = 'none';
+            document.getElementById('resize-drop-zone').style.display = 'flex';
+            resizeState.img = null;
+            fileStore.delete('resize-crop');
+            document.querySelector('#resize-crop .convert-button').disabled = true;
+        });
+
+        // Watch for width/height input changes to update aspect ratio
+        ['resize-w', 'resize-h'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                resizeState.targetW = parseInt(document.getElementById('resize-w').value) || 1080;
+                resizeState.targetH = parseInt(document.getElementById('resize-h').value) || 1080;
+                updateResizePreview();
+            });
+        });
+
+        window.addEventListener('resize', () => {
+            if (resizeState.img && document.getElementById('resize-crop').classList.contains('active')) {
+                updateResizePreview();
+            }
+        });
+
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
 
@@ -1374,6 +1733,10 @@
                     // Palette tab auto-execution
                     if (tabId === 'palette') {
                         executeConversion('palette', files);
+                    }
+                    // Resize & Crop preview initialization
+                    if (tabId === 'resize-crop') {
+                        initResizePreview(files[0]);
                     }
                 }
             }
@@ -1658,29 +2021,38 @@
         }
 
         async function processResizeCrop(file) {
-            const targetW = parseInt(document.getElementById('resize-w').value);
-            const targetH = parseInt(document.getElementById('resize-h').value);
+            const { img, x, y, zoom, baseScale, targetW, targetH, displayW } = resizeState;
+            if (!img) return;
             const format = document.getElementById('resize-format').value;
             
+            // Ratio between target output pixels and preview display pixels
+            const ratio = targetW / displayW;
+            const finalScale = baseScale * zoom * ratio;
+            const finalX = x * ratio;
+            const finalY = y * ratio;
+
             return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = targetW;
-                    canvas.height = targetH;
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Center Crop 계산
-                    const scale = Math.max(targetW / img.width, targetH / img.height);
-                    const x = (targetW - img.width * scale) / 2;
-                    const y = (targetH - img.height * scale) / 2;
-                    
-                    ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-                    canvas.toBlob((blob) => {
-                        resolve({ name: `resized_${file.name.split('.')[0]}.${format === 'image/png' ? 'png' : 'jpg'}`, blob, originalSize: file.size });
-                    }, format, 0.92);
-                };
-                img.src = URL.createObjectURL(file);
+                const canvas = document.createElement('canvas');
+                canvas.width = targetW;
+                canvas.height = targetH;
+                const ctx = canvas.getContext('2d');
+                
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                
+                // Draw background (black) for any potential gaps (though clamping should prevent them)
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, targetW, targetH);
+                
+                ctx.drawImage(img, finalX, finalY, img.width * finalScale, img.height * finalScale);
+                
+                canvas.toBlob((blob) => {
+                    resolve({ 
+                        name: `resized_${file.name.replace(/\.[^/.]+$/, "")}.${format === 'image/png' ? 'png' : 'jpg'}`, 
+                        blob, 
+                        originalSize: file.size 
+                    });
+                }, format, format === 'image/jpeg' ? 0.95 : undefined);
             });
         }
 
