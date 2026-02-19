@@ -1148,19 +1148,19 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div>
                             <label style="font-weight: 700; display: block; margin-bottom: 0.5rem;">Target Width (px)</label>
-                            <input type="number" id="resize-w" value="1080" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border-base); background: var(--bg-base); color: inherit;">
+                            <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border-base); background: var(--bg-base); color: inherit;">
                         </div>
                         <div>
                             <label style="font-weight: 700; display: block; margin-bottom: 0.5rem;">Target Height (px)</label>
-                            <input type="number" id="resize-h" value="1080" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border-base); background: var(--bg-base); color: inherit;">
+                            <input type="number" id="targetHeight" value="1080" style="width: 100%; padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border-base); background: var(--bg-base); color: inherit;">
                         </div>
                     </div>
                     <div>
                         <label style="font-weight: 700; display: block; margin-bottom: 1rem;">Presets & Aspect Ratio</label>
                         <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-                            <button class="preset-btn" onclick="document.getElementById('resize-w').value=1280; document.getElementById('resize-h').value=720">HD (16:9)</button>
-                            <button class="preset-btn" onclick="document.getElementById('resize-w').value=1080; document.getElementById('resize-h').value=1080">Square (1:1)</button>
-                            <button class="preset-btn" onclick="document.getElementById('resize-w').value=1080; document.getElementById('resize-h').value=1920">Story (9:16)</button>
+                            <button class="preset-btn" onclick="window.applyResizePreset(1280, 720)">HD (16:9)</button>
+                            <button class="preset-btn" onclick="window.applyResizePreset(1080, 1080)">Square (1:1)</button>
+                            <button class="preset-btn" onclick="window.applyResizePreset(1080, 1920)">Story (9:16)</button>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 1.5rem;">
@@ -1404,6 +1404,18 @@
             baseScale: 1
         };
 
+        window.applyResizePreset = (w, h) => {
+            const widthInput = document.getElementById('targetWidth');
+            const heightInput = document.getElementById('targetHeight');
+            if (widthInput && heightInput) {
+                widthInput.value = w;
+                heightInput.value = h;
+                resizeState.targetW = w;
+                resizeState.targetH = h;
+                updateResizePreview();
+            }
+        };
+
         function updateResizePreview() {
             if (!resizeState.img) return;
             const { canvas, ctx, img, zoom, targetW, targetH } = resizeState;
@@ -1459,8 +1471,8 @@
             img.onload = () => {
                 resizeState.img = img;
                 resizeState.zoom = 1;
-                resizeState.targetW = parseInt(document.getElementById('resize-w').value) || 1080;
-                resizeState.targetH = parseInt(document.getElementById('resize-h').value) || 1080;
+                resizeState.targetW = parseInt(document.getElementById('targetWidth').value) || 1080;
+                resizeState.targetH = parseInt(document.getElementById('targetHeight').value) || 1080;
                 
                 // Initial centered position
                 const workspace = document.getElementById('resize-workspace');
@@ -1575,12 +1587,15 @@
         });
 
         // Watch for width/height input changes to update aspect ratio
-        ['resize-w', 'resize-h'].forEach(id => {
-            document.getElementById(id).addEventListener('input', () => {
-                resizeState.targetW = parseInt(document.getElementById('resize-w').value) || 1080;
-                resizeState.targetH = parseInt(document.getElementById('resize-h').value) || 1080;
-                updateResizePreview();
-            });
+        ['targetWidth', 'targetHeight'].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.addEventListener('input', () => {
+                    resizeState.targetW = parseInt(document.getElementById('targetWidth').value) || 1080;
+                    resizeState.targetH = parseInt(document.getElementById('targetHeight').value) || 1080;
+                    updateResizePreview();
+                });
+            }
         });
 
         window.addEventListener('resize', () => {
