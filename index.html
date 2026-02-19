@@ -1560,6 +1560,16 @@
             return allOk;
         }
 
+        function keepEnglishOnly(text) {
+            if (!text) return "";
+            return text
+                .replace(/[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7A3\uD7B0-\uD7FF]/g, "")
+                .replace(/[^\x09\x0A\x0D\x20-\x7E]/g, "") // remove non-ASCII noise
+                .replace(/[ \t]+/g, " ")
+                .replace(/\n{3,}/g, "\n\n")
+                .trim();
+        }
+
         async function initOcrEngineOnce() {
             if (ocrWorker) return ocrWorker;
             const output = document.getElementById('ocrResult');
@@ -1601,8 +1611,8 @@
                     }
                 };
 
-                // Create worker with explicit languages
-                const worker = await Tesseract.createWorker(['eng', 'kor'], 1, workerOptions);
+                // Create worker with explicit language (English Only)
+                const worker = await Tesseract.createWorker(['eng'], 1, workerOptions);
                 
                 // 60s Timeout for initialization (Tesseract.createWorker is async)
                 const timeoutPromise = new Promise((_, reject) => 
@@ -1640,7 +1650,7 @@
                 const worker = await initOcrEngineOnce();
                 
                 const { data: { text } } = await worker.recognize(canvas);
-                output.value = text || 'No text found.';
+                output.value = keepEnglishOnly(text) || 'No text found.';
             } catch (error) {
                 console.error('OCR Error:', error);
                 output.value = `OCR Error: ${error.message}. Please check diagnostics below.`;
