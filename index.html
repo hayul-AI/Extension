@@ -716,7 +716,7 @@
 
         <section class="hero">
             <h1>Free Online Image Converter</h1>
-            <p>Convert, compress, and extract text from images instantly. No uploads, no registration — everything runs in your browser.</p>
+            <p>Images are converted instantly, and no files are ever saved or logged. No sign-up is required. All processing happens directly in your browser.</p>
         </section>
 
         <div class="tabs-container">
@@ -1019,215 +1019,6 @@
                 </div>
             </div>
 
-            <!-- Filter Tab -->
-            <div id="filter" class="tab-content">
-                <h2>Image Filter Editor</h2>
-                <div id="filter-upload-stage">
-                    <div class="drop-zone">
-                        <p style="font-weight: 800; font-size: 1.25rem;">Drop image to filter</p>
-                        <label class="btn-primary">Select Image</label>
-                        <input type="file" class="file-input" accept="image/*" style="display: none;">
-                    </div>
-                </div>
-
-                <div id="filter-editor-stage" style="display: none;">
-                    <div class="filter-editor-container">
-                        <div class="filter-main-layout">
-                            <div class="filter-preview-area">
-                                <div id="filter-canvas-container">
-                                    <canvas id="filter-canvas"></canvas>
-                                </div>
-                            </div>
-                            
-                            <div class="filter-controls-area">
-                                <div class="edit-controls-row" style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-base);">
-                                    <label style="font-weight: 700; display: block; margin-bottom: 1rem;">Canvas & Transform</label>
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                                        <div class="control-group">
-                                            <label style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.4rem; display: block;">Aspect Ratio</label>
-                                            <select id="f-ratio" class="lang-select" style="width: 100%;">
-                                                <option value="original">Original</option>
-                                                <option value="1:1">Square (1:1)</option>
-                                                <option value="16:9">Widescreen (16:9)</option>
-                                                <option value="9:16">Story (9:16)</option>
-                                            </select>
-                                        </div>
-                                        <div class="control-group">
-                                            <label style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.4rem; display: block;">Rotation</label>
-                                            <div style="display: flex; gap: 0.4rem;">
-                                                <button class="preset-btn" id="f-rot-left" style="padding: 0.5rem; flex: 1;">-90°</button>
-                                                <button class="preset-btn" id="f-rot-right" style="padding: 0.5rem; flex: 1;">+90°</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="slider-group">
-                                        <div class="slider-header"><label>Zoom</label><span id="val-zoom">100%</span></div>
-                                        <input type="range" id="f-zoom" min="10" max="300" value="100">
-                                    </div>
-                                    <div class="slider-group" style="margin-bottom: 0;">
-                                        <div class="slider-header"><label>Rotate</label><span id="val-rotation">0°</span></div>
-                                        <input type="range" id="f-rotation" min="-180" max="180" value="0">
-                                    </div>
-                                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                                        <button class="preset-btn" id="f-fit" style="font-size: 0.7rem; flex: 1;">Fit to Screen</button>
-                                        <button class="preset-btn" id="f-center" style="font-size: 0.7rem; flex: 1;">Center Image</button>
-                                    </div>
-                                </div>
-
-                                <div class="filter-presets">
-                                    <label style="font-weight: 700; display: block; margin-bottom: 1rem;">Presets</label>
-                                    <div class="presets-grid">
-                                        <button class="preset-btn active" data-preset="none">None</button>
-                                        <button class="preset-btn" data-preset="clean">Clean</button>
-                                        <button class="preset-btn" data-preset="warm">Warm</button>
-                                        <button class="preset-btn" data-preset="cool">Cool</button>
-                                        <button class="preset-btn" data-preset="vintage">Vintage</button>
-                                        <button class="preset-btn" data-preset="film">Film</button>
-                                        <button class="preset-btn" data-preset="punchy">Punchy</button>
-                                        <button class="preset-btn" data-preset="glow">Glow</button>
-                                        <button class="preset-btn" data-preset="bw">B&W</button>
-                                        <button class="preset-btn" data-preset="sepia">Sepia</button>
-                                        <button class="preset-btn" data-preset="dramatic">Dramatic</button>
-                                        <button class="preset-btn" data-preset="moody">Moody</button>
-                                    </div>
-                                </div>
-
-                                <div class="filter-sliders" style="margin-top: 2rem;">
-                                    <div class="slider-group">
-                                        <div class="slider-header"><label>Brightness</label><span id="val-brightness">100%</span></div>
-                                        <input type="range" id="f-brightness" min="0" max="200" value="100">
-                                    </div>
-                                    <div class="slider-group">
-                                        <div class="slider-header"><label>Contrast</label><span id="val-contrast">100%</span></div>
-                                        <input type="range" id="f-contrast" min="0" max="200" value="100">
-                                    </div>
-                                    <div class="slider-group">
-                                        <div class="slider-header"><label>Saturation</label><span id="val-saturation">100%</span></div>
-                                        <input type="range" id="f-saturation" min="0" max="200" value="100">
-                                    </div>
-                                    <div class="slider-group">
-                                        <div class="slider-header"><label>Blur</label><span id="val-blur">0px</span></div>
-                                        <input type="range" id="f-blur" min="0" max="20" value="0">
-                                    </div>
-                                    <div class="slider-group">
-                                        <div class="slider-header"><label>Vignette</label><span id="val-vignette">0%</span></div>
-                                        <input type="range" id="f-vignette" min="0" max="100" value="0">
-                                    </div>
-                                    <div class="slider-group">
-                                        <div class="slider-header"><label>Grain</label><span id="val-grain">0%</span></div>
-                                        <input type="range" id="f-grain" min="0" max="100" value="0">
-                                    </div>
-                                </div>
-
-                                <div class="filter-actions" style="margin-top: 2rem; display: flex; gap: 1rem;">
-                                    <button class="btn-success" id="filter-download-btn" style="flex: 2; padding: 1rem; border-radius: 12px; font-weight: 800;">Download PNG</button>
-                                    <button class="btn-primary" id="filter-reset-btn" style="flex: 1; background: var(--text-sub); box-shadow: none;">Reset</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tool-info">
-                    <h3>Free Professional Image Filter Editor</h3>
-                    <p>Enhance your photos instantly with our high-performance image filter tool. Apply professional presets or fine-tune individual settings like brightness, contrast, and saturation. Everything is processed locally in your browser for maximum privacy and speed.</p>
-                    <ul class="tool-steps">
-                        <li>Upload any image file (up to 10MB).</li>
-                        <li>Choose a preset or adjust the sliders for a custom look.</li>
-                        <li>Download your high-quality filtered image instantly.</li>
-                    </ul>
-                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
-                </div>
-            </div>
-
-            <!-- PDF Tab -->
-            <div id="jpg-to-pdf" class="tab-content">
-                <h2>Merge to PDF</h2>
-                <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem;">Drop images to merge</p>
-                    <label class="btn-primary">Select Files</label>
-                    <input type="file" class="file-input" multiple accept=".jpg, .jpeg" style="display: none;">
-                </div>
-                <button class="btn-success convert-button" disabled>Create Document</button>
-                <div class="progress-wrapper"><div class="progress-fill"></div></div>
-                <div class="results-grid results"></div>
-
-
-                <div class="tool-info">
-                    <h3>Professional Images to PDF Converter</h3>
-                    <p>Combine multiple JPG images into a single, high-quality PDF document. This is ideal for creating digital portfolios, submitting assignments, or organizing scanned receipts into a single file.</p>
-                    <p>Our PDF generator ensures that image quality is maintained while keeping the document size manageable for sharing and archiving.</p>
-                    <ul class="tool-steps">
-                        <li>Upload all the images you want to merge into a single PDF.</li>
-                        <li>The tool automatically scales them to a standard A4 page layout.</li>
-                        <li>Download the merged PDF document instantly.</li>
-                    </ul>
-                    <div class="faq-block">
-                        <div class="faq-item-small">
-                            <strong>Can I reorder images?</strong>
-                            <span>Currently, images are added in the order you select them. For specific ordering, upload them in groups.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>Is there a page limit?</strong>
-                            <span>The tool can handle dozens of pages, limited only by your browser's available memory.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>Are the PDFs searchable?</strong>
-                            <span>The resulting PDF contains images. To make it searchable, you would need to run it through an OCR process.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>Can I merge PNG files too?</strong>
-                            <span>Currently, this tool is optimized for JPG and JPEG files.</span>
-                        </div>
-                    </div>
-                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
-                </div>
-            </div>
-
-            <!-- Favicon Tab -->
-            <div id="favicon" class="tab-content">
-                 <h2>Favicon Generator</h2>
-                <div class="drop-zone">
-                    <p style="font-weight: 800; font-size: 1.25rem;">Drop your logo</p>
-                    <label class="btn-primary">Select Image</label>
-                    <input type="file" class="file-input" accept=".png, .jpg, .jpeg" style="display: none;">
-                </div>
-                <button class="btn-success convert-button" disabled>Generate Pack</button>
-                <div class="progress-wrapper"><div class="progress-fill"></div></div>
-                <div class="results-grid results"></div>
-
-
-                <div class="tool-info">
-                    <h3>Free Favicon Generator</h3>
-                    <p>Convert your brand logo into a complete set of favicons for your website. A favicon is the small icon that appears in browser tabs and bookmarks, essential for a professional web presence.</p>
-                    <p>Our generator creates standard sizes (16x16, 32x32, etc.) and bundles them into a convenient ZIP pack for easy deployment.</p>
-                    <ul class="tool-steps">
-                        <li>Upload a square logo image (PNG or JPG).</li>
-                        <li>Wait for the tool to generate the multiple required sizes.</li>
-                        <li>Download the ZIP pack containing all your new favicons.</li>
-                    </ul>
-                    <div class="faq-block">
-                        <div class="faq-item-small">
-                            <strong>What is the best starting resolution?</strong>
-                            <span>We recommend using a 512x512 PNG image for the best results across all sizes.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>Which formats are in the ZIP pack?</strong>
-                            <span>The pack contains standard .png files in 16x16, 32x32, 48x48, and 64x64 resolutions.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>Do I need to pay for the ZIP pack?</strong>
-                            <span>No, like all PixelConvert tools, the favicon generator is completely free.</span>
-                        </div>
-                        <div class="faq-item-small">
-                            <strong>Is a square image required?</strong>
-                            <span>Yes, favicons are always square. Non-square images will be scaled to fit.</span>
-                        </div>
-                    </div>
-                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
-                </div>
-            </div>
-
             <!-- Resize & Crop Tab -->
             <div id="resize-crop" class="tab-content">
                 <h2>Resize & Center Crop</h2>
@@ -1304,6 +1095,29 @@
                     <div style="grid-column: span 2; display: flex; gap: 0.75rem;">
                         <button class="btn-primary" id="mosaic-undo" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; background: var(--text-sub); box-shadow: none;">Undo</button>
                         <button class="btn-primary" id="mosaic-clear" style="flex: 1; padding: 0.6rem; font-size: 0.8rem; background: var(--brand-accent); box-shadow: none;">Clear Mosaic</button>
+                    </div>
+                </div>
+
+                <!-- Image Filters Integration -->
+                <div class="options" id="resize-filter-options" style="display: none; margin-top: 2rem; padding: 1.5rem; background: rgba(0,0,0,0.02); border-radius: 20px; border: 1px solid var(--border-base);">
+                    <label style="font-weight: 800; font-size: 0.8rem; text-transform: uppercase; opacity: 0.6; display: block; margin-bottom: 1.5rem;">Visual Filters</label>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                        <div class="slider-group">
+                            <div class="slider-header"><label>Brightness</label><span id="val-r-brightness">100%</span></div>
+                            <input type="range" id="r-brightness" min="0" max="200" value="100" style="width: 100%; accent-color: var(--brand-primary);">
+                        </div>
+                        <div class="slider-group">
+                            <div class="slider-header"><label>Contrast</label><span id="val-r-contrast">100%</span></div>
+                            <input type="range" id="r-contrast" min="0" max="200" value="100" style="width: 100%; accent-color: var(--brand-primary);">
+                        </div>
+                        <div class="slider-group">
+                            <div class="slider-header"><label>Saturation</label><span id="val-r-saturation">100%</span></div>
+                            <input type="range" id="r-saturation" min="0" max="200" value="100" style="width: 100%; accent-color: var(--brand-primary);">
+                        </div>
+                        <div class="slider-group">
+                            <div class="slider-header"><label>Blur</label><span id="val-r-blur">0px</span></div>
+                            <input type="range" id="r-blur" min="0" max="20" value="0" style="width: 100%; accent-color: var(--brand-primary);">
+                        </div>
                     </div>
                 </div>
 
@@ -1642,7 +1456,22 @@
             
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
+
+            // Apply Integrated Filters
+            const b = document.getElementById('r-brightness').value;
+            const c = document.getElementById('r-contrast').value;
+            const sa = document.getElementById('r-saturation').value;
+            const bl = document.getElementById('r-blur').value;
+            
+            document.getElementById('val-r-brightness').textContent = b + '%';
+            document.getElementById('val-r-contrast').textContent = c + '%';
+            document.getElementById('val-r-saturation').textContent = sa + '%';
+            document.getElementById('val-r-blur').textContent = bl + 'px';
+
+            ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${sa}%) blur(${bl}px)`;
+            
             ctx.drawImage(img, resizeState.x, resizeState.y, img.width * s, img.height * s);
+            ctx.filter = 'none';
             
             // Indicators
             ctx.strokeStyle = 'rgba(255,255,255,0.3)';
@@ -1654,6 +1483,7 @@
             const container = document.getElementById('resize-preview-container');
             const dropZone = document.getElementById('resize-drop-zone');
             const slider = document.getElementById('resize-zoom-slider');
+            const filterOptions = document.getElementById('resize-filter-options');
             const img = new Image();
             img.onload = () => {
                 resizeState.img = img;
@@ -1663,6 +1493,7 @@
                 
                 dropZone.style.display = 'none';
                 container.style.display = 'flex';
+                filterOptions.style.display = 'block';
                 slider.value = 1;
                 
                 // First pass to set display dimensions
@@ -1758,17 +1589,28 @@
             updateResizePreview();
         });
 
+        // Resize Filter Listeners
+        ['r-brightness', 'r-contrast', 'r-saturation', 'r-blur'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updateResizePreview);
+        });
+
         resizeResetBtn.addEventListener('click', () => {
             resizeState.zoom = 1;
             const s = resizeState.baseScale;
             resizeState.x = (resizeState.displayW - resizeState.img.width * s) / 2;
             resizeState.y = (resizeState.displayH - resizeState.img.height * s) / 2;
             resizeSlider.value = 1;
+            // Reset filters too
+            document.getElementById('r-brightness').value = 100;
+            document.getElementById('r-contrast').value = 100;
+            document.getElementById('r-saturation').value = 100;
+            document.getElementById('r-blur').value = 0;
             updateResizePreview();
         });
 
         resizeChangeImgBtn.addEventListener('click', () => {
             document.getElementById('resize-preview-container').style.display = 'none';
+            document.getElementById('resize-filter-options').style.display = 'none';
             document.getElementById('resize-drop-zone').style.display = 'flex';
             resizeState.img = null;
             fileStore.delete('resize-crop');
@@ -1801,198 +1643,8 @@
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
 
-        // --- Image Filter Editor Logic ---
-        let filterImg = null;
-        let activePreset = 'none';
-        let isRendering = false;
-        
-        const filterCanvas = document.getElementById('filter-canvas');
-        const filterCtx = filterCanvas ? filterCanvas.getContext('2d') : null;
-        const filterContainer = document.getElementById('filter-canvas-container');
-
-        const transformState = {
-            zoom: 1,
-            rotation: 0,
-            panX: 0,
-            panY: 0,
-            ratio: 'original',
-            isDragging: false,
-            lastX: 0,
-            lastY: 0,
-            pinchDist: 0
-        };
-
-        function scheduleRender() {
-            if (isRendering) return;
-            isRendering = true;
-            requestAnimationFrame(() => {
-                renderFilterCanvas();
-                isRendering = false;
-            });
-        }
-
-        function renderFilterCanvas() {
-            if (!filterImg || !filterCtx) return;
-
-            const b = document.getElementById('f-brightness').value;
-            const c = document.getElementById('f-contrast').value;
-            const s = document.getElementById('f-saturation').value;
-            const bl = document.getElementById('f-blur').value;
-            const v = document.getElementById('f-vignette').value;
-            const g = document.getElementById('f-grain').value;
-            const zoom = document.getElementById('f-zoom').value / 100;
-            const rot = document.getElementById('f-rotation').value;
-
-            document.getElementById('val-brightness').textContent = b + '%';
-            document.getElementById('val-contrast').textContent = c + '%';
-            document.getElementById('val-saturation').textContent = s + '%';
-            document.getElementById('val-blur').textContent = bl + 'px';
-            document.getElementById('val-vignette').textContent = v + '%';
-            document.getElementById('val-grain').textContent = g + '%';
-            document.getElementById('val-zoom').textContent = Math.round(zoom * 100) + '%';
-            document.getElementById('val-rotation').textContent = rot + '°';
-
-            // Set canvas resolution based on aspect ratio
-            const containerW = filterContainer.clientWidth;
-            const containerH = filterContainer.clientHeight;
-            filterCanvas.width = containerW * 2; // Supersampling
-            filterCanvas.height = containerH * 2;
-            filterCanvas.style.width = containerW + 'px';
-            filterCanvas.style.height = containerH + 'px';
-
-            filterCtx.clearRect(0, 0, filterCanvas.width, filterCanvas.height);
-            
-            // Build Transformation Matrix
-            filterCtx.save();
-            filterCtx.translate(filterCanvas.width / 2 + transformState.panX * 2, filterCanvas.height / 2 + transformState.panY * 2);
-            filterCtx.rotate((rot * Math.PI) / 180);
-            filterCtx.scale(zoom, zoom);
-            
-            // Apply Image Filters
-            let filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%) blur(${bl}px)`;
-            const presetData = filterPresets[activePreset];
-            if (presetData && presetData.tint) filterString += ` ${presetData.tint}`;
-            filterCtx.filter = filterString;
-
-            // Draw centered
-            const drawW = filterImg.width;
-            const drawH = filterImg.height;
-            filterCtx.drawImage(filterImg, -drawW / 2, -drawH / 2, drawW, drawH);
-            filterCtx.restore();
-
-            // Overlays (Vignette & Grain)
-            if (v > 0) {
-                const grad = filterCtx.createRadialGradient(filterCanvas.width/2, filterCanvas.height/2, 0, filterCanvas.width/2, filterCanvas.height/2, Math.max(filterCanvas.width, filterCanvas.height)/1.4);
-                grad.addColorStop(0, 'rgba(0,0,0,0)');
-                grad.addColorStop(1, `rgba(0,0,0,${v/120})`);
-                filterCtx.fillStyle = grad;
-                filterCtx.fillRect(0, 0, filterCanvas.width, filterCanvas.height);
-            }
-            if (g > 0) {
-                filterCtx.globalCompositeOperation = 'overlay';
-                filterCtx.globalAlpha = g / 150;
-                const grainCanvas = document.createElement('canvas');
-                grainCanvas.width = 128; grainCanvas.height = 128;
-                const gCtx = grainCanvas.getContext('2d');
-                const gData = gCtx.createImageData(128, 128);
-                for(let i=0; i<gData.data.length; i+=4) {
-                    const val = Math.random() * 255;
-                    gData.data[i] = gData.data[i+1] = gData.data[i+2] = val;
-                    gData.data[i+3] = 255;
-                }
-                gCtx.putImageData(gData, 0, 0);
-                filterCtx.fillStyle = filterCtx.createPattern(grainCanvas, 'repeat');
-                filterCtx.fillRect(0, 0, filterCanvas.width, filterCanvas.height);
-                filterCtx.globalCompositeOperation = 'source-over';
-                filterCtx.globalAlpha = 1.0;
-            }
-        }
-
-        // Pointer Events for Pan & Zoom
-        if (filterContainer) {
-            filterContainer.addEventListener('pointerdown', e => {
-                transformState.isDragging = true;
-                transformState.lastX = e.clientX;
-                transformState.lastY = e.clientY;
-                filterContainer.setPointerCapture(e.pointerId);
-            });
-
-            filterContainer.addEventListener('pointermove', e => {
-                if (!transformState.isDragging) return;
-                const dx = e.clientX - transformState.lastX;
-                const dy = e.clientY - transformState.lastY;
-                transformState.panX += dx;
-                transformState.panY += dy;
-                transformState.lastX = e.clientX;
-                transformState.lastY = e.clientY;
-                scheduleRender();
-            });
-
-            filterContainer.addEventListener('pointerup', () => transformState.isDragging = false);
-
-            filterContainer.addEventListener('wheel', e => {
-                e.preventDefault();
-                const delta = e.deltaY > 0 ? 0.9 : 1.1;
-                const slider = document.getElementById('f-zoom');
-                slider.value = Math.max(10, Math.min(300, slider.value * delta));
-                scheduleRender();
-            }, { passive: false });
-        }
-
-        const filterPresets = {
-            none: { b: 100, c: 100, s: 100, bl: 0, v: 0, g: 0 },
-            clean: { b: 110, c: 115, s: 105, bl: 0, v: 0, g: 0 },
-            warm: { b: 100, c: 100, s: 120, bl: 0, v: 0, g: 0, tint: 'sepia(0.25) hue-rotate(-10deg)' },
-            cool: { b: 100, c: 105, s: 115, bl: 0, v: 0, g: 0, tint: 'hue-rotate(10deg) saturate(1.2)' },
-            vintage: { b: 95, c: 90, s: 80, bl: 0, v: 25, g: 15, tint: 'sepia(0.5)' },
-            film: { b: 105, c: 110, s: 85, bl: 0, v: 20, g: 25, tint: 'contrast(1.1) brightness(0.95)' },
-            punchy: { b: 100, c: 140, s: 140, bl: 0, v: 10, g: 0 },
-            glow: { b: 125, c: 95, s: 110, bl: 0.8, v: 0, g: 0 },
-            bw: { b: 100, c: 120, s: 0, bl: 0, v: 15, g: 5 },
-            sepia: { b: 100, c: 100, s: 100, bl: 0, v: 20, g: 0, tint: 'sepia(1)' },
-            dramatic: { b: 90, c: 160, s: 40, bl: 0, v: 35, g: 0 },
-            moody: { b: 75, c: 145, s: 70, bl: 0, v: 45, g: 15 }
-        };
-
-        function initFilterPreview(file) {
-            if (file.size > 10 * 1024 * 1024) {
-                alert("File too large. Maximum size is 10MB.");
-                return;
-            }
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = new Image();
-                img.onload = () => {
-                    filterImg = img;
-                    document.getElementById('filter-upload-stage').style.display = 'none';
-                    document.getElementById('filter-editor-stage').style.display = 'block';
-                    resetFilters();
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function resetFilters() {
-            activePreset = 'none';
-            document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === 'none'));
-            ['f-brightness','f-contrast','f-saturation'].forEach(id => document.getElementById(id).value = 100);
-            ['f-blur','f-vignette','f-grain','f-rotation'].forEach(id => document.getElementById(id).value = 0);
-            
-            if (filterImg && filterContainer) {
-                const containerW = filterContainer.clientWidth || 800;
-                const containerH = filterContainer.clientHeight || 600;
-                const scale = Math.min(containerW / filterImg.width, containerH / filterImg.height);
-                document.getElementById('f-zoom').value = Math.round(scale * 100);
-            } else {
-                document.getElementById('f-zoom').value = 100;
-            }
-            
-            transformState.panX = 0; transformState.panY = 0;
-            scheduleRender();
-        }
-
-        // --- End Filter Logic ---
+        // --- Image Filter Editor Logic (Legacy Cleanup) ---
+        // (Removing unused standalone filter logic as it's now integrated)
 
         tabButtons.forEach(button => {
             button.addEventListener('click', async () => {
