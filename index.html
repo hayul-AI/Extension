@@ -1978,7 +1978,16 @@
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === 'none'));
             ['f-brightness','f-contrast','f-saturation'].forEach(id => document.getElementById(id).value = 100);
             ['f-blur','f-vignette','f-grain','f-rotation'].forEach(id => document.getElementById(id).value = 0);
-            document.getElementById('f-zoom').value = 100;
+            
+            if (filterImg && filterContainer) {
+                const containerW = filterContainer.clientWidth || 800;
+                const containerH = filterContainer.clientHeight || 600;
+                const scale = Math.min(containerW / filterImg.width, containerH / filterImg.height);
+                document.getElementById('f-zoom').value = Math.round(scale * 100);
+            } else {
+                document.getElementById('f-zoom').value = 100;
+            }
+            
             transformState.panX = 0; transformState.panY = 0;
             scheduleRender();
         }
@@ -2080,15 +2089,53 @@
                         document.getElementById('f-blur').value = p.bl;
                         document.getElementById('f-vignette').value = p.v;
                         document.getElementById('f-grain').value = p.g;
-                        applyFilters();
+                        scheduleRender();
                     }
                 });
             }
         });
 
-        ['f-brightness', 'f-contrast', 'f-saturation', 'f-blur', 'f-vignette', 'f-grain'].forEach(id => {
+        ['f-brightness', 'f-contrast', 'f-saturation', 'f-blur', 'f-vignette', 'f-grain', 'f-zoom', 'f-rotation'].forEach(id => {
             const el = document.getElementById(id);
-            if (el) el.addEventListener('input', applyFilters);
+            if (el) el.addEventListener('input', scheduleRender);
+        });
+
+        const fRatio = document.getElementById('f-ratio');
+        if (fRatio) {
+            fRatio.addEventListener('change', () => {
+                const val = fRatio.value;
+                filterContainer.className = val === 'original' ? '' : `ratio-${val.replace(':', '-')}`;
+                scheduleRender();
+            });
+        }
+
+        document.getElementById('f-rot-left')?.addEventListener('click', () => {
+            const el = document.getElementById('f-rotation');
+            el.value = (parseInt(el.value) - 90);
+            if (el.value < -180) el.value = parseInt(el.value) + 360;
+            scheduleRender();
+        });
+
+        document.getElementById('f-rot-right')?.addEventListener('click', () => {
+            const el = document.getElementById('f-rotation');
+            el.value = (parseInt(el.value) + 90);
+            if (el.value > 180) el.value = parseInt(el.value) - 360;
+            scheduleRender();
+        });
+
+        document.getElementById('f-fit')?.addEventListener('click', () => {
+            if (!filterImg) return;
+            const containerW = filterContainer.clientWidth;
+            const containerH = filterContainer.clientHeight;
+            const scale = Math.min(containerW / filterImg.width, containerH / filterImg.height);
+            document.getElementById('f-zoom').value = Math.round(scale * 100);
+            transformState.panX = 0; transformState.panY = 0;
+            scheduleRender();
+        });
+
+        document.getElementById('f-center')?.addEventListener('click', () => {
+            transformState.panX = 0; transformState.panY = 0;
+            scheduleRender();
         });
 
         const frBtn = document.getElementById('filter-reset-btn');
