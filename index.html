@@ -661,6 +661,30 @@
         .slider-header { display: flex; justify-content: space-between; margin-bottom: 0.6rem; font-size: 0.85rem; font-weight: 700; }
         .slider-header span { color: var(--brand-primary); font-variant-numeric: tabular-nums; }
         .filter-sliders input[type="range"] { width: 100%; cursor: pointer; accent-color: var(--brand-primary); }
+
+        /* Filter Editor Enhanced Styles */
+        #filter-canvas-container {
+            width: 100%;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: grab;
+            touch-action: none;
+            transition: aspect-ratio 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #filter-canvas-container.ratio-1-1 { aspect-ratio: 1 / 1; }
+        #filter-canvas-container.ratio-16-9 { aspect-ratio: 16 / 9; }
+        #filter-canvas-container.ratio-9-16 { aspect-ratio: 9 / 16; }
+        #filter-canvas-container:active { cursor: grabbing; }
+        #filter-canvas {
+            max-width: none !important;
+            max-height: none !important;
+            display: block;
+        }
     </style>
     <meta name="naver-site-verification" content="4415f96d8f89974e087dbb0e6da3b5a29f5c2d45" />
 </head>
@@ -726,33 +750,62 @@
                 
 
                 <div class="tool-info">
-                    <h3>Professional HEIC to JPG Converter</h3>
-                    <p>Easily convert Apple's high-efficiency image format (HEIC) to universally compatible JPG files. Our converter preserves image metadata and quality while ensuring your photos can be opened on any device.</p>
-                    <p>This tool is ideal for iPhone users who need to share photos with Windows, Android, or web platforms that don't yet support the HEIF standard.</p>
-                    <ul class="tool-steps">
-                        <li>Select or drag and drop your .heic or .heif files.</li>
-                        <li>Click "Process Images" to start the local conversion.</li>
-                        <li>Download your high-quality JPG files instantly.</li>
-                    </ul>
-                    <div class="faq-block">
+                    <h3>PixelConvert Image Transformation Suite</h3>
+                    <p>PixelConvert provides a comprehensive set of browser-based utilities for common image processing tasks. All operations occur locally on your device, ensuring that your files remain private and are never uploaded to an external server.</p>
+                    
+                    <div style="margin-top: 2rem;">
+                        <ul class="tool-steps">
+                            <li style="margin-bottom: 0.75rem;"><strong>HEIC to JPG:</strong> Convert iPhone HEIC and HEIF photos into universally compatible JPG files.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>WEBP to JPG:</strong> Transform modern WEBP web images into standard JPG format.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>PNG to JPG:</strong> Convert PNG graphics into optimized JPGs to reduce file sizes.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>JPG to PNG:</strong> Change JPG photos into lossless PNG format with transparency support.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>Image Compression:</strong> Shrink file sizes while maintaining visible quality.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>Filter Editor:</strong> Apply visual presets and fine-tune image properties locally.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>Resize & Crop:</strong> Adjust pixel dimensions and aspect ratios for social media.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>EXIF Remover:</strong> Protect your privacy by stripping hidden GPS and metadata.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>Image to PDF:</strong> Merge multiple images into a single, organized PDF document.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>Color Palette:</strong> Extract hex codes and dominant colors from any image.</li>
+                            <li style="margin-bottom: 0.75rem;"><strong>Favicon Generator:</strong> Create a complete set of web icons from a single logo.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-top: 3rem; border-top: 1px solid var(--border-base); padding-top: 2rem;">
+                        <h3 style="font-size: 1.5rem;">How it works</h3>
+                        <ul class="tool-steps" style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 1rem; display: flex; gap: 1rem;">
+                                <span style="background: var(--brand-primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-size: 0.8rem;">1</span>
+                                <span>Select or drag and drop your image files into the tool section.</span>
+                            </li>
+                            <li style="margin-bottom: 1rem; display: flex; gap: 1rem;">
+                                <span style="background: var(--brand-primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-size: 0.8rem;">2</span>
+                                <span>Adjust specific settings like quality, dimensions, or filters.</span>
+                            </li>
+                            <li style="margin-bottom: 1rem; display: flex; gap: 1rem;">
+                                <span style="background: var(--brand-primary); color: white; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; font-size: 0.8rem;">3</span>
+                                <span>Download the processed results directly to your device instantly.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="faq-block" style="margin-top: 3rem;">
                         <div class="faq-item-small">
-                            <strong>Is this converter safe to use?</strong>
-                            <span>Yes. PixelConvert processes images entirely in your browser's memory. No data is sent to our servers.</span>
+                            <strong>Is my image uploaded to a server?</strong>
+                            <span>No. All processing occurs locally within your web browser. Your images are never transmitted to, stored on, or seen by any external server.</span>
                         </div>
                         <div class="faq-item-small">
-                            <strong>Can I convert multiple HEIC files at once?</strong>
-                            <span>Absolutely! Our batch converter can handle dozens of files simultaneously with pro-grade speed.</span>
+                            <strong>Will image quality change?</strong>
+                            <span>Quality depends on your settings. Lossless conversions maintain clarity, while compression tools balance file size and visual detail.</span>
                         </div>
                         <div class="faq-item-small">
-                            <strong>Do I lose image quality?</strong>
-                            <span>We use optimized algorithms to ensure minimal quality loss during the HEIC to JPG conversion process.</span>
+                            <strong>What files are supported?</strong>
+                            <span>We support most modern formats, including HEIC, HEIF, JPG, JPEG, PNG, and WEBP.</span>
                         </div>
                         <div class="faq-item-small">
-                            <strong>Does it support .HEIF files?</strong>
-                            <span>Yes, both .heic and .heif extensions are supported.</span>
+                            <strong>Can I process multiple images?</strong>
+                            <span>Yes, most tools support batch processing to handle multiple files efficiently in one session.</span>
                         </div>
                     </div>
-                    <div class="privacy-note">Files are processed locally in your browser. Nothing is uploaded.</div>
+                    <div class="privacy-note">PixelConvert prioritizes data security by performing all image processing tasks entirely on your local device.</div>
                 </div>
             </div>
 
@@ -987,6 +1040,40 @@
                             </div>
                             
                             <div class="filter-controls-area">
+                                <div class="edit-controls-row" style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-base);">
+                                    <label style="font-weight: 700; display: block; margin-bottom: 1rem;">Canvas & Transform</label>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                        <div class="control-group">
+                                            <label style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.4rem; display: block;">Aspect Ratio</label>
+                                            <select id="f-ratio" class="lang-select" style="width: 100%;">
+                                                <option value="original">Original</option>
+                                                <option value="1:1">Square (1:1)</option>
+                                                <option value="16:9">Widescreen (16:9)</option>
+                                                <option value="9:16">Story (9:16)</option>
+                                            </select>
+                                        </div>
+                                        <div class="control-group">
+                                            <label style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 0.4rem; display: block;">Rotation</label>
+                                            <div style="display: flex; gap: 0.4rem;">
+                                                <button class="preset-btn" id="f-rot-left" style="padding: 0.5rem; flex: 1;">-90°</button>
+                                                <button class="preset-btn" id="f-rot-right" style="padding: 0.5rem; flex: 1;">+90°</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slider-group">
+                                        <div class="slider-header"><label>Zoom</label><span id="val-zoom">100%</span></div>
+                                        <input type="range" id="f-zoom" min="10" max="300" value="100">
+                                    </div>
+                                    <div class="slider-group" style="margin-bottom: 0;">
+                                        <div class="slider-header"><label>Rotate</label><span id="val-rotation">0°</span></div>
+                                        <input type="range" id="f-rotation" min="-180" max="180" value="0">
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                                        <button class="preset-btn" id="f-fit" style="font-size: 0.7rem; flex: 1;">Fit to Screen</button>
+                                        <button class="preset-btn" id="f-center" style="font-size: 0.7rem; flex: 1;">Center Image</button>
+                                    </div>
+                                </div>
+
                                 <div class="filter-presets">
                                     <label style="font-weight: 700; display: block; margin-bottom: 1rem;">Presets</label>
                                     <div class="presets-grid">
@@ -1717,8 +1804,140 @@
         // --- Image Filter Editor Logic ---
         let filterImg = null;
         let activePreset = 'none';
+        let isRendering = false;
+        
         const filterCanvas = document.getElementById('filter-canvas');
         const filterCtx = filterCanvas ? filterCanvas.getContext('2d') : null;
+        const filterContainer = document.getElementById('filter-canvas-container');
+
+        const transformState = {
+            zoom: 1,
+            rotation: 0,
+            panX: 0,
+            panY: 0,
+            ratio: 'original',
+            isDragging: false,
+            lastX: 0,
+            lastY: 0,
+            pinchDist: 0
+        };
+
+        function scheduleRender() {
+            if (isRendering) return;
+            isRendering = true;
+            requestAnimationFrame(() => {
+                renderFilterCanvas();
+                isRendering = false;
+            });
+        }
+
+        function renderFilterCanvas() {
+            if (!filterImg || !filterCtx) return;
+
+            const b = document.getElementById('f-brightness').value;
+            const c = document.getElementById('f-contrast').value;
+            const s = document.getElementById('f-saturation').value;
+            const bl = document.getElementById('f-blur').value;
+            const v = document.getElementById('f-vignette').value;
+            const g = document.getElementById('f-grain').value;
+            const zoom = document.getElementById('f-zoom').value / 100;
+            const rot = document.getElementById('f-rotation').value;
+
+            document.getElementById('val-brightness').textContent = b + '%';
+            document.getElementById('val-contrast').textContent = c + '%';
+            document.getElementById('val-saturation').textContent = s + '%';
+            document.getElementById('val-blur').textContent = bl + 'px';
+            document.getElementById('val-vignette').textContent = v + '%';
+            document.getElementById('val-grain').textContent = g + '%';
+            document.getElementById('val-zoom').textContent = Math.round(zoom * 100) + '%';
+            document.getElementById('val-rotation').textContent = rot + '°';
+
+            // Set canvas resolution based on aspect ratio
+            const containerW = filterContainer.clientWidth;
+            const containerH = filterContainer.clientHeight;
+            filterCanvas.width = containerW * 2; // Supersampling
+            filterCanvas.height = containerH * 2;
+            filterCanvas.style.width = containerW + 'px';
+            filterCanvas.style.height = containerH + 'px';
+
+            filterCtx.clearRect(0, 0, filterCanvas.width, filterCanvas.height);
+            
+            // Build Transformation Matrix
+            filterCtx.save();
+            filterCtx.translate(filterCanvas.width / 2 + transformState.panX * 2, filterCanvas.height / 2 + transformState.panY * 2);
+            filterCtx.rotate((rot * Math.PI) / 180);
+            filterCtx.scale(zoom, zoom);
+            
+            // Apply Image Filters
+            let filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%) blur(${bl}px)`;
+            const presetData = filterPresets[activePreset];
+            if (presetData && presetData.tint) filterString += ` ${presetData.tint}`;
+            filterCtx.filter = filterString;
+
+            // Draw centered
+            const drawW = filterImg.width;
+            const drawH = filterImg.height;
+            filterCtx.drawImage(filterImg, -drawW / 2, -drawH / 2, drawW, drawH);
+            filterCtx.restore();
+
+            // Overlays (Vignette & Grain)
+            if (v > 0) {
+                const grad = filterCtx.createRadialGradient(filterCanvas.width/2, filterCanvas.height/2, 0, filterCanvas.width/2, filterCanvas.height/2, Math.max(filterCanvas.width, filterCanvas.height)/1.4);
+                grad.addColorStop(0, 'rgba(0,0,0,0)');
+                grad.addColorStop(1, `rgba(0,0,0,${v/120})`);
+                filterCtx.fillStyle = grad;
+                filterCtx.fillRect(0, 0, filterCanvas.width, filterCanvas.height);
+            }
+            if (g > 0) {
+                filterCtx.globalCompositeOperation = 'overlay';
+                filterCtx.globalAlpha = g / 150;
+                const grainCanvas = document.createElement('canvas');
+                grainCanvas.width = 128; grainCanvas.height = 128;
+                const gCtx = grainCanvas.getContext('2d');
+                const gData = gCtx.createImageData(128, 128);
+                for(let i=0; i<gData.data.length; i+=4) {
+                    const val = Math.random() * 255;
+                    gData.data[i] = gData.data[i+1] = gData.data[i+2] = val;
+                    gData.data[i+3] = 255;
+                }
+                gCtx.putImageData(gData, 0, 0);
+                filterCtx.fillStyle = filterCtx.createPattern(grainCanvas, 'repeat');
+                filterCtx.fillRect(0, 0, filterCanvas.width, filterCanvas.height);
+                filterCtx.globalCompositeOperation = 'source-over';
+                filterCtx.globalAlpha = 1.0;
+            }
+        }
+
+        // Pointer Events for Pan & Zoom
+        if (filterContainer) {
+            filterContainer.addEventListener('pointerdown', e => {
+                transformState.isDragging = true;
+                transformState.lastX = e.clientX;
+                transformState.lastY = e.clientY;
+                filterContainer.setPointerCapture(e.pointerId);
+            });
+
+            filterContainer.addEventListener('pointermove', e => {
+                if (!transformState.isDragging) return;
+                const dx = e.clientX - transformState.lastX;
+                const dy = e.clientY - transformState.lastY;
+                transformState.panX += dx;
+                transformState.panY += dy;
+                transformState.lastX = e.clientX;
+                transformState.lastY = e.clientY;
+                scheduleRender();
+            });
+
+            filterContainer.addEventListener('pointerup', () => transformState.isDragging = false);
+
+            filterContainer.addEventListener('wheel', e => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const slider = document.getElementById('f-zoom');
+                slider.value = Math.max(10, Math.min(300, slider.value * delta));
+                scheduleRender();
+            }, { passive: false });
+        }
 
         const filterPresets = {
             none: { b: 100, c: 100, s: 100, bl: 0, v: 0, g: 0 },
@@ -1754,76 +1973,14 @@
             reader.readAsDataURL(file);
         }
 
-        function applyFilters() {
-            if (!filterImg || !filterCtx) return;
-            const b = document.getElementById('f-brightness').value;
-            const c = document.getElementById('f-contrast').value;
-            const s = document.getElementById('f-saturation').value;
-            const bl = document.getElementById('f-blur').value;
-            const v = document.getElementById('f-vignette').value;
-            const g = document.getElementById('f-grain').value;
-
-            document.getElementById('val-brightness').textContent = b + '%';
-            document.getElementById('val-contrast').textContent = c + '%';
-            document.getElementById('val-saturation').textContent = s + '%';
-            document.getElementById('val-blur').textContent = bl + 'px';
-            document.getElementById('val-vignette').textContent = v + '%';
-            document.getElementById('val-grain').textContent = g + '%';
-
-            filterCanvas.width = filterImg.width;
-            filterCanvas.height = filterImg.height;
-
-            let filterString = `brightness(${b}%) contrast(${c}%) saturate(${s}%) blur(${bl}px)`;
-            const presetData = filterPresets[activePreset];
-            if (presetData && presetData.tint) filterString += ` ${presetData.tint}`;
-
-            filterCtx.clearRect(0, 0, filterCanvas.width, filterCanvas.height);
-            filterCtx.filter = filterString;
-            filterCtx.drawImage(filterImg, 0, 0);
-            
-            if (v > 0) {
-                filterCtx.filter = 'none';
-                const grad = filterCtx.createRadialGradient(
-                    filterCanvas.width/2, filterCanvas.height/2, 0,
-                    filterCanvas.width/2, filterCanvas.height/2, Math.max(filterCanvas.width, filterCanvas.height)/1.4
-                );
-                grad.addColorStop(0, 'rgba(0,0,0,0)');
-                grad.addColorStop(1, `rgba(0,0,0,${v/120})`);
-                filterCtx.fillStyle = grad;
-                filterCtx.fillRect(0, 0, filterCanvas.width, filterCanvas.height);
-            }
-
-            if (g > 0) {
-                filterCtx.filter = 'none';
-                filterCtx.globalCompositeOperation = 'overlay';
-                filterCtx.globalAlpha = g / 150;
-                const grainCanvas = document.createElement('canvas');
-                grainCanvas.width = 128; grainCanvas.height = 128;
-                const gCtx = grainCanvas.getContext('2d');
-                const gData = gCtx.createImageData(128, 128);
-                for(let i=0; i<gData.data.length; i+=4) {
-                    const val = Math.random() * 255;
-                    gData.data[i] = gData.data[i+1] = gData.data[i+2] = val;
-                    gData.data[i+3] = 255;
-                }
-                gCtx.putImageData(gData, 0, 0);
-                filterCtx.fillStyle = filterCtx.createPattern(grainCanvas, 'repeat');
-                filterCtx.fillRect(0, 0, filterCanvas.width, filterCanvas.height);
-                filterCtx.globalCompositeOperation = 'source-over';
-                filterCtx.globalAlpha = 1.0;
-            }
-        }
-
         function resetFilters() {
             activePreset = 'none';
             document.querySelectorAll('.preset-btn').forEach(b => b.classList.toggle('active', b.dataset.preset === 'none'));
-            document.getElementById('f-brightness').value = 100;
-            document.getElementById('f-contrast').value = 100;
-            document.getElementById('f-saturation').value = 100;
-            document.getElementById('f-blur').value = 0;
-            document.getElementById('f-vignette').value = 0;
-            document.getElementById('f-grain').value = 0;
-            applyFilters();
+            ['f-brightness','f-contrast','f-saturation'].forEach(id => document.getElementById(id).value = 100);
+            ['f-blur','f-vignette','f-grain','f-rotation'].forEach(id => document.getElementById(id).value = 0);
+            document.getElementById('f-zoom').value = 100;
+            transformState.panX = 0; transformState.panY = 0;
+            scheduleRender();
         }
 
         // --- End Filter Logic ---
