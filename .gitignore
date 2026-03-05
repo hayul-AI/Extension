@@ -5,3 +5,4 @@ dist
 converter-fd0f2-firebase-adminsdk-*.json
 firebase-debug.log
 .firebase/
+.vite/
