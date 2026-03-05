@@ -1,61 +1,37 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ToolShell from '../components/ToolShell';
-import FileDrop from '../components/FileDrop';
+import ColorPaletteGenerator from './ColorPaletteGenerator';
+import "../styles/palette-editor.css";
 
 export default function ColorPalette() {
-  const [colors, setColors] = useState([]);
-
-  const processImage = (selectedFile) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 50; 
-        canvas.height = 50;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, 50, 50);
-        
-        const data = ctx.getImageData(0, 0, 50, 50).data;
-        const colorCounts = {};
-        
-        for (let i = 0; i < data.length; i += 16) { 
-          const r = Math.round(data[i] / 32) * 32;
-          const g = Math.round(data[i+1] / 32) * 32;
-          const b = Math.round(data[i+2] / 32) * 32;
-          const rgb = `${r},${g},${b}`;
-          colorCounts[rgb] = (colorCounts[rgb] || 0) + 1;
-        }
-
-        const sortedColors = Object.entries(colorCounts)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 6)
-          .map(entry => {
-            const [r, g, b] = entry[0].split(',');
-            const toHex = c => {
-              const hex = Number(c).toString(16);
-              return hex.length === 1 ? '0' + hex : hex;
-            };
-            return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-          });
-          
-        setColors(sortedColors);
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(selectedFile);
-  };
-
   const seoData = {
-    what: "This tool extracts the most dominant and prominent colors from an uploaded image to create a usable color palette.",
-    how: "The tool loads your image onto an invisible HTML canvas, shrinks it to improve performance, and reads the raw pixel data. It groups similar pixels mathematically to find the most common color clusters natively in your browser.",
-    example: "You found a photograph with a beautiful sunset. You want to design a website based on those colors. Upload the image here to get the exact HEX codes for the main sunset colors.",
-    interpretation: "The result is a set of color swatches alongside their HEX codes, which you can easily copy and paste into Photoshop, CSS, or Figma.",
+    title: "Dominant Image Color Extractor",
+    intro: "Effortlessly extract the most prominent colors from any photograph or graphic to create a beautiful, professional color palette. This tool is a must-have for designers, developers, and artists seeking color inspiration directly from their own images.",
+    whyUse: [
+      "Instantly discover the primary HEX codes for your digital design projects.",
+      "Ensure consistent branding by extracting colors from existing logos or assets.",
+      "Get creative inspiration for website themes, digital art, or interior design.",
+      "Analyze the color mood and balance of any photograph or graphic work."
+    ],
+    howItWorks: "Our utility performs a fast mathematical analysis of your image's pixel data. It shrinks the image to a low-resolution map and then clusters similar pixel values using a fast quantization algorithm to identify the most common hues. This process is executed natively in your browser.",
+    bestResults: [
+      "Use photos with diverse but clear color subjects for more varied palettes.",
+      "The extractor works best on high-contrast images where dominant colors are distinct.",
+      "You can easily copy and paste the HEX codes provided below each swatch."
+    ],
     faqs: [
-      { q: "How accurate is the palette?", a: "It uses a fast quantization algorithm. While it may miss tiny accents, it successfully captures the overall mood and dominant hues." },
-      { q: "Are the images processed remotely?", a: "No. The pixel counting happens purely in your browser's local memory." },
-      { q: "Can I copy the HEX codes?", a: "Yes, the HEX codes are displayed below each color swatch for easy selection." }
-    ]
+      { q: "How many colors does the tool extract?", a: "This extractor identifies the top 6 most dominant color clusters in any given image." },
+      { q: "Can I extract colors from small icons?", a: "Yes, the tool works on images of any size, though small icons might result in a more limited palette." },
+      { q: "Is the palette identification accurate?", a: "The tool uses a high-performance grouping algorithm. While it might miss tiny color accents, it is exceptionally accurate at capturing the overall color story." },
+      { q: "Are my images sent to a server for analysis?", a: "No. The entire color counting and clustering logic runs locally on your device's CPU. Your privacy is 100% maintained." },
+      { q: "What format are the color codes in?", a: "We provide the industry-standard HEX codes (e.g., #FFFFFF), which are ready for use in CSS, Photoshop, or Figma." }
+    ],
+    relatedTools: [
+      { name: "Resize & Crop", path: "/image-resize-and-crop" },
+      { name: "EXIF Remover", path: "/tool-remove-exif" },
+      { name: "OCR Text Extraction", path: "/extract-text-from-image" }
+    ],
+    slug: "get-color-palette"
   };
 
   return (
@@ -65,24 +41,7 @@ export default function ColorPalette() {
       seoData={seoData}
       canonicalPath="/get-color-palette"
     >
-      {colors.length === 0 ? (
-        <FileDrop onFileSelect={processImage} accept="image/*" />
-      ) : (
-        <div className="result-area">
-          <h3>Dominant Color Palette</h3>
-          <div className="palette-colors">
-            {colors.map((c, i) => (
-              <div key={i} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <div className="color-box" style={{backgroundColor: c}}></div>
-                <span style={{marginTop: '0.5rem', fontFamily: 'monospace', fontWeight: 'bold'}}>{c}</span>
-              </div>
-            ))}
-          </div>
-          <button onClick={() => setColors([])} className="btn" style={{marginTop: '2rem'}}>
-            Extract From Another Image
-          </button>
-        </div>
-      )}
+      <ColorPaletteGenerator />
     </ToolShell>
   );
 }

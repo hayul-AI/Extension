@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
+import './firebase'; // Import Firebase initialization
 import App from './App.jsx';
 import './styles.css';
 

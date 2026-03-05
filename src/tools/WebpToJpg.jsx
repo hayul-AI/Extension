@@ -29,15 +29,33 @@ export default function WebpToJpg() {
   };
 
   const seoData = {
-    what: "Converts modern WebP images into the universally recognized JPG format.",
-    how: "Your browser loads the WebP image, renders it onto a hidden HTML5 Canvas, fills any transparent background with white, and then exports the canvas data as a new JPG file.",
-    example: "You downloaded an image from a website that saved as a .webp file, but the software you need to use it with doesn't support WebP. Convert it to JPG to fix the compatibility issue.",
-    interpretation: "The converted JPG file will be visually identical to the WebP but will have a different file extension and likely a different file size.",
+    title: "WebP to JPG Converter",
+    intro: "Convert modern WebP images into the universally recognized JPG format instantly. WebP is excellent for web performance, but many image viewers, social media platforms, and legacy editing tools still do not fully support it.",
+    whyUse: [
+      "Open downloaded website images in any standard photo viewer or editor.",
+      "Ensure your graphics are visible on all social media and messaging platforms.",
+      "Easily share high-quality images with users on older operating systems.",
+      "Quickly convert 'Save as WebP' browser images back to standard JPGs."
+    ],
+    howItWorks: "The conversion happens natively in your browser. Our tool loads the WebP binary data, renders the image onto a hidden HTML5 canvas element, and then exports that canvas as a compressed JPG stream. No server bandwidth is used, keeping your conversion fast and private.",
+    bestResults: [
+      "If the WebP image is animated, only the first frame will be converted to a static JPG.",
+      "Since JPG doesn't support transparency, any transparent WebP areas will become white.",
+      "The output quality is set to 90%, providing a perfect balance of clarity and file size."
+    ],
     faqs: [
-      { q: "What happens to WebP animations?", a: "JPG does not support animation. If you upload an animated WebP, only the first frame will be captured in the resulting JPG." },
-      { q: "Is transparency preserved?", a: "No, JPG cannot handle transparency. Any transparent areas in your WebP will become solid white." },
-      { q: "Is my image uploaded?", a: "No, all conversion logic is executed securely on your own device." }
-    ]
+      { q: "Is WebP better than JPG?", a: "Yes, WebP typically provides 25-35% better compression than JPG at the same quality level. It's the modern standard for the web, but JPG remains the universal standard for compatibility." },
+      { q: "Can I convert animated WebP to GIF?", a: "This specific tool converts WebP to static JPG. For animations, you would need a WebP-to-GIF specific converter." },
+      { q: "Is there any privacy risk?", a: "None. All processing is 100% client-side. We have no backend server receiving or storing your image files." },
+      { q: "Does it support large WebP files?", a: "Yes, it can handle large files, although extremely high resolutions might be limited by your computer's available RAM." },
+      { q: "Why did my transparent image turn white?", a: "The JPG format is older and does not support transparency (alpha channels). Our converter automatically fills these areas with white for a clean look." }
+    ],
+    relatedTools: [
+      { name: "PNG to JPG", path: "/online-png-to-jpg" },
+      { name: "Image to PDF", path: "/make-image-to-pdf" },
+      { name: "Resize & Crop", path: "/image-resize-and-crop" }
+    ],
+    slug: "convert-webp-to-jpg"
   };
 
   return (
@@ -52,12 +70,12 @@ export default function WebpToJpg() {
       ) : (
         <div className="result-area">
           <h3>Converted to JPG!</h3>
-          <img src={resultUrl} alt="Preview" style={{maxHeight: '300px'}} />
-          <div>
-            <a href={resultUrl} download={file.name.replace(/\.webp$/i, '.jpg')} className="btn">
+          <img src={resultUrl} alt="Preview" />
+          <div className="btn-group">
+            <a href={resultUrl} download={file.name.replace(/\.webp$/i, '.jpg')} className="btn btn-primary">
               Download JPG
             </a>
-            <button onClick={() => {setFile(null); setResultUrl(null)}} className="btn" style={{background: 'var(--text-light)', marginLeft: '1rem'}}>
+            <button onClick={() => {setFile(null); setResultUrl(null)}} className="btn btn-secondary">
               Convert Another
             </button>
           </div>

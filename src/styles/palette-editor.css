@@ -1,0 +1,141 @@
+/* Full-width editor layout for color picker */
+.palette-editor-layout {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+/* Remove narrow card restriction if present */
+.palette-editor-layout .tool-card,
+.palette-editor-layout .tool-container,
+.palette-editor-layout .card {
+  max-width: 100%;
+  width: 100%;
+}
+
+/* Canvas workspace */
+.palette-canvas-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;      /* Set 16:9 ratio */
+  background: #0f172a;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;          /* IMPORTANT: remove scroll */
+  position: relative;        /* for loupe overlay */
+  touch-action: none;        /* prevent browser scroll while interacting */
+  cursor: crosshair;
+}
+
+/* Eyedropper cursor when over canvas area */
+.palette-canvas-wrapper:hover {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 22 1-1h3l9-9"/><path d="M9 8V5l3-3 9 9-3 3h-3"/><path d="m15 13 2 2"/><path d="m13 15 2 2"/></svg>') 0 24, crosshair;
+}
+
+.palette-stage {
+  position: relative;
+  transform-origin: center;
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.palette-canvas {
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  max-width: none;
+}
+
+.palette-zoom-controls {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 5;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 8px 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.palette-zoom-controls button {
+  height: 32px;
+  min-width: 32px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.palette-zoom-controls .zoom-readout {
+  color: #fff;
+  font-size: 13px;
+  opacity: 0.95;
+  padding: 0 6px;
+}
+
+.palette-loupe {
+  position: absolute;
+  z-index: 6;
+  width: 140px;
+  height: 140px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.20);
+  background: rgba(15,23,42,0.92);
+  box-shadow: 0 18px 50px rgba(0,0,0,0.45);
+  pointer-events: none; /* so clicks go through */
+  overflow: hidden;
+}
+
+.palette-loupe canvas {
+  width: 140px;
+  height: 140px;
+  display: block;
+}
+
+.palette-loupe-label {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 7;
+  pointer-events: none;
+  color: #fff;
+  font-size: 12px;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 6px 8px;
+  border-radius: 10px;
+}
+
+/* Saved palette section */
+.palette-saved-section {
+  margin-top: 22px;
+  padding: 18px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+/* Mobile adjustment */
+@media (max-width: 768px) {
+  .palette-editor-layout {
+    padding: 16px 12px 28px;
+  }
+  .palette-canvas-wrapper {
+    aspect-ratio: auto;
+    min-height: 340px;
+  }
+}

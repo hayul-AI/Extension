@@ -27,15 +27,33 @@ export default function RemoveExif() {
   };
 
   const seoData = {
-    what: "Our EXIF Metadata Remover completely erases hidden data embedded in your photos, such as GPS location, camera model, date/time, and exposure settings.",
-    how: "The tool works by reading the image pixels directly into your browser's memory using a Canvas element, and then redrawing it. Since it only copies the visible pixels and ignores the file's header metadata, the resulting image is 100% EXIF-free. No data is ever uploaded to a server.",
-    example: "If you take a photo with your smartphone, it likely contains your exact GPS coordinates. Before posting it to a public forum, use this tool to strip the location data, ensuring your home or current whereabouts remain private.",
-    interpretation: "The downloaded file will look identical to the original image but will have a slightly different file size. If you inspect the properties of the new file, fields like 'Location' and 'Camera Make' will be completely blank.",
+    title: "EXIF Metadata Remover",
+    intro: "Protect your digital privacy by stripping hidden metadata from your photos. Every image you take contains embedded information like GPS coordinates, camera settings, and timestamps that could compromise your security when shared online.",
+    whyUse: [
+      "Remove precise GPS location data before posting to social media.",
+      "Clear camera and lens specifications to protect your equipment details.",
+      "Reduce file overhead by removing unnecessary header information.",
+      "Ensure professional privacy for sensitive internal documents or photos."
+    ],
+    howItWorks: "Our tool utilizes advanced client-side processing. It reads the raw pixel data of your image and redraws it onto a fresh canvas, effectively creating a clean copy that lacks any of the original metadata headers (EXIF, IPTC, XMP). This process happens entirely in your RAM.",
+    bestResults: [
+      "Use high-quality original files for the cleanest strip.",
+      "Download the 'Clean Image' immediately after processing.",
+      "Note that this tool currently supports standard image formats like JPG and PNG."
+    ],
     faqs: [
-      { q: "Is the image quality reduced?", a: "No. The tool uses a 100% quality setting when redrawing the pixels, so there is virtually no loss in visual quality for standard formats." },
-      { q: "Can this process be reversed?", a: "No. Once the EXIF data is stripped and you download the new file, the metadata is permanently gone from that specific copy." },
-      { q: "Is it safe to use for sensitive photos?", a: "Yes. The processing is entirely local. We have no backend servers receiving your files, so your photos cannot be intercepted or viewed by us." }
-    ]
+      { q: "What exactly is EXIF data?", a: "EXIF (Exchangeable Image File Format) is data embedded in image files that includes information about the camera, date, time, and often the exact GPS location where the photo was taken." },
+      { q: "Does stripping metadata reduce image quality?", a: "No, we use a 100% quality redraw method to ensure that the visible pixels remain identical to your original photo." },
+      { q: "Is my data stored on your server?", a: "Absolutely not. This tool is 100% local. Your photos never leave your computer or smartphone." },
+      { q: "Can I batch process photos?", a: "Currently, this utility processes images one at a time to ensure maximum browser stability and privacy." },
+      { q: "Does this work on iPhone photos?", a: "Yes, it is highly recommended for iPhone and Android photos which often contain highly accurate location tags." }
+    ],
+    relatedTools: [
+      { name: "Image to PDF", path: "/make-image-to-pdf" },
+      { name: "Resize & Crop", path: "/image-resize-and-crop" },
+      { name: "PNG to JPG", path: "/online-png-to-jpg" }
+    ],
+    slug: "tool-remove-exif"
   };
 
   return (
@@ -50,12 +68,12 @@ export default function RemoveExif() {
       ) : (
         <div className="result-area">
           <h3>EXIF Data Removed Successfully!</h3>
-          <img src={resultUrl} alt="Preview" style={{maxHeight: '300px'}} />
-          <div>
-            <a href={resultUrl} download={`cleaned_${file.name}`} className="btn">
+          <img src={resultUrl} alt="Preview" />
+          <div className="btn-group">
+            <a href={resultUrl} download={`cleaned_${file.name}`} className="btn btn-primary">
               Download Clean Image
             </a>
-            <button onClick={() => {setFile(null); setResultUrl(null)}} className="btn" style={{background: 'var(--text-light)', marginLeft: '1rem'}}>
+            <button onClick={() => {setFile(null); setResultUrl(null)}} className="btn btn-secondary">
               Process Another
             </button>
           </div>

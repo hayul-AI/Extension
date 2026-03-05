@@ -3,6 +3,7 @@ import ToolShell from '../components/ToolShell';
 import FileDrop from '../components/FileDrop';
 import Tesseract from 'tesseract.js';
 import ProgressBar from '../components/ProgressBar';
+import SEO from '../components/SEO';
 
 const LANGUAGES = [
   { code: 'eng', name: 'English' },
@@ -58,62 +59,87 @@ export default function OcrImageToText() {
   };
 
   const seoData = {
-    what: "Our Optical Character Recognition (OCR) tool analyzes images containing text (like scanned documents or screenshots) and extracts the text into a selectable, editable format.",
-    how: "This tool loads a compiled WebAssembly version of the famous Tesseract OCR engine directly into your browser. The intensive pattern-recognition algorithms run locally using your device's CPU. No text or images are sent to the cloud.",
-    example: "You have a screenshot of an error message or a scanned PDF of a book page. Upload it here, and you can easily copy-paste the text instead of typing it out manually.",
-    interpretation: "The output is raw text displayed in a text box. You can copy it to your clipboard for use in word processors or emails.",
+    title: "OCR Image to Text Extractor",
+    intro: "Convert any image containing text into editable, selectable digital text instantly. Our high-performance OCR (Optical Character Recognition) utility is perfect for digitizing scanned documents, notes, or extracting text from screenshots without manual typing.",
+    whyUse: [
+      "Instantly digitize paper documents and handwritten notes.",
+      "Extract error messages or data from software screenshots.",
+      "Support for 10+ global languages for accurate recognition.",
+      "Save hours of manual data entry by automating text extraction."
+    ],
+    howItWorks: "This tool runs a WebAssembly port of the industry-standard Tesseract OCR engine. When you upload an image, your browser's CPU analyzes the visual patterns of letters and symbols to reconstruct them as digital strings. This intensive calculation is performed locally, meaning your text is never sent to a third-party server.",
+    bestResults: [
+      "Use high-contrast images with clear, upright text for maximum accuracy.",
+      "Select the correct document language from the dropdown before processing.",
+      "Ensure the image is not blurry or significantly rotated."
+    ],
     faqs: [
-      { q: "Is the extraction 100% accurate?", a: "OCR accuracy depends heavily on the image quality, font size, and contrast. Blurry or handwritten text will have higher error rates than a crisp screenshot of digital text." },
-      { q: "Are other languages supported?", a: "Yes, you can select from various languages in the dropdown before uploading your image to load the correct language model." },
-      { q: "Why does it take a while to process?", a: "Because OCR involves complex machine learning algorithms running entirely on your local device, it may take a few seconds depending on your processor's speed and the size of the image." }
-    ]
+      { q: "Is the text extraction 100% accurate?", a: "OCR accuracy depends on image quality. While digital screenshots are often 99%+ accurate, blurry photos or complex fonts may require minor manual corrections." },
+      { q: "Can I extract text from a PDF?", a: "This utility currently focuses on image formats (JPG, PNG, WebP). To extract from PDF, you should convert the PDF page to an image first." },
+      { q: "Are my sensitive documents private?", a: "Yes. Because the recognition logic is executed in your local browser environment, your documents and the extracted text stay exclusively on your device." },
+      { q: "How many languages are supported?", a: "We currently support 13 major languages, including English, Korean, Spanish, Chinese, and Arabic." },
+      { q: "Why does the first extraction take a few seconds?", a: "On the first use, your browser needs to download the specific language model data. After that, subsequent extractions will be much faster." }
+    ],
+    relatedTools: [
+      { name: "Image to PDF", path: "/make-image-to-pdf" },
+      { name: "EXIF Remover", path: "/tool-remove-exif" },
+      { name: "Color Palette", path: "/get-color-palette" }
+    ],
+    slug: "extract-text-from-image"
   };
 
   return (
-    <ToolShell 
-      title="OCR Image to Text Extractor" 
-      description="Extract text from images locally. Secure, accurate, and supports multiple languages."
-      seoData={seoData}
-      canonicalPath="/extract-text-from-image"
-    >
-      {!isProcessing && !text ? (
-        <>
-          <div className="form-group" style={{maxWidth: '300px', margin: '0 auto 2rem auto'}}>
-            <label>Select Document Language</label>
-            <select className="form-input" value={lang} onChange={e => setLang(e.target.value)}>
-              {LANGUAGES.map(l => (
-                <option key={l.code} value={l.code}>{l.name} ({l.code})</option>
-              ))}
-            </select>
+    <>
+      <SEO 
+        title="Image to Text Converter (OCR) | ImageConverter"
+        description="Extract editable text from images using online OCR. Works with screenshots, scanned documents, and photos directly in your browser."
+        path="/extract-text-from-image"
+      />
+      <ToolShell 
+        title="OCR Image to Text Extractor" 
+        description="Extract text from images locally. Secure, accurate, and supports multiple languages."
+        seoData={seoData}
+        canonicalPath="/extract-text-from-image"
+      >
+        {!isProcessing && !text ? (
+          <>
+            <div className="form-group" style={{maxWidth: '300px', margin: '0 auto 2rem auto'}}>
+              <label>Select Document Language</label>
+              <select className="form-input" value={lang} onChange={e => setLang(e.target.value)}>
+                {LANGUAGES.map(l => (
+                  <option key={l.code} value={l.code}>{l.name} ({l.code})</option>
+                ))}
+              </select>
+            </div>
+            <FileDrop onFileSelect={processImage} accept="image/*" />
+          </>
+        ) : isProcessing ? (
+          <div style={{padding: '3rem', textAlign: 'center'}}>
+            <h3>Extracting Text...</h3>
+            <p style={{color: 'var(--text-light)', marginBottom: '1rem'}}>{status}</p>
+            <ProgressBar progress={progress} text="Running local Tesseract engine" />
           </div>
-          <FileDrop onFileSelect={processImage} accept="image/*" />
-        </>
-      ) : isProcessing ? (
-        <div style={{padding: '3rem', textAlign: 'center'}}>
-          <h3>Extracting Text...</h3>
-          <p style={{color: 'var(--text-light)', marginBottom: '1rem'}}>{status}</p>
-          <ProgressBar progress={progress} text="Running local Tesseract engine" />
-        </div>
-      ) : (
-        <div className="result-area">
-          <h3>Extraction Complete</h3>
-          <textarea 
-            className="form-input" 
-            rows="10" 
-            value={text} 
-            readOnly 
-            style={{marginTop: '1rem', marginBottom: '1rem', resize: 'vertical'}}
-          ></textarea>
-          <div>
-            <button onClick={() => navigator.clipboard.writeText(text)} className="btn">
-              Copy Text
-            </button>
-            <button onClick={() => {setFile(null); setText('');}} className="btn" style={{background: 'var(--text-light)', marginLeft: '1rem'}}>
-              Extract Another
-            </button>
+        ) : (
+          <div className="result-area">
+            <h3>Extraction Complete</h3>
+            <textarea 
+              className="form-input" 
+              rows="10" 
+              value={text} 
+              readOnly 
+              style={{marginTop: '1rem', marginBottom: '1rem', resize: 'vertical'}}
+            ></textarea>
+            <div className="btn-group">
+              <button onClick={() => navigator.clipboard.writeText(text)} className="btn btn-primary">
+                Copy Text
+              </button>
+              <button onClick={() => {setFile(null); setText('');}} className="btn btn-secondary">
+                Extract Another
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </ToolShell>
+        )}
+      </ToolShell>
+    </>
   );
 }

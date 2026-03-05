@@ -3,6 +3,7 @@ import ToolShell from '../components/ToolShell';
 import FileDrop from '../components/FileDrop';
 import heic2any from 'heic2any';
 import ProgressBar from '../components/ProgressBar';
+import SEO from '../components/SEO';
 
 export default function HeicToJpg() {
   const [file, setFile] = useState(null);
@@ -29,47 +30,72 @@ export default function HeicToJpg() {
   };
 
   const seoData = {
-    what: "Converts Apple's high-efficiency HEIC photo format into standard JPGs, ensuring compatibility with older devices, Windows PCs, and websites.",
-    how: "We use a specialized JavaScript library (heic2any) that decodes the HEIC file locally within your browser. It parses the HEVC video stream inside the file and paints it to a canvas before exporting it as a standard JPG.",
-    example: "You transferred photos from your iPhone to your Windows computer, but they won't open. Use this tool to quickly make them viewable JPGs.",
-    interpretation: "The result is a universally compatible JPG file. Visual quality is preserved, and you can now open the image in any standard photo viewer.",
+    title: "iPhone HEIC to JPG Converter",
+    intro: "Convert Apple's modern HEIC (High Efficiency Image Container) photos to universally compatible JPG format. HEIC is great for saving space on your iPhone, but it often causes compatibility issues when transferring photos to Windows PCs or older software.",
+    whyUse: [
+      "Open your iPhone photos on any Windows or Android device without extra software.",
+      "Upload your high-efficiency photos to websites that only support JPG or PNG.",
+      "Maintain the visual beauty of your shots while gaining universal compatibility.",
+      "Quickly convert entire albums locally for sharing with friends and family."
+    ],
+    howItWorks: "This tool uses a powerful JavaScript library that runs directly in your browser. It decodes the HEVC (High Efficiency Video Coding) based image data inside the HEIC container and re-renders it as a high-quality JPG. This complex process is handled entirely on your local CPU.",
+    bestResults: [
+      "Keep in mind that HEIC files are very high resolution; large files may take a few seconds to decode.",
+      "The conversion process is static—if you upload a 'Live Photo,' only the primary still image is converted.",
+      "Ensure you use a modern browser (like Chrome or Safari) for the fastest decoding speeds."
+    ],
     faqs: [
-      { q: "Is HEIC better than JPG?", a: "HEIC generally offers better compression, meaning higher quality at half the file size. However, it lacks the universal compatibility of JPG." },
-      { q: "Why does it take a few seconds?", a: "HEIC decoding is computationally heavy. Since it's running directly on your device's processor rather than a massive cloud server, it might take a moment depending on your hardware." },
-      { q: "Do I lose Live Photo functionality?", a: "Yes. JPG is a static image format. The video component of an iOS Live Photo is discarded during conversion." }
-    ]
+      { q: "Is HEIC better than JPG?", a: "Technically, yes. HEIC offers similar image quality at about half the file size. However, it lacks the 30-year history of universal support that JPG enjoys." },
+      { q: "Why does it take longer than PNG conversion?", a: "HEIC is a highly compressed format that requires intensive mathematical decoding (using HEVC) before it can be converted, which is more demanding on your processor." },
+      { q: "Are my photos uploaded to a server?", a: "No. Your sensitive personal photos never leave your device. The decoding and encoding happen in your browser's private memory." },
+      { q: "Can I convert HEIF files too?", a: "Yes, HEIF is the base standard for HEIC, and this tool supports both extensions." },
+      { q: "Is there a file size limit?", a: "There is no hard limit, but very large images might temporarily freeze older browsers during the intensive decoding phase." }
+    ],
+    relatedTools: [
+      { name: "PNG to JPG", path: "/online-png-to-jpg" },
+      { name: "WEBP to JPG", path: "/convert-webp-to-jpg" },
+      { name: "Image to PDF", path: "/make-image-to-pdf" }
+    ],
+    slug: "convert-heic-to-jpg"
   };
 
   return (
-    <ToolShell 
-      title="Convert HEIC to JPG" 
-      description="Easily change Apple iPhone HEIC photos to standard JPG format. Processed safely on your device."
-      seoData={seoData}
-      canonicalPath="/convert-heic-to-jpg"
-    >
-      {!resultUrl ? (
-        loading ? (
-          <div style={{padding: '3rem', textAlign: 'center'}}>
-            <h3>Processing...</h3>
-            <ProgressBar progress={100} text="Decoding HEIC file locally" />
-          </div>
+    <>
+      <SEO 
+        title="HEIC to JPG Converter | ImageConverter"
+        description="Convert HEIC iPhone photos to JPG instantly online. Fast browser-based conversion with no uploads stored and no software installation required."
+        path="/convert-heic-to-jpg"
+      />
+      <ToolShell 
+        title="Convert HEIC to JPG" 
+        description="Easily change Apple iPhone HEIC photos to standard JPG format. Processed safely on your device."
+        seoData={seoData}
+        canonicalPath="/convert-heic-to-jpg"
+      >
+        {!resultUrl ? (
+          loading ? (
+            <div style={{padding: '3rem', textAlign: 'center'}}>
+              <h3>Processing...</h3>
+              <ProgressBar progress={100} text="Decoding HEIC file locally" />
+            </div>
+          ) : (
+            <FileDrop onFileSelect={processImage} accept=".heic, .heif" />
+          )
         ) : (
-          <FileDrop onFileSelect={processImage} accept=".heic, .heif" />
-        )
-      ) : (
-        <div className="result-area">
-          <h3>Converted to JPG!</h3>
-          <img src={resultUrl} alt="Preview" style={{maxHeight: '300px'}} />
-          <div>
-            <a href={resultUrl} download={file.name.replace(/\.heic$/i, '.jpg')} className="btn">
-              Download JPG
-            </a>
-            <button onClick={() => {setFile(null); setResultUrl(null)}} className="btn" style={{background: 'var(--text-light)', marginLeft: '1rem'}}>
-              Convert Another
-            </button>
+          <div className="result-area">
+            <h3>Converted to JPG!</h3>
+            <img src={resultUrl} alt="Preview" />
+            <div className="btn-group">
+              <a href={resultUrl} download={file.name.replace(/\.heic$/i, '.jpg')} className="btn btn-primary">
+                Download JPG
+              </a>
+              <button onClick={() => {setFile(null); setResultUrl(null)}} className="btn btn-secondary">
+                Convert Another
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </ToolShell>
+        )}
+      </ToolShell>
+    </>
   );
 }
