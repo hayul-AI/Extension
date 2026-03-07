@@ -88,8 +88,6 @@ const tools = [
   { title: "Image to PDF", path: "/tools/image-to-pdf", desc: "Turn multiple images into a single PDF with A4 support.", icon: <IconPdf /> },
   { title: "Image Compressor", path: "/image-compressor", desc: "Reduce JPG and PNG file size while maintaining quality.", icon: <IconResize /> },
   { title: "PDF Merge", path: "/pdf-merge", desc: "Combine multiple PDF files into a single document.", icon: <IconPdf /> },
-  { title: "PDF Compressor", path: "/pdf-compressor", desc: "Compress PDF files while maintaining readability.", icon: <IconPdf /> },
-  { title: "Image Converter", path: "/image-converter", desc: "Convert between PNG, JPG, and WEBP formats.", icon: <IconConvert /> },
   { title: "Blur Face / Mosaic", path: "/tools/blur-face", desc: "Censor sensitive areas instantly. 100% local.", icon: <IconBlur /> },
   { title: "Favicon Generator", path: "/generate-favicon-now", desc: "Create multi-size favicon packs for your websites.", icon: <IconFavicon /> },
   { title: "Resize & Crop", path: "/image-resize-and-crop", desc: "Perfectly adjust image dimensions and aspect ratios.", icon: <IconResize /> },
