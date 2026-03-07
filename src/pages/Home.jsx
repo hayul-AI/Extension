@@ -87,7 +87,6 @@ const tools = [
   { title: "WEBP to JPG", path: "/convert-webp-to-jpg", desc: "Fast conversion from WebP images to standard JPGs.", icon: <IconWebp /> },
   { title: "Image to PDF", path: "/tools/image-to-pdf", desc: "Turn multiple images into a single PDF with A4 support.", icon: <IconPdf /> },
   { title: "Image Compressor", path: "/image-compressor", desc: "Reduce JPG and PNG file size while maintaining quality.", icon: <IconResize /> },
-  { title: "PDF Merge", path: "/pdf-merge", desc: "Combine multiple PDF files into a single document.", icon: <IconPdf /> },
   { title: "Blur Face / Mosaic", path: "/tools/blur-face", desc: "Censor sensitive areas instantly. 100% local.", icon: <IconBlur /> },
   { title: "Favicon Generator", path: "/generate-favicon-now", desc: "Create multi-size favicon packs for your websites.", icon: <IconFavicon /> },
   { title: "Resize & Crop", path: "/image-resize-and-crop", desc: "Perfectly adjust image dimensions and aspect ratios.", icon: <IconResize /> },
@@ -100,7 +99,7 @@ export default function Home() {
     <div>
       <SEO 
         title="ImageConverter - Free Online File Converter & Image Tools"
-        description="Free online tools to convert, compress, and edit files instantly. Convert images, merge PDFs, reduce file size, and extract text using OCR directly in your browser. No installation required."
+        description="Free online tools to convert and edit images instantly. Convert between formats, resize, crop, and extract text using OCR directly in your browser. No installation required."
         path="/"
       />
       

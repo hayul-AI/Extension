@@ -53,9 +53,6 @@ function App() {
           <Route path="extract-text-from-image" element={<OcrImageToText />} />
           <Route path="tools/blur-face" element={<BlurFace />} />
           <Route path="image-compressor" element={<ImageCompressor />} />
-          <Route path="pdf-merge" element={<PdfMerge />} />
-          <Route path="pdf-compressor" element={<PdfCompressor />} />
-          <Route path="image-converter" element={<ImageConverterTool />} />
         </Route>
       </Routes>
     </BrowserRouter>

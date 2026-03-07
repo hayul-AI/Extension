@@ -45,8 +45,6 @@ export default function Layout() {
           <div className="footer-section">
             <h4>Advanced</h4>
             <ul>
-              <li><Link to="/pdf-merge">PDF Merge</Link></li>
-              <li><Link to="/pdf-compressor">PDF Compressor</Link></li>
               <li><Link to="/tool-remove-exif">Remove Metadata</Link></li>
               <li><Link to="/image-resize-and-crop">Resize & Crop</Link></li>
               <li><Link to="/make-image-to-pdf">Image to PDF</Link></li>
