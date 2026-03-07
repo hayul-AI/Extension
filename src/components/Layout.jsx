@@ -39,7 +39,6 @@ export default function Layout() {
               <li><Link to="/online-jpg-to-png">JPG to PNG</Link></li>
               <li><Link to="/convert-heic-to-jpg">HEIC to JPG</Link></li>
               <li><Link to="/convert-webp-to-jpg">WebP to JPG</Link></li>
-              <li><Link to="/image-compressor">Image Compressor</Link></li>
             </ul>
           </div>
           <div className="footer-section">

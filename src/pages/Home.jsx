@@ -86,7 +86,6 @@ const tools = [
   { title: "HEIC to JPG", path: "/convert-heic-to-jpg", desc: "Convert Apple HEIC photos to compatible JPG format.", icon: <IconHeic /> },
   { title: "WEBP to JPG", path: "/convert-webp-to-jpg", desc: "Fast conversion from WebP images to standard JPGs.", icon: <IconWebp /> },
   { title: "Image to PDF", path: "/tools/image-to-pdf", desc: "Turn multiple images into a single PDF with A4 support.", icon: <IconPdf /> },
-  { title: "Image Compressor", path: "/image-compressor", desc: "Reduce JPG and PNG file size while maintaining quality.", icon: <IconResize /> },
   { title: "Blur Face / Mosaic", path: "/tools/blur-face", desc: "Censor sensitive areas instantly. 100% local.", icon: <IconBlur /> },
   { title: "Favicon Generator", path: "/generate-favicon-now", desc: "Create multi-size favicon packs for your websites.", icon: <IconFavicon /> },
   { title: "Resize & Crop", path: "/image-resize-and-crop", desc: "Perfectly adjust image dimensions and aspect ratios.", icon: <IconResize /> },
