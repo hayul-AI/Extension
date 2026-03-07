@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ToolShell from '../components/ToolShell';
 import FileDrop from '../components/FileDrop';
 import Tesseract from 'tesseract.js';
@@ -6,6 +6,7 @@ import ProgressBar from '../components/ProgressBar';
 import SEO from '../components/SEO';
 
 const LANGUAGES = [
+  { code: 'eng+kor', name: 'Korean + English (Auto)' },
   { code: 'eng', name: 'English' },
   { code: 'spa', name: 'Spanish' },
   { code: 'fra', name: 'French' },
@@ -27,24 +28,115 @@ export default function OcrImageToText() {
   const [progress, setProgress] = useState(0);
   const [status, setStatus] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [lang, setLang] = useState('eng');
+  const [lang, setLang] = useState('eng+kor');
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [scale, setScale] = useState(1);
+  const imageContainerRef = useRef(null);
+
+  // Drag to pan state
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [scrollStart, setScrollStart] = useState({ left: 0, top: 0 });
+
+  useEffect(() => {
+    const container = imageContainerRef.current;
+    if (!container) return;
+
+    const handleWheelNative = (e) => {
+      e.preventDefault(); // Prevent native scrolling
+
+      setScale(prev => {
+        // Use a multiplier for smooth, relative zooming
+        const sensitivity = 0.001;
+        const multiplier = 1 - (e.deltaY * sensitivity);
+        let newScale = prev * multiplier;
+
+        // Boundaries
+        if (newScale > 5) newScale = 5;
+        if (newScale < 0.1) newScale = 0.1;
+
+        return newScale;
+      });
+    };
+
+    // Use native event listener for passive: false
+    container.addEventListener('wheel', handleWheelNative, { passive: false });
+    return () => container.removeEventListener('wheel', handleWheelNative);
+  }, [previewUrl]); // re-bind when preview becomes available
+
+
+  const preprocessImage = (fileToProcess) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+
+          ctx.drawImage(img, 0, 0);
+
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageData.data;
+
+          // Enhanced Contrast and Grayscale filter
+          const contrast = 1.3; // Increase contrast by 30%
+          const intercept = 128 * (1 - contrast);
+
+          for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+
+            // Grayscale extraction
+            const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+
+            // Contrast adjustment
+            let finalColor = gray * contrast + intercept;
+            if (finalColor > 255) finalColor = 255;
+            if (finalColor < 0) finalColor = 0;
+
+            data[i] = finalColor;
+            data[i + 1] = finalColor;
+            data[i + 2] = finalColor;
+          }
+
+          ctx.putImageData(imageData, 0, 0);
+          resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(fileToProcess);
+    });
+  };
 
   const processImage = async (selectedFile) => {
     if (!selectedFile) return;
     setFile(selectedFile);
+    setPreviewUrl(URL.createObjectURL(selectedFile));
+    setScale(1); // Reset zoom
     setIsProcessing(true);
     setText('');
     setProgress(0);
-    
+
     try {
+      setStatus('Preprocessing image to enhance accuracy...');
+      setProgress(5);
+      const preprocessedDataUrl = await preprocessImage(selectedFile);
+
       const result = await Tesseract.recognize(
-        selectedFile,
+        preprocessedDataUrl,
         lang,
         {
           logger: m => {
             setStatus(m.status);
             if (m.status === 'recognizing text') {
-              setProgress(m.progress * 100);
+              setProgress(5 + (m.progress * 95));
             }
           }
         }
@@ -90,20 +182,20 @@ export default function OcrImageToText() {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Image to Text Converter (OCR) | ImageConverter"
         description="Extract editable text from images using online OCR. Works with screenshots, scanned documents, and photos directly in your browser."
         path="/extract-text-from-image"
       />
-      <ToolShell 
-        title="OCR Image to Text Extractor" 
+      <ToolShell
+        title="OCR Image to Text Extractor"
         description="Extract text from images locally. Secure, accurate, and supports multiple languages."
         seoData={seoData}
         canonicalPath="/extract-text-from-image"
       >
         {!isProcessing && !text ? (
           <>
-            <div className="form-group" style={{maxWidth: '300px', margin: '0 auto 2rem auto'}}>
+            <div className="form-group" style={{ maxWidth: '300px', margin: '0 auto 2rem auto' }}>
               <label>Select Document Language</label>
               <select className="form-input" value={lang} onChange={e => setLang(e.target.value)}>
                 {LANGUAGES.map(l => (
@@ -114,28 +206,93 @@ export default function OcrImageToText() {
             <FileDrop onFileSelect={processImage} accept="image/*" />
           </>
         ) : isProcessing ? (
-          <div style={{padding: '3rem', textAlign: 'center'}}>
+          <div style={{ padding: '3rem', textAlign: 'center' }}>
             <h3>Extracting Text...</h3>
-            <p style={{color: 'var(--text-light)', marginBottom: '1rem'}}>{status}</p>
+            <p style={{ color: 'var(--text-light)', marginBottom: '1rem' }}>{status}</p>
             <ProgressBar progress={progress} text="Running local Tesseract engine" />
           </div>
         ) : (
-          <div className="result-area">
-            <h3>Extraction Complete</h3>
-            <textarea 
-              className="form-input" 
-              rows="10" 
-              value={text} 
-              readOnly 
-              style={{marginTop: '1rem', marginBottom: '1rem', resize: 'vertical'}}
-            ></textarea>
-            <div className="btn-group">
-              <button onClick={() => navigator.clipboard.writeText(text)} className="btn btn-primary">
-                Copy Text
-              </button>
-              <button onClick={() => {setFile(null); setText('');}} className="btn btn-secondary">
-                Extract Another
-              </button>
+          <div className="result-area" style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}>
+            {/* Image Preview Area */}
+            <div style={{ flex: '1 1 350px', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3>Original Image</h3>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-soft)', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <span>{Math.round(scale * 100)}%</span>
+                  <button onClick={() => setScale(prev => Math.max(prev - 0.2, 0.1))} className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.8rem', minWidth: '30px' }}>-</button>
+                  <button onClick={() => setScale(prev => Math.min(prev + 0.2, 5))} className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.8rem', minWidth: '30px' }}>+</button>
+                  <button onClick={() => setScale(1)} className="btn btn-secondary" style={{ padding: '0.2rem 0.5rem', fontSize: '0.8rem' }}>Reset</button>
+                </div>
+              </div>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-soft)', marginBottom: '0.5rem' }}>Use mouse wheel to zoom, click & drag to pan.</p>
+              <div
+                ref={imageContainerRef}
+                onMouseDown={(e) => {
+                  setIsDragging(true);
+                  setDragStart({ x: e.pageX, y: e.pageY });
+                  setScrollStart({ left: imageContainerRef.current.scrollLeft, top: imageContainerRef.current.scrollTop });
+                }}
+                onMouseLeave={() => setIsDragging(false)}
+                onMouseUp={() => setIsDragging(false)}
+                onMouseMove={(e) => {
+                  if (!isDragging) return;
+                  e.preventDefault();
+                  const dx = e.pageX - dragStart.x;
+                  const dy = e.pageY - dragStart.y;
+                  imageContainerRef.current.scrollLeft = scrollStart.left - dx;
+                  imageContainerRef.current.scrollTop = scrollStart.top - dy;
+                }}
+                style={{
+                  marginTop: '0.5rem',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius-card)',
+                  backgroundColor: 'var(--bg-color)',
+                  flexGrow: 1,
+                  minHeight: '600px',
+                  overflow: 'auto',
+                  position: 'relative',
+                  cursor: isDragging ? 'grabbing' : 'grab',
+                  // Hide scrollbars for a cleaner drag experience
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}
+              >
+                <div style={{
+                  transform: `scale(${scale})`,
+                  transformOrigin: 'top left',
+                  transition: isDragging ? 'none' : 'transform 0.1s ease-out',
+                  minWidth: '100%',
+                  minHeight: '100%',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  padding: '1rem',
+                  pointerEvents: 'none' // Prevent image drag conflict
+                }}>
+                  <img src={previewUrl} alt="Uploaded for OCR" draggable="false" style={{ maxWidth: '100%', objectFit: 'contain' }} />
+                </div>
+              </div>
+            </div>
+
+            {/* Text Edit Area */}
+            <div style={{ flex: '1 1 300px', minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+              <h3>Extraction Complete (Editable)</h3>
+              <textarea
+                className="form-input"
+                rows="18"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Extracted text will appear here. You can manually correct any mistakes."
+                style={{ marginTop: '1rem', marginBottom: '1rem', resize: 'vertical', flexGrow: 1 }}
+              ></textarea>
+              <div className="btn-group">
+                <button onClick={() => navigator.clipboard.writeText(text)} className="btn btn-primary">
+                  Copy Text
+                </button>
+                <button onClick={() => { setFile(null); setText(''); setPreviewUrl(''); }} className="btn btn-secondary">
+                  Extract Another
+                </button>
+              </div>
             </div>
           </div>
         )}

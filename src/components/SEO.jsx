@@ -9,7 +9,7 @@ const SEO = ({ title, description, path = "" }) => {
   return (
     <Helmet>
       {/* Standard Metadata */}
-      <title>{title}</title>
+      <title>{`${title}`}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
 

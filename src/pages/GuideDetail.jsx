@@ -30,7 +30,7 @@ export default function GuideDetail() {
   return (
     <div className="content-page-wrapper">
       <Helmet>
-        <title>{guide.title} Guide | Free Online Image Converter</title>
+        <title>{`${guide.title} Guide | Free Online Image Converter`}</title>
         <meta name="description" content={`${guide.blurb} Learn how it works, pro tips, and privacy details.`} />
       </Helmet>
 

@@ -2,12 +2,12 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
-export default function ContentPageShell({ 
-  title, 
-  description, 
-  canonicalPath, 
-  intro, 
-  children 
+export default function ContentPageShell({
+  title,
+  description,
+  canonicalPath,
+  intro,
+  children
 }) {
   const siteUrl = 'https://converter.hotplmedia.com';
   const fullCanonical = `${siteUrl}${canonicalPath}`;
@@ -26,7 +26,7 @@ export default function ContentPageShell({
   return (
     <div className="content-page-wrapper">
       <Helmet>
-        <title>{title} | ImageConverter</title>
+        <title>{`${title} | ImageConverter`}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={fullCanonical} />
         <meta property="og:title" content={title} />
